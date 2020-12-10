@@ -10,7 +10,8 @@
 import AppChild from './components/AppChild.vue';
 
 export default {
- components: {
+  name: 'app',
+  components: {
     AppChild,
   },
   data() {
