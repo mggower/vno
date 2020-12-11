@@ -1,10 +1,12 @@
 console.log('before');
+
 /*
 reading file 'readTextFile' allows us to read and write in plain english
 "readFile --> gives us UNICODE Characters" X X X
 */
-const data = await Deno.readTextFile('./please.vue');
 
+const data = await Deno.readTextFile('./HeyGirl.vue');
+console.log('data', data);
 const tRegex = /<\W*template>/gm;
 const template = data.split(tRegex)[1].split(/\n/).join('');
 // template.replace(/n/gm, '');
@@ -38,15 +40,15 @@ console.log('object', object);
 make directory if 'vno-build' does not exits
 this is where all of our build files will go
 */
-const app = 'thisBadBoy';
-// we'll use syntax like this to populate our files with the correct syntax
-const output = `const ${app}  = Vue.component('${app}', {
-  template: "${template}",
-  ${script}
-})`;
+// const app = 'thisBadBoy';
+// // we'll use syntax like this to populate our files with the correct syntax
+// const output = `const ${app}  = Vue.component('${app}', {
+//   template: "${template}",
+//   ${script}
+// })`;
 /*
 copy and write content from .Vue file into a new doc
 */
 // await Deno.mkdir('vno-build');
-await Deno.writeTextFile('./vno-build/Output.js', output, { create: true });
+// await Deno.writeTextFile('./vno-build/Output.js', output, { create: true });
 // console.log('File data:', data);
