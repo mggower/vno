@@ -5,12 +5,6 @@ reading file 'readTextFile' allows us to read and write in plain english
 "readFile --> gives us UNICODE Characters" X X X
 */
 
-const data = await Deno.readTextFile('./App.vue');
-// data.split(/\n/).join('')
-console.log('data', data);
-const tRegex = /<\W*template>/gm;
-const template = data.split(tRegex)[1].split(/\n/).join('');
-
 // console.log('template ->', template);
 // console.log('typeof template ->', typeof template);
 
