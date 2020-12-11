@@ -1,4 +1,4 @@
-import Orange from './tree/Orange.vue';
+import Orange from './testComponents/Orange.vue';
 
 const Green = () => 'Green';
 

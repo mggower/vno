@@ -1,5 +1,5 @@
-import Green from './tree/Green.vue';
-import Red from './tree/Red.vue';
+import Green from './testComponents/Green.vue';
+import Red from './testComponents/Red.vue';
 
 const App = () => 'App';
 

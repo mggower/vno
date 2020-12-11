@@ -1,5 +1,5 @@
-import Orange from './tree/Orange.vue';
-import Purple from './tree/Purple.vue';
+import Orange from './testComponents/Orange.vue';
+import Purple from './testComponents/Purple.vue';
 
 const Red = () => 'red';
 
