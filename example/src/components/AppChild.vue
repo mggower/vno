@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'app-child',
+  el: 'app-child',
   data() {
     return {
       counter: 0,
