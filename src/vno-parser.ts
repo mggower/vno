@@ -1,4 +1,5 @@
 import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
+import { ensureDir } from "https://deno.land/std@0.80.0/fs/mod.ts";
 
 /**
  * interface establishes types and properties:
@@ -8,20 +9,20 @@ import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
  * parseTools: for vno methods and parsing data
  * traverse: for iteration function
  */
-
 interface component {
   label: string;
   path: string;
   template?: string;
   script?: string;
   style?: string;
+  instance?: any;
 }
 
 interface filePath {
   (relativePath: string): string;
 }
 interface parseTools {
-  (data: string, obj?: component): void;
+  (data?: string, obj?: component): void;
 }
 
 interface traverse {
@@ -36,6 +37,7 @@ interface vno {
   script: parseTools;
   style: parseTools;
   imports: parseTools;
+  instance: parseTools;
   build: parseTools;
   parse: traverse;
 }
@@ -53,11 +55,11 @@ const vno = {
    */
   queue: [] as any,
   cache: [] as any,
+
   /**
    * locate creates an absolute path based on the current working directory
    * @param relative ;; the relative path provided in each file
    */
-
   locate(relative: string) {
     // ***** --> this will likely develop to `./components${relative}`
     return join(Deno.cwd(), `${relative}`);
@@ -69,7 +71,6 @@ const vno = {
    * @param data ;; collected data sourced from file
    * @param current ;; the current active component object
    */
-
   template(data: string, current: component) {
     const regex = /<\W*template>/;
     const template = data.split(regex)[1].split(/\n|\s{2,}/).join("");
@@ -83,7 +84,6 @@ const vno = {
    * @param data ;; collected data sourced from file
    * @param current ;; the current active component object
    */
-
   script(data: string, current: component) {
     const regex = /<\W*script>/;
     const script = data.split(regex)[1].split(/[\n\s]/).join("");
@@ -100,7 +100,6 @@ const vno = {
    * @param data ;; collected data sourced from file
    * @param current ;; the current active component object
    */
-
   style(data: string, current: component) {
     const regex = /<\W*style>/;
     const style = data.split(regex)[1].split(/[\n\s]/).join("");
@@ -115,7 +114,6 @@ const vno = {
    * that component is not found in the queue or cache.
    * @param data ;; collected data sourced from file
    */
-
   imports(data: string) {
     const lines = data.split(/\n/);
 
@@ -137,12 +135,31 @@ const vno = {
     });
   },
 
+  instance(current: component) {
+    const { label, template, script } = current;
+    if (label === "App") { // 'App' is hardcoded now, but we will rafactor to be dynamic
+      current.instance =
+        `\nconst ${label} = new Vue({template: \`${template}\`,${script}})`;
+    } else {
+      current.instance =
+        `\nconst ${label} = Vue.component(\"${label}\", {template: \`${template}\`,${script}})`;
+    }
+  },
   /**
    * build method will iterate through the cache and write the
    * components as Vue instances into a single file for production.
    */
-
   build() {
+    ensureDir("./vno-build");
+    const reverse = this.cache.reverse();
+    reverse.forEach((comp: component) => {
+      const { instance } = comp;
+      Deno.writeTextFile(
+        "./vno-build/test.js",
+        instance,
+        { append: true },
+      );
+    });
   },
 
   /**
@@ -150,7 +167,6 @@ const vno = {
    * to begin app parsing. Parse calls all vno methods.
    * @param root ;; a component object { name, path } 
    */
-
   async parse(root: component) {
     this.queue.push(root);
 
@@ -158,24 +174,19 @@ const vno = {
       const current: component = this.queue.shift();
       const data = await Deno.readTextFile(current.path);
 
-      await this.template(data, current);
-      await this.script(data, current);
-      await this.style(data, current);
-      await this.imports(data);
+      this.template(data, current);
+      this.script(data, current);
+      this.style(data, current);
+      this.instance(current);
+      this.imports(data);
 
       this.cache.push(current);
     }
-
+    this.build();
     return this.cache;
   },
 };
 
-const root: component = {
-  label: "App",
-  path: vno.locate("./App.vue"),
-};
-
-const results = await vno.parse(root);
-console.log("RE$ULTZ --> ", results);
+vno.build();
 
 export default vno;
