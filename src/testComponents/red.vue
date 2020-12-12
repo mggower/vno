@@ -9,7 +9,7 @@ import Orange from './testComponents/Orange.vue';
 import Purple from './testComponents/Purple.vue';
 
 export default {
-  name: 'Red',
+  name: 'red',
   data() {
     return {
       color: 'red'

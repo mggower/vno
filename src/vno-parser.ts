@@ -14,10 +14,9 @@ const cache: object[] = [];
  */
 
 interface component {
-  name: string;
+  label: string;
   path: string;
   template?: string;
-  imports?: object[];
   script?: string;
   style?: string;
 }
@@ -47,7 +46,7 @@ const vno = {
    */
 
   template(data: string, current: component) {
-    const regex = /<\W*template>/gm;
+    const regex = /<\W*template>/;
     const template = data.split(regex)[1].split(/\n|\s{2,}/).join("");
 
     current.template = template;
@@ -99,14 +98,14 @@ const vno = {
     const children = lines.filter((element) => regex.test(element));
 
     children.forEach((item) => {
-      const [_, name, __, path] = item.split(" ");
+      const [_, label, __, path] = item.split(" ");
       const component: component = {
-        name,
+        label,
         path: this.locate(path.split(/[`'"]/)[1]),
       };
       if (
-        !cache.some((child: any) => child.name === component.name) &&
-        !queue.some((child: any) => child.name === component.name)
+        !cache.some((child: any) => child.label === component.label) &&
+        !queue.some((child: any) => child.label === component.label)
       ) {
         queue.push(component);
       }
@@ -141,13 +140,17 @@ const vno = {
 
       cache.push(current);
     }
+
+    return cache;
   },
 };
 
 const root = {
-  name: "App",
+  label: "App",
   path: vno.locate("./App.vue"),
 };
 
-await vno.parse(root);
-console.log("RE$ULTZ --> ", cache);
+const results = await vno.parse(root);
+console.log("RE$ULTZ --> ", results);
+
+export default vno;
