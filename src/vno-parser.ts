@@ -1,16 +1,12 @@
 import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
 
 /**
- * The queue is used to line up component files that have not yet been parsed.
- * After parsing, the component object is pushed into the cache for build.
- */
-
-const queue: object[] = [];
-const cache: object[] = [];
-
-/**
- * the component interface establishes types and properties for each
- * single file component during build
+ * interface establishes types and properties:
+ * 
+ * component: for data collection for single file components
+ * filePath: for finding absolute path to directories
+ * parseTools: for vno methods and parsing data
+ * traverse: for iteration function
  */
 
 interface component {
@@ -21,6 +17,29 @@ interface component {
   style?: string;
 }
 
+interface filePath {
+  (relativePath: string): string;
+}
+interface parseTools {
+  (data: string, obj?: component): void;
+}
+
+interface traverse {
+  (data: string): object[];
+}
+
+interface vno {
+  queue: object[];
+  cache: object[];
+  locate: filePath;
+  template: parseTools;
+  script: parseTools;
+  style: parseTools;
+  imports: parseTools;
+  build: parseTools;
+  parse: traverse;
+}
+
 /**
  * the vno object contains the methods used during the parsing process.
  * all methods are called inside of 'parse', which then constructs
@@ -28,6 +47,12 @@ interface component {
  */
 
 const vno = {
+  /**
+   * The queue is used to line up component files that have not yet been parsed.
+   * After parsing, the component object is pushed into the cache for build.
+   */
+  queue: [] as any,
+  cache: [] as any,
   /**
    * locate creates an absolute path based on the current working directory
    * @param relative ;; the relative path provided in each file
@@ -104,10 +129,10 @@ const vno = {
         path: this.locate(path.split(/[`'"]/)[1]),
       };
       if (
-        !cache.some((child: any) => child.label === component.label) &&
-        !queue.some((child: any) => child.label === component.label)
+        !this.cache.some((child: any) => child.label === component.label) &&
+        !this.queue.some((child: any) => child.label === component.label)
       ) {
-        queue.push(component);
+        this.queue.push(component);
       }
     });
   },
@@ -127,10 +152,10 @@ const vno = {
    */
 
   async parse(root: component) {
-    queue.push(root);
+    this.queue.push(root);
 
-    while (queue.length) {
-      const current: any = queue.shift();
+    while (this.queue.length) {
+      const current: component = this.queue.shift();
       const data = await Deno.readTextFile(current.path);
 
       await this.template(data, current);
@@ -138,14 +163,14 @@ const vno = {
       await this.style(data, current);
       await this.imports(data);
 
-      cache.push(current);
+      this.cache.push(current);
     }
 
-    return cache;
+    return this.cache;
   },
 };
 
-const root = {
+const root: component = {
   label: "App",
   path: vno.locate("./App.vue"),
 };

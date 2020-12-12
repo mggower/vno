@@ -1,39 +1,39 @@
-console.log('before');
+console.log("before");
 
 /*
 reading file 'readTextFile' allows us to read and write in plain english
 "readFile --> gives us UNICODE Characters" X X X
 */
 
-const data = await Deno.readTextFile('./HeyGirl.vue');
-console.log('data', data);
+const data = await Deno.readTextFile("./HeyGirl.vue");
+console.log("data", data);
 const tRegex = /<\W*template>/gm;
-const template = data.split(tRegex)[1].split(/\n/).join('');
+const template = data.split(tRegex)[1].split(/\n/).join("");
 // template.replace(/n/gm, '');
 // template.trim();
 // const pls = template;
 // console.log(pls);
-console.log('template ->', template);
-console.log('typeof template ->', typeof template);
+console.log("template ->", template);
+console.log("typeof template ->", typeof template);
 
 const scrRegex = /<\W*script>/gm;
 const script = data.split(scrRegex)[1];
 
-console.log('script ->', script);
-console.log('typeof script ->', typeof script);
+console.log("script ->", script);
+console.log("typeof script ->", typeof script);
 
 const styRegex = /<\W*style>/gm;
 const style = data.split(styRegex)[1];
 
-console.log('style ->', style);
-console.log('typeof style ->', typeof style);
+console.log("style ->", style);
+console.log("typeof style ->", typeof style);
 
 const object = {
   template,
   script,
   style,
 };
-console.log('object', object);
+console.log("object", object);
 
 /* mkdir and write to new file
 
