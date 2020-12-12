@@ -1,5 +1,27 @@
+<template>
+  <div id="green">
+    <h1> greenie in a bottle baby </h1>
+  </div>
+</template>
+
+<script>
 import Orange from './testComponents/Orange.vue';
 
-const Green = () => 'Green';
+export default {
+  name: 'Green',
+  data() {
+    return {
+      color: 'green'
+    }
+  },
+  components: {
+    Orange,
+  }
+}
+</script>
 
-export default Green;
+<style>
+body {
+  background-color: chartreuse;
+}
+</style>

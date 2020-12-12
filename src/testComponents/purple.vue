@@ -1,4 +1,22 @@
+<template>
+  <div id="purple">
+    <h1> purple is here </h1>
+  </div>
+</template>
 
-const Purple = () => 'Purple';
+<script>
+export default {
+  name: 'Purple',
+  data() {
+    return {
+      color: 'purple'
+    }
+  },
+}
+</script>
 
-export default Purple;
+<style>
+body {
+  background-color: blue;
+}
+</style>
