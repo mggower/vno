@@ -21,24 +21,26 @@ const vno = {
   },
 
   template(data: string, current: component) {
-    const tRegex = /<\W*template>/gm;
-    const template = data.split(tRegex)[1].split(/\n/).join("");
+    const regex = /<\W*template>/gm;
+    const template = data.split(regex)[1].split(/\n|\s{2,}/).join("");
+
     current.template = template;
   },
 
   script(data: string, current: component) {
     const regex = /<\W*script>/;
-    let script = data.split(regex)[1].split(/[\n\s]/).join("");
+    const script = data.split(regex)[1].split(/[\n\s]/).join("");
 
     const start = script.indexOf("{") + 1;
-    let end = script.lastIndexOf("}");
+    const end = script.lastIndexOf("}");
 
     current.script = script.slice(start, end);
   },
 
   style(data: string, current: component) {
-    const styRegex = /<\W*style>/gm;
-    const style = data.split(styRegex)[1];
+    const regex = /<\W*style>/;
+    const style = data.split(regex)[1].split(/[\n\s]/).join("");
+
     current.style = style;
   },
 
@@ -76,9 +78,9 @@ const vno = {
       const current: any = queue.shift();
       const data = await Deno.readTextFile(current.path);
 
-      // await this.template(data, current);
+      await this.template(data, current);
       await this.script(data, current);
-      // await this.style(data, current);
+      await this.style(data, current);
       await this.imports(data);
 
       cache.push(current);
