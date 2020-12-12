@@ -65,9 +65,6 @@ const vno = {
     });
   },
 
-  async traverse() {
-  },
-
   build() {
   },
 
