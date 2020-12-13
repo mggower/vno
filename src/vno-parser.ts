@@ -1,54 +1,18 @@
 import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
 import { ensureDir, exists } from "https://deno.land/std@0.80.0/fs/mod.ts";
-/**
- * interface establishes types and properties:
- * 
- * component: for data collection for single file components
- * filePath: for finding absolute path to directories
- * parseTools: for vno methods and parsing data
- * traverse: for iteration function
- */
-interface component {
-  label: string;
-  path: string;
-  template?: string;
-  script?: string;
-  style?: string;
-  instance?: any;
-}
-
-interface filePath {
-  (relativePath: string): string;
-}
-interface parseTools {
-  (data: string, obj: component): void;
-}
-
-interface buildTools {
-  (obj: component): any;
-}
-
-interface vno {
-  locate: filePath;
-  template: parseTools;
-  script: parseTools;
-  style: parseTools;
-  imports: parseTools;
-  instance: buildTools;
-  build: parseTools;
-  parse: buildTools;
-}
+import { component, vno } from "./strategies/types.ts";
+import print from "./strategies/console.ts";
 
 /**
  * parser class contains the methods used during the parsing process.
  * all methods are called inside of 'parse', which then constructs
  * our cache of components and are sent through the build process.
  */
-
 class Parser implements vno {
   root: any;
   queue: any[];
   cache: any[];
+  cdn: string;
   /**
   * The queue is used to line up component files that have not yet been parsed.
   * After parsing, the component object is pushed into the cache for build.
@@ -57,6 +21,8 @@ class Parser implements vno {
     this.root = null;
     this.queue = [];
     this.cache = [];
+    this.cdn =
+      "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
   }
 
   /**
@@ -89,12 +55,14 @@ class Parser implements vno {
    */
   script(data: string, current: component) {
     const regex = /<\W*script>/;
-    const script = data.split(regex)[1].split(/[\n\s]/).join("");
+    const script = data.split(regex)[1].split(/[\n\s]/);
+
+    current.name = script[script.indexOf("name:") + 1].split("'")[1];
 
     const start = script.indexOf("{") + 1;
     const end = script.lastIndexOf("}");
 
-    current.script = script.slice(start, end);
+    current.script = script.slice(start, end).join("");
   }
 
   /**
@@ -139,14 +107,18 @@ class Parser implements vno {
   }
 
   instance(current: component) {
-    const { label, template, script } = current;
+    const { label, name, template, script } = current;
     if (label === this.root.label) {
       current.instance =
-        `\nconst ${label} = new Vue({template: \`${template}\`,${script}})`;
+        `\nconst ${label} = new Vue({template: \`${template}\`,${script}});\n`;
     } else {
       current.instance =
-        `\nconst ${label} = Vue.component(\"${label}\", {template: \`${template}\`,${script}})`;
+        `\nconst ${label} = Vue.component("${name}", {template: \`${template}\`,${script}});`;
     }
+  }
+
+  mount(root: component) {
+    return `\n${root.label}.$mount("#${root.name}");\nexport default ${root.label};\n`;
   }
   /**
    * build method will iterate through the cache and write the
@@ -155,21 +127,24 @@ class Parser implements vno {
   async build() {
     await ensureDir("./vno-build");
     const buildPath = "./vno-build/build.js";
-  
-    const vue =
-      `import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js'`;
-    const mount =
-      `\n${this.root.label}.$mount('#${this.root.label}');\nexport default ${this.root.label};`;
 
-    if (await exists(buildPath)) Deno.remove(buildPath);
+    const vue = `import Vue from '${this.cdn}';\n`;
+    const mount = this.mount(this.root);
+
+    if (await exists(buildPath)) await Deno.remove(buildPath);
     await Deno.writeTextFile(buildPath, vue, { append: true });
-    this.cache.reverse()
-      .forEach(
-        async (comp: component) => {
-          await Deno.writeTextFile(buildPath, comp.instance, { append: true });
-        },
-      );
+
+    this.cache.forEach(
+      async (child: component) => {
+        await Deno.writeTextFile(buildPath, child.instance, { append: true });
+      },
+    );
+
+    await Deno.writeTextFile(buildPath, this.root.instance, { append: true });
     await Deno.writeTextFile(buildPath, mount, { append: true });
+
+    console.timeEnd();
+    print();
   }
 
   /**
@@ -180,6 +155,8 @@ class Parser implements vno {
   async parse(root: component) {
     this.root = root;
     this.queue.push(root);
+    console.time();
+    console.log("parsing...");
 
     while (this.queue.length) {
       const current: component = this.queue.shift();
@@ -190,7 +167,10 @@ class Parser implements vno {
       this.style(data, current);
       this.instance(current);
       this.imports(data);
-      this.cache.push(current);
+
+      if (current !== this.root) {
+        this.cache.unshift(current);
+      }
     }
 
     this.build();
