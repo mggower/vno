@@ -131,16 +131,20 @@ const vno = {
 
     while (queue.length) {
       const current: any = queue.shift();
-      const data = await Deno.readTextFile(current.path);
+      console.log("queens we are inside the while loop");
+      try {
+        const data = await Deno.readTextFile(current.path);
 
-      await this.template(data, current);
-      await this.script(data, current);
-      await this.style(data, current);
-      await this.imports(data);
+        this.template(data, current);
+        this.script(data, current);
+        this.style(data, current);
+        this.imports(data);
+      } catch (err) {
+        console.log("you fucked up", err);
+      }
 
       cache.push(current);
     }
-
     return cache;
   },
 };
