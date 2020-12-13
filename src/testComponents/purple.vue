@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'Purple',
+  name: 'purple',
   data() {
     return {
       color: 'purple'
