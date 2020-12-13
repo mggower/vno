@@ -10,6 +10,10 @@ console.log("RE$ULTZ --> ", results);
 
 import { walk } from "https://deno.land/std@0.80.0/fs/mod.ts";
 
+import { exists } from "https://deno.land/std@0.80.0/fs/mod.ts";
+
+console.log(await exists("./App.vue"));
+
 async function printFileNames() {
   const files = [];
   for await (const entry of walk(".")) {

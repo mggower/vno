@@ -1,6 +1,5 @@
 import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
-import { ensureDir } from "https://deno.land/std@0.80.0/fs/mod.ts";
-
+import { ensureDir, exists } from "https://deno.land/std@0.80.0/fs/mod.ts";
 /**
  * interface establishes types and properties:
  * 
@@ -22,39 +21,43 @@ interface filePath {
   (relativePath: string): string;
 }
 interface parseTools {
-  (data?: string, obj?: component): void;
+  (data: string, obj: component): void;
 }
 
-interface traverse {
-  (data: string): object[];
+interface buildTools {
+  (obj: component): any;
 }
 
 interface vno {
-  queue: object[];
-  cache: object[];
   locate: filePath;
   template: parseTools;
   script: parseTools;
   style: parseTools;
   imports: parseTools;
-  instance: parseTools;
+  instance: buildTools;
   build: parseTools;
-  parse: traverse;
+  parse: buildTools;
 }
 
 /**
- * the vno object contains the methods used during the parsing process.
+ * parser class contains the methods used during the parsing process.
  * all methods are called inside of 'parse', which then constructs
  * our cache of components and are sent through the build process.
  */
 
-const vno = {
+class Parser implements vno {
+  root: any;
+  queue: any[];
+  cache: any[];
   /**
-   * The queue is used to line up component files that have not yet been parsed.
-   * After parsing, the component object is pushed into the cache for build.
-   */
-  queue: [] as any,
-  cache: [] as any,
+  * The queue is used to line up component files that have not yet been parsed.
+  * After parsing, the component object is pushed into the cache for build.
+  */
+  constructor() {
+    this.root = null;
+    this.queue = [];
+    this.cache = [];
+  }
 
   /**
    * locate creates an absolute path based on the current working directory
@@ -63,7 +66,7 @@ const vno = {
   locate(relative: string) {
     // ***** --> this will likely develop to `./components${relative}`
     return join(Deno.cwd(), `${relative}`);
-  },
+  }
 
   /**
    * template parses through <template> tags, and then 
@@ -76,7 +79,7 @@ const vno = {
     const template = data.split(regex)[1].split(/\n|\s{2,}/).join("");
 
     current.template = template;
-  },
+  }
 
   /**
    * script parses through <script> tags, and then 
@@ -92,7 +95,7 @@ const vno = {
     const end = script.lastIndexOf("}");
 
     current.script = script.slice(start, end);
-  },
+  }
 
   /**
    * style parses through <style> tags, and then 
@@ -105,7 +108,7 @@ const vno = {
     const style = data.split(regex)[1].split(/[\n\s]/).join("");
 
     current.style = style;
-  },
+  }
 
   /**
    * imports parses through import statements, and then 
@@ -133,34 +136,41 @@ const vno = {
         this.queue.push(component);
       }
     });
-  },
+  }
 
   instance(current: component) {
     const { label, template, script } = current;
-    if (label === "App") { // 'App' is hardcoded now, but we will rafactor to be dynamic
+    if (label === this.root.label) {
       current.instance =
         `\nconst ${label} = new Vue({template: \`${template}\`,${script}})`;
     } else {
       current.instance =
         `\nconst ${label} = Vue.component(\"${label}\", {template: \`${template}\`,${script}})`;
     }
-  },
+  }
   /**
    * build method will iterate through the cache and write the
    * components as Vue instances into a single file for production.
    */
-  build() {
-    ensureDir("./vno-build");
-    const reverse = this.cache.reverse();
-    reverse.forEach((comp: component) => {
-      const { instance } = comp;
-      Deno.writeTextFile(
-        "./vno-build/test.js",
-        instance,
-        { append: true },
+  async build() {
+    await ensureDir("./vno-build");
+    const buildPath = "./vno-build/build.js";
+  
+    const vue =
+      `import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js'`;
+    const mount =
+      `\n${this.root.label}.$mount('#${this.root.label}');\nexport default ${this.root.label};`;
+
+    if (await exists(buildPath)) Deno.remove(buildPath);
+    await Deno.writeTextFile(buildPath, vue, { append: true });
+    this.cache.reverse()
+      .forEach(
+        async (comp: component) => {
+          await Deno.writeTextFile(buildPath, comp.instance, { append: true });
+        },
       );
-    });
-  },
+    await Deno.writeTextFile(buildPath, mount, { append: true });
+  }
 
   /**
    * parse is an async method that will be invoked with the application root
@@ -168,6 +178,7 @@ const vno = {
    * @param root ;; a component object { name, path } 
    */
   async parse(root: component) {
+    this.root = root;
     this.queue.push(root);
 
     while (this.queue.length) {
@@ -179,14 +190,12 @@ const vno = {
       this.style(data, current);
       this.instance(current);
       this.imports(data);
-
       this.cache.push(current);
     }
+
     this.build();
     return this.cache;
-  },
-};
+  }
+}
 
-vno.build();
-
-export default vno;
+export default new Parser();
