@@ -13,10 +13,12 @@ class Parser implements vno {
   queue: any[];
   cache: any[];
   cdn: string;
+
   /**
   * The queue is used to line up component files that have not yet been parsed.
   * After parsing, the component object is pushed into the cache for build.
   */
+
   constructor() {
     this.root = null;
     this.queue = [];
@@ -143,7 +145,6 @@ class Parser implements vno {
     await Deno.writeTextFile(buildPath, this.root.instance, { append: true });
     await Deno.writeTextFile(buildPath, mount, { append: true });
 
-    console.timeEnd();
     print();
   }
 
@@ -155,8 +156,6 @@ class Parser implements vno {
   async parse(root: component) {
     this.root = root;
     this.queue.push(root);
-    console.time();
-    console.log("parsing...");
 
     while (this.queue.length) {
       const current: component = this.queue.shift();
