@@ -1,8 +1,8 @@
 import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
 import { ensureDir, exists } from "https://deno.land/std@0.80.0/fs/mod.ts";
 
-import { component, vno } from "./strategies/types.ts";
-import print from "./strategies/console.ts";
+import { component, vno } from "./types.ts";
+import print from "./console.ts";
 
 /**
  * parser object interface vno contains the methods used during the parsing
@@ -196,13 +196,15 @@ Parser.prototype.build = async function () {
   if (await exists(stylePath)) await Deno.remove(stylePath);
   await Deno.writeTextFile(stylePath, this.root.style, { append: true });
 
-  await Object.keys(this.cache).forEach(
-    async (child) => {
-      const { instance, style } = this.cache[child];
-      await Deno.writeTextFile(buildPath, instance, { append: true });
-      await Deno.writeTextFile(stylePath, style, { append: true });
-    },
-  );
+  await Object.keys(this.cache)
+    .forEach(
+      async (child) => {
+        const { instance, style } = this.cache[child];
+        await Deno.writeTextFile(buildPath, instance, { append: true });
+        await Deno.writeTextFile(stylePath, style, { append: true });
+      },
+    );
+
   await this.mount(this.root, buildPath);
   print();
 };
@@ -243,10 +245,10 @@ Parser.prototype.parse = async function (root: component) {
   return this.cache;
 };
 
-const demo = new (Parser as any)();
-await demo.parse({
-  label: "App",
-  path: demo.locate("./App.vue"),
-});
+// const demo = new (Parser as any)();
+// await demo.parse({
+//   label: "App",
+//   path: demo.locate("./App.vue"),
+// });
 
 export default new (Parser as any)();

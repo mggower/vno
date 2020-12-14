@@ -27,7 +27,7 @@ interface buildTools {
 export interface vno {
   root: any;
   queue: any[];
-  cache: any[];
+  cache: object;
   cdn: string;
   locate: filePath;
   template: buildTools;
