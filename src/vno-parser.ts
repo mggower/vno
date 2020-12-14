@@ -175,7 +175,6 @@ Parser.prototype.mount = async function (root: component, buildPath: string) {
    * build method will iterate through the cache and write the
    * components as Vue instances into a single file for production.
    */
-
 Parser.prototype.build = async function () {
   await ensureDir("./vno-build");
   const buildPath = "./vno-build/build.js";
