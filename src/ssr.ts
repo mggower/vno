@@ -2,7 +2,7 @@ import vno from "./vno-parser.ts";
 // import Output from "../vno-build/Output.js";
 
 const root = {
-  name: "App",
+  label: "App",
   path: vno.locate("./App.vue"),
 };
 console.log("entered ssr.ts");
@@ -19,7 +19,6 @@ const html: string =
 
 const js = script;
 console.log("exited ssr.ts");
-// export { html, js };
 
 import { Application } from "https://deno.land/x/oak/mod.ts";
 
@@ -43,3 +42,4 @@ app.addEventListener("listen", () => {
 });
 
 await app.listen({ port: 8000 });
+export { html, js };
