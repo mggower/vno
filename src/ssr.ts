@@ -11,15 +11,14 @@ const root = {
 console.log("entered ssr.ts");
 
 // console.log("HELP: ", help);
-// const parsedCache: any = await vno.parse(root);
+const parsedCache: any = await vno.parse(root);
 // console.log(parsedCache);
-console.log("rootObj: ", rootObj);
 // console.log("APP-OBJ: ", appObj);
-// const template: = rootObj.template;
+const template: string = parsedCache.template;
 // console.log("TEMPLATE,", template);
-// const script: string = rootObj.script;
+const script: string = parsedCache.script;
 // console.log("SCRIPT: ", script);
-// const style: string = rootObj.style;
+const style: string = parsedCache.style;
 
 // const htmlRoot = root.name;
 
