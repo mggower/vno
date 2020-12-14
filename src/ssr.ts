@@ -4,26 +4,21 @@ import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
 // import Output from "../vno-build/Output.js";
 // const text: any = await Deno.readTextFile("../example/public/index.html");
 
+// Root Obj
 const root = {
   name: "App",
   path: vno.locate("./App.vue"),
 };
 console.log("entered ssr.ts");
 
-// console.log("HELP: ", help);
+//Assign const parsedCache a value of an array of children components from the vno-parser's cache
 const parsedCache: any = await vno.parse(root);
-// console.log(parsedCache);
-// console.log("APP-OBJ: ", appObj);
+//template will be the <template> string
 const template: string = parsedCache.template;
-// console.log("TEMPLATE,", template);
+//script will be the <script> string
 const script: string = parsedCache.script;
-// console.log("SCRIPT: ", script);
+//style will be the <style> string
 const style: string = parsedCache.style;
-
-// const htmlRoot = root.name;
-
-// const htmlRead = Deno.readTextFile("../example/public/index.html");
-// console.log(htmlRead);
 
 //POSSIBLE INTERFACE FOR HTML-OBJ
 // interface htmlConfig {
@@ -33,12 +28,18 @@ const style: string = parsedCache.style;
 //   name: string;
 // }
 
+/*Function which will build an html file injected with the root's template, script, name, and style values*/
 function htmlBuild(obj: any) {
+  /*An object within the function which assigns the correct property-values for each component. 
+  If object passed in does not havecorrect value, a default value will be inserted*/
   const htmlObj: any = {
+    //root of the app or "app"
     rootName: obj.rootName || "app",
 
+    //the current working directory + the vno-build folder/file extensions (no default value assigned yet)
     build: join(Deno.cwd(), "./vno-build/build.js"),
 
+    //root's template or default template
     template: obj.template ||
       `<template>
     <div id="app">
@@ -46,6 +47,7 @@ function htmlBuild(obj: any) {
     </div>
   </template>`,
 
+    //root's script or default script
     script: obj.script ||
       `<script>
   export default {
@@ -61,6 +63,8 @@ function htmlBuild(obj: any) {
   }
   </script>`,
 
+    //root's style or default styile
+
     style: obj.style ||
       `<style>
   body {
@@ -69,8 +73,11 @@ function htmlBuild(obj: any) {
   </style>`,
   };
 
-  const finalHtml: string = `<!DOCTYPE html>
-<html lang="en">
+  //assign finalHtml const to a value of an interpolated string of htmlObj values
+  const finalHtml: string =
+    // eslint-disable-next-line [RULE]
+    `<!DOCTYPE html>
+  <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -95,19 +102,21 @@ function htmlBuild(obj: any) {
     <div id="${htmlObj.root}">
       <!-- built files will be auto injected -->
       ${htmlObj.script}
-    </div>
+      </div>
+      <script type="application/javascript" src="${htmlObj.build}">
+      </script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <script type="module">
-    <script src=${htmlObj.build}>
       import ${htmlObj.rootName} from './src/${htmlObj.rootName}.js';
     </script>
   </body>
 </html>`;
+  //return out the finalHtml var
   return finalHtml;
 }
-const rootObj = await vno.root;
 
-const html: any = htmlBuild(rootObj);
+//Assign 'html' const the evaluated result of calling htmlBuild function on the vno's root obj
+const html: any = htmlBuild(vno.root);
 console.log("HTML: ", html);
 console.log("exited ssr.ts");
 
@@ -135,6 +144,7 @@ app.addEventListener("listen", () => {
 
 await app.listen({ port: 8000 });
 
+export { html };
 // const divRegex = /<\W*div id="app">/;
 // const divRegex2 = /<\/div>/;
 // const scriptRegex = /<\W*script type="module">/;
