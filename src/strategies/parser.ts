@@ -25,8 +25,7 @@ function Parser(this: vno) {
    * @param relative ;; the relative path provided in each file
    */
 Parser.prototype.locate = function (relative: string) {
-  // ***** --> this will likely develop to `./components${relative}`
-  return join(Deno.cwd(), `${relative}`);
+  return join(Deno.cwd(), `${relative}`); // --> likely develop to `./components${relative}`
 };
 
 /**
@@ -39,7 +38,6 @@ Parser.prototype.init = async function (current: component) {
   const { path } = current;
   const data = path && await Deno.readTextFile(path);
   current.split = data?.split(/\n/);
-  // console.log(current.label, "'s data split-->", current.split);
 };
 
 /**
@@ -244,11 +242,5 @@ Parser.prototype.parse = async function (root: component) {
   this.build();
   return this.cache;
 };
-
-// const demo = new (Parser as any)();
-// await demo.parse({
-//   label: "App",
-//   path: demo.locate("./App.vue"),
-// });
 
 export default new (Parser as any)();
