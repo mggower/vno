@@ -88,20 +88,23 @@ class Parser implements vno {
    * @param data ;; collected data sourced from file
    */
   imports(data: string) {
-    const lines = data.split(/\n/);
-
+    const importLines = data.split(/\n/);
     const regex = /^(import)/;
-    const children = lines.filter((element) => regex.test(element));
+    const children = importLines.filter((element) => regex.test(element));
 
-    children.forEach((item) => {
-      const [_, label, __, path] = item.split(" ");
+    children.forEach((importItem) => {
+      const [_, label, __, path] = importItem.split(" ");
       const component: component = {
         label,
         path: this.locate(path.split(/[`'"]/)[1]),
       };
       if (
-        !this.cache.some((child: any) => child.label === component.label) &&
-        !this.queue.some((child: any) => child.label === component.label)
+        !this.cache.some((cacheChild: any) =>
+          cacheChild.label === component.label
+        ) &&
+        !this.queue.some((queueChild: any) =>
+          queueChild.label === component.label
+        )
       ) {
         this.queue.push(component);
       }
@@ -153,7 +156,7 @@ class Parser implements vno {
    * to begin app parsing. Parse calls all vno methods.
    * @param root ;; a component object { name, path } 
    */
-  async parse(root: component) {
+  async parse(root: any) {
     this.root = root;
     this.queue.push(root);
 
