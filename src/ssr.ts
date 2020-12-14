@@ -10,19 +10,18 @@ const root = {
 };
 console.log("entered ssr.ts");
 
-const parsed: any = await vno.parse(root);
-console.log(parsed);
 // console.log("HELP: ", help);
-const appObj = await vno.root;
-console.log("appObj: ", appObj);
+// const parsedCache: any = await vno.parse(root);
+// console.log(parsedCache);
+console.log("rootObj: ", rootObj);
 // console.log("APP-OBJ: ", appObj);
-const template = appObj.template;
+// const template: = rootObj.template;
 // console.log("TEMPLATE,", template);
-const script = appObj.script;
+// const script: string = rootObj.script;
 // console.log("SCRIPT: ", script);
-const style: string = appObj.style;
+// const style: string = rootObj.style;
 
-const htmlRoot = root.name;
+// const htmlRoot = root.name;
 
 // const htmlRead = Deno.readTextFile("../example/public/index.html");
 // console.log(htmlRead);
@@ -35,43 +34,43 @@ const htmlRoot = root.name;
 //   name: string;
 // }
 
-const htmlObj: object = {
-  root: root.name || "App",
-
-  build: join(Deno.cwd(), "./vno-build/build.js"),
-
-  template: `${template}` ||
-    `<template>
-  <div id="app">
-    <h1> Default Template </h1>
-  </div>
-</template>`,
-
-  script: `${script}` ||
-    `<script>
-export default {
-  name: 'app',
-  data() {
-    return {
-
-    }
-  },
-  components: {
-    
-  }
-}
-</script>`,
-
-  style: `${style}` ||
-    `<style>
-body {
-  background-color: #025373;
-}
-</style>`,
-};
-
 function htmlBuild(obj: any) {
-  `<!DOCTYPE html>
+  const htmlObj: any = {
+    rootName: obj.rootName || "app",
+
+    build: join(Deno.cwd(), "./vno-build/build.js"),
+
+    template: obj.template ||
+      `<template>
+    <div id="app">
+      <h1> Default Template </h1>
+    </div>
+  </template>`,
+
+    script: obj.script ||
+      `<script>
+  export default {
+    name: 'app',
+    data() {
+      return {
+  
+      }
+    },
+    components: {
+      
+    }
+  }
+  </script>`,
+
+    style: obj.style ||
+      `<style>
+  body {
+    background-color: #025373;
+  }
+  </style>`,
+  };
+
+  const finalHtml: string = `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -86,7 +85,7 @@ function htmlBuild(obj: any) {
   </head>
   <body>
   <h1>template</h1>
-  ${obj.template}
+  ${htmlObj.template}
     <noscript>
       <strong
         >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
@@ -94,20 +93,23 @@ function htmlBuild(obj: any) {
         continue.</strong
       >
     </noscript>
-    <div id="${obj.root}">
+    <div id="${htmlObj.root}">
       <!-- built files will be auto injected -->
-      ${obj.script}
+      ${htmlObj.script}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <script type="module">
-    <script src=${obj.build}>
-      import ${obj.root} from './src/${obj.root}.js';
+    <script src=${htmlObj.build}>
+      import ${htmlObj.rootName} from './src/${htmlObj.rootName}.js';
     </script>
   </body>
 </html>`;
+  return finalHtml;
 }
-const html: any = htmlBuild(htmlObj);
+const rootObj = await vno.root;
 
+const html: any = htmlBuild(rootObj);
+console.log("HTML: ", html);
 console.log("exited ssr.ts");
 
 import { Application } from "https://deno.land/x/oak/mod.ts";
