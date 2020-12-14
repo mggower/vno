@@ -101,10 +101,9 @@ function htmlBuild(obj: any) {
     </noscript>
     <div id="${htmlObj.root}">
       <!-- built files will be auto injected -->
-      ${htmlObj.script}
+      <script>${htmlObj.script}</script>
       </div>
-      <script type="application/javascript" src="${htmlObj.build}">
-      </script>
+      <script type="module" src="${htmlObj.build}"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <script type="module">
       import ${htmlObj.rootName} from './src/${htmlObj.rootName}.js';
@@ -116,7 +115,7 @@ function htmlBuild(obj: any) {
 }
 
 //Assign 'html' const the evaluated result of calling htmlBuild function on the vno's root obj
-const html: any = htmlBuild(vno.root);
+const html: any = htmlBuild({});
 console.log("HTML: ", html);
 console.log("exited ssr.ts");
 
@@ -125,6 +124,7 @@ import { Application } from "https://deno.land/x/oak/mod.ts";
 
 const app = new Application();
 
+//if endpoint '/' is requested, the pre-interpolated html file will be served in the response body
 app.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
   if (filePath === "/") {
@@ -145,6 +145,8 @@ app.addEventListener("listen", () => {
 await app.listen({ port: 8000 });
 
 export { html };
+
+//extra crap we may need with regex and HTML
 // const divRegex = /<\W*div id="app">/;
 // const divRegex2 = /<\/div>/;
 // const scriptRegex = /<\W*script type="module">/;
