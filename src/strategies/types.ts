@@ -8,6 +8,7 @@
 export interface component {
   label: string;
   path: string;
+  split?: string[];
   name?: string;
   template?: string;
   script?: string;
@@ -18,22 +19,22 @@ export interface component {
 interface filePath {
   (relativePath: string): string;
 }
-interface parseTools {
-  (data: string, obj: component): void;
-}
-
 interface buildTools {
   (obj: component): any;
 }
 
 export interface vno {
+  root: any;
+  queue: any[];
+  cache: any[];
+  cdn: string;
   locate: filePath;
-  template: parseTools;
-  script: parseTools;
-  style: parseTools;
-  imports: parseTools;
+  template: buildTools;
+  script: buildTools;
+  style: buildTools;
+  imports: buildTools;
   instance: buildTools;
   mount: buildTools;
-  build: parseTools;
+  build: buildTools;
   parse: buildTools;
 }

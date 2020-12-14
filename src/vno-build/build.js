@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+// prettier-ignore
 import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
 
 const Purple = Vue.component("purple", {template: `<div id="purple"><h1> purple is here </h1></div>`,name:'purple',data(){return{color:'purple'}},});
