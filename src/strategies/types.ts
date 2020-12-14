@@ -7,8 +7,9 @@
  */
 export interface component {
   label: string;
-  path: string;
+  path?: string | URL;
   split?: string[];
+  imports?: string[];
   name?: string;
   template?: string;
   script?: string;

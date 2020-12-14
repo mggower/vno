@@ -34,8 +34,9 @@ Parser.prototype.locate = function (relative: string) {
  * @params current: component ;; the component currently being parsed;
  */
 Parser.prototype.init = async function (current: component) {
-  const data = await Deno.readTextFile(current.path);
-  current.split = data.split(/\n/);
+  const { path } = current;
+  const data = path && await Deno.readTextFile(path);
+  current.split = data?.split(/\n/);
   // console.log(current.label, "'s data split-->", current.split);
 };
 
@@ -47,16 +48,17 @@ Parser.prototype.init = async function (current: component) {
    */
 Parser.prototype.template = function (current: component) {
   const { split } = current;
+
   const open: any = split?.indexOf("<template>");
-  const close = split?.indexOf("</template>");
-  const template = split?.slice(open + 1, close).join("").replace(
-    /(\s{2,})/gm,
-    "",
-  );
-  return {
-    ...current,
-    template
-  }
+  const close: any = split?.indexOf("</template>");
+
+  current.split = split?.slice(close + 2);
+
+  const template = split?.slice(open + 1, close)
+    .join("")
+    .replace(/(\s{2,})/g, "");
+
+  current.template = template;
 };
 
 /**
@@ -66,15 +68,36 @@ Parser.prototype.template = function (current: component) {
    * @param current ;; the current active component object
    */
 Parser.prototype.script = function (current: component) {
-  // const regex = /<\W*script>/;
-  // const script = data.split(regex)[1].split(/[\n\s]/);
+  const { split } = current;
 
-  // current.name = script[script.indexOf("name:") + 1].split("'")[1];
+  const open: any = split?.indexOf("<script>");
+  const close: any = split?.indexOf("</script>");
 
-  // const start = script.indexOf("{") + 1;
-  // const end = script.lastIndexOf("}");
+  current.split = split?.slice(close + 2);
 
-  // current.script = script.slice(start, end).join("");
+  const script = split?.slice(open + 1, close);
+
+  const importRegEx = /^(import)/;
+  const imports = script?.filter((element) => importRegEx.test(element));
+  current.imports = imports;
+  this.imports(current);
+
+  const nameRegEx = /(name)/;
+  const name = script?.filter((element) => nameRegEx.test(element))[0]
+    .split(/[`'"]/)[1];
+
+  // const id: any = name && name[0].slice(1, name[0].length - 1);
+  current.name = name;
+
+  const exportRegEx = /^(export)/;
+  const start: any = script?.findIndex((element) => exportRegEx.test(element));
+  const end: any = script?.lastIndexOf("}");
+
+  const exports = script?.slice(start + 1, end)
+    .join("")
+    .replace(/(\s)/g, "");
+
+  current.script = exports;
 };
 
 /**
@@ -84,10 +107,17 @@ Parser.prototype.script = function (current: component) {
    * @param current ;; the current active component object
    */
 Parser.prototype.style = function (current: component) {
-  // const regex = /<\W*style>/;
-  // const style = data.split(regex)[1].split(/[\n\s]/).join("");
+  const { split } = current;
 
-  // current.style = style;
+  const open: any = split?.indexOf("<style>");
+  const close: any = split?.indexOf("</style>");
+  current.split = [];
+
+  const style: any = split?.slice(open + 1, close)
+    .join("")
+    .replace(/(\s)/g, "");
+
+  current.style = style;
 };
 
 /**
@@ -97,25 +127,29 @@ Parser.prototype.style = function (current: component) {
    * that component is not found in the queue or cache.
    * @param data ;; collected data sourced from file
    */
-Parser.prototype.imports = function (data: string) {
-  const lines = data.split(/\n/);
+Parser.prototype.imports = function (current: component) {
+  const { imports } = current;
 
-  const regex = /^(import)/;
-  const children = lines.filter((element) => regex.test(element));
+  const components: any = imports
+    ?.reduce((accumulator: object[], current: string): object[] => {
+      const array: string[] | undefined = current.split(/\s/);
+      let children = accumulator.slice();
 
-  children.forEach((item) => {
-    const [_, label, __, path] = item.split(" ");
-    const component: component = {
-      label,
-      path: this.locate(path.split(/[`'"]/)[1]),
-    };
-    if (
-      !this.cache.some((child: any) => child.label === component.label) &&
-      !this.queue.some((child: any) => child.label === component.label)
-    ) {
-      this.queue.push(component);
-    }
-  });
+      const component: component = {
+        label: array[1],
+        path: this.locate(array[3].split(/[`'"]/)[1]),
+      };
+
+      if (
+        !this.cache.some((child: any) => child.label === component.label) &&
+        !this.queue.some((child: any) => child.label === component.label)
+      ) {
+        children = [...accumulator, component];
+      }
+      return children;
+    }, []);
+
+  this.queue = [...this.queue, ...components];
 };
 
 Parser.prototype.instance = function (current: component) {
@@ -129,8 +163,12 @@ Parser.prototype.instance = function (current: component) {
   }
 };
 
-Parser.prototype.mount = function (root: component) {
-  return `\n${root.label}.$mount("#${root.name}");\nexport default ${root.label};\n`;
+Parser.prototype.mount = async function (root: component, buildPath: string) {
+  const mount =
+    `\n${root.label}.$mount("#${root.name}");\nexport default ${root.label};\n`;
+
+  await Deno.writeTextFile(buildPath, this.root.instance, { append: true });
+  await Deno.writeTextFile(buildPath, mount, { append: true });
 };
 
 /**
@@ -144,7 +182,6 @@ Parser.prototype.build = async function () {
 
   const ignore = `/* eslint-disable prettier/prettier */\n// prettier-ignore\n`;
   const vue = `import Vue from '${this.cdn}';\n`;
-  const mount = this.mount(this.root);
 
   if (await exists(buildPath)) await Deno.remove(buildPath);
   await Deno.writeTextFile(buildPath, ignore + vue, { append: true });
@@ -154,10 +191,7 @@ Parser.prototype.build = async function () {
       await Deno.writeTextFile(buildPath, child.instance, { append: true });
     },
   );
-
-  await Deno.writeTextFile(buildPath, this.root.instance, { append: true });
-  await Deno.writeTextFile(buildPath, mount, { append: true });
-
+  await this.mount(this.root, buildPath);
   print();
 };
 
@@ -172,20 +206,30 @@ Parser.prototype.parse = async function (root: component) {
 
   while (this.queue.length) {
     const current: component = this.queue.shift();
-    const data = await Deno.readTextFile(current.path);
+
     await this.init(current);
     this.template(current);
-    // this.script(data, current);
-    // this.style(data, current);
-    // this.instance(current);
-    this.imports(data);
+    this.script(current);
+    this.style(current);
+    this.instance(current);
+    // this.imports(current);
+
+    const { label, name, template, script, style, instance } = current;
+    const component: component = {
+      label,
+      name,
+      template,
+      script,
+      style,
+      instance,
+    };
 
     if (current !== this.root) {
-      this.cache.unshift(current);
+      this.cache.unshift(component);
     }
   }
 
-  // this.build();
+  this.build();
   return this.cache;
 };
 
@@ -195,6 +239,6 @@ await demo.parse({
   path: demo.locate("./App.vue"),
 });
 
-// console.log("dem0ca$h", demo.cache);
+console.log("dem0ca$h", demo.cache);
 
 export default new (Parser as any)();
