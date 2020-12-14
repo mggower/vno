@@ -115,7 +115,7 @@ function htmlBuild(obj: any) {
 }
 
 //Assign 'html' const the evaluated result of calling htmlBuild function on the vno's root obj
-const html: any = htmlBuild({});
+const html: any = htmlBuild(vno.root);
 console.log("HTML: ", html);
 console.log("exited ssr.ts");
 
