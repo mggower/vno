@@ -1,5 +1,6 @@
 import vno from "./vno-parser.ts";
 import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
+import { send } from "./deps.ts";
 
 // import Output from "../vno-build/Output.js";
 // const text: any = await Deno.readTextFile("../example/public/index.html");
@@ -30,6 +31,8 @@ const style: string = parsedCache.style;
 
 /*Function which will build an html file injected with the root's template, script, name, and style values*/
 function htmlBuild(obj: any) {
+  const cssFile = vno.locate("./bonusCSS.css");
+
   /*An object within the function which assigns the correct property-values for each component. 
   If object passed in does not havecorrect value, a default value will be inserted*/
   const htmlObj: any = {
@@ -82,11 +85,7 @@ function htmlBuild(obj: any) {
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Montserrat|PT+Serif"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./src/assets/style.css" />
+    <link rel="stylesheet" href="bonusCSS.css"/>
     <title>parsingVno</title>
   </head>
   <body>
@@ -125,7 +124,7 @@ import { Application } from "https://deno.land/x/oak/mod.ts";
 const app = new Application();
 
 //if endpoint '/' is requested, the pre-interpolated html file will be served in the response body
-app.use(async (ctx, next) => {
+app.use(async (ctx: any, next) => {
   const filePath = ctx.request.url.pathname;
   if (filePath === "/") {
     ctx.response.type = "text/html";
