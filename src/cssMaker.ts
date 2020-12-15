@@ -10,7 +10,7 @@ import vno from "./strategies/parser.ts";
 import { ensureFile } from "https://deno.land/std@0.80.0/fs/mod.ts";
 
 const root = {
-  name: "App",
+  label: "App",
   path: vno.locate("./App.vue"),
 };
 

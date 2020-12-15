@@ -7,7 +7,7 @@ import { send } from "./deps.ts";
 
 // Root Obj
 const root = {
-  name: "App",
+  label: "App",
   path: vno.locate("./App.vue"),
 };
 console.log("entered ssr.ts");
