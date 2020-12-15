@@ -7,7 +7,7 @@ import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
 
 // Root Obj
 const root = {
-  name: "App",
+  label: "App",
   path: vno.locate("./App.vue"),
 };
 console.log("entered ssr.ts");
