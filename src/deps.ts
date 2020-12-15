@@ -4,7 +4,6 @@ export * as log from "https://deno.land/std@0.74.0/log/mod.ts";
 // oak
 export {
   Application,
-  Context,
   Router,
   send,
 } from "https://deno.land/x/oak@v6.3.1/mod.ts";
