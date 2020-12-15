@@ -9,12 +9,12 @@ await vno.parse({
   path: vno.locate("./App.vue"),
 });
 
-// server.use(async (context) => {
-//   await send(context, context.request.url.pathname, {
-//     root: Deno.cwd(),
-//     index: "index.html",
-//   });
-// });
+server.use(async (context: any) => {
+  await send(context, context.request.url.pathname, {
+    root: Deno.cwd(),
+    index: "index.html",
+  });
+});
 
 const indiH = `<!DOCTYPE html>
 <html lang="en">

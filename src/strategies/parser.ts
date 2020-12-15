@@ -11,7 +11,7 @@ import print from "./console.ts";
  */
 /**
   * The queue is used to line up component files that have not yet been parsed.
-  * After parsing, the component object is pushed into the cache for build.
+  * After parsing, the componet object is pushed into the cache for build.
   */
 function Parser(this: vno) {
   this.root = null;
@@ -25,7 +25,7 @@ function Parser(this: vno) {
    * @param relative ;; the relative path provided in each file
    */
 Parser.prototype.locate = function (relative: string) {
-  return join(Deno.cwd(), `${relative}`); // --> likely develop to `./components${relative}`
+  return join(Deno.cwd(), `./client/${relative}`); // --> likely develop to `./components${relative}`
 };
 
 /**
@@ -36,8 +36,11 @@ Parser.prototype.locate = function (relative: string) {
  */
 Parser.prototype.init = async function (current: component) {
   const { path } = current;
-  const data = path && await Deno.readTextFile(path);
-  current.split = data?.split(/\n/);
+  console.log(current.label, "path -->", path);
+  if (path) {
+    const data = await Deno.readTextFile(path);
+    current.split = data?.split(/\n/);
+  }
 };
 
 /**
@@ -244,3 +247,10 @@ Parser.prototype.parse = async function (root: component) {
 };
 
 export default new (Parser as any)();
+
+
+/**
+ * 
+ * ."client"/App.vue
+ * ./components/AppChild.vue
+ */
