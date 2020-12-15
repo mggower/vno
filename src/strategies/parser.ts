@@ -13,11 +13,11 @@ import print from "./console.ts";
   * The queue is used to line up component files that have not yet been parsed.
   * After parsing, the componet object is pushed into the cache for build.
   */
-function Parser(this: vno) {
-  this.root = null;
-  this.queue = [];
+function Parser(this: vno, root: component, queue: [], cdn: string) {
+  this.root = root;
+  this.queue = queue;
+  this.cdn = cdn;
   this.cache = {};
-  this.cdn = "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
 }
 
 /**
@@ -25,7 +25,7 @@ function Parser(this: vno) {
    * @param relative ;; the relative path provided in each file
    */
 Parser.prototype.locate = function (relative: string) {
-  return join(Deno.cwd(), `./client/${relative}`); // --> likely develop to `./components${relative}`
+  return join(Deno.cwd(), `./${relative}`); // --> likely develop to `./components${relative}`
 };
 
 /**
@@ -84,7 +84,7 @@ Parser.prototype.script = function (current: component) {
   const imports = script?.filter((element) => importRegEx.test(element));
   current.imports = imports;
 
-  this.imports(current);
+  // this.imports(current);
 
   const nameRegEx = /(name)/;
   const name = script?.filter((element) => nameRegEx.test(element))[0]
@@ -215,10 +215,7 @@ Parser.prototype.build = async function () {
    * to begin app parsing. Parse calls all vno methods.
    * @param root ;; a component object { name, path }
    */
-Parser.prototype.parse = async function (root: component) {
-  this.queue.unshift(root);
-  this.root = root;
-
+Parser.prototype.parse = async function () {
   while (this.queue.length) {
     const current: component = this.queue.shift();
 
@@ -246,11 +243,4 @@ Parser.prototype.parse = async function (root: component) {
   return this.cache;
 };
 
-export default new (Parser as any)();
-
-
-/**
- * 
- * ."client"/App.vue
- * ./components/AppChild.vue
- */
+export default Parser;
