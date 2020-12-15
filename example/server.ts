@@ -1,40 +1,46 @@
-import { Application } from "https://deno.land/x/oak/mod.ts";
-import { html } from "../src/ssr.ts";
+import { Application, join, log, send } from "./deps.ts";
+import vno from "../src/strategies/parser.ts";
 
-// html export is commented out to make ssr.ts serve html
+const port: number = 8080;
+const server: Application = new Application();
 
-// import globalImportCSS from '../globalImportCSS'
-console.log("entered server.ts");
-const app = new Application();
+await vno.parse({
+  label: "App",
+  path: "client",
+});
 
-// app.use((ctx) => {
-//   ctx.response.body = "Hello World!";
+// server.use(async (context: any) => {
+//   await send(context, context.request.url.pathname, {
+//     root: join(Deno.cwd(), "public"),
+//     index: "index.html",
+//   });
 // });
 
-app.use(async (ctx, next) => {
+server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
   if (filePath === "/") {
-    console.log("responding to GET request now");
-    ctx.response.type = "text/html";
-    ctx.response.body = html;
+    await send(ctx, ctx.request.url.pathname, {
+      root: join(Deno.cwd(), "public"),
+      index: "index.html",
+    });
+  } else if (filePath === "/build.js") {
+    ctx.response.type = "application/javascript";
+    await send(ctx, filePath, {
+      root: join(Deno.cwd(), "vno-build"),
+      index: "build.js",
+    });
+  } else if (filePath === "/style.css") {
+    ctx.response.type = "text/css";
+    await send(ctx, filePath, {
+      root: join(Deno.cwd(), "vno-build"),
+      index: "style.css",
+    });
   } else await next();
-  // if (filePath === "/mikeysbundle") {
-  //   ctx.response.type = "application/javascript";
-  //   ctx.response.body = js;
-  // }
-  // if (filePath === "/style?") {
-  //   ctx.response.type = "text/css";
-  //   ctx.response.type = "globalImportCSS";
-  // } else await next();
 });
 
-// Error handler
-app.use(async (ctx) => {
-  ctx.throw(500, "unknown route, please look harder...");
-});
+if (import.meta.main) {
+  log.info(`Server is up and running on ${port}`);
+  await server.listen({ port });
+}
 
-app.addEventListener("listen", () => {
-  console.log(`Listening on localhost: 8000`);
-});
-
-await app.listen({ port: 8000 });
+export { server };
