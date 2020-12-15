@@ -1,4 +1,4 @@
-import vno from "./vno-parser.ts";
+import vno from "./strategies/parser.ts";
 import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
 import { send } from "./deps.ts";
 
