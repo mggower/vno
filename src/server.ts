@@ -1,5 +1,5 @@
 import { Application, join, log, send } from "./deps.ts";
-import vno from "./vno-parser.ts";
+import vno from "./strategies/parser.ts";
 
 const port: number = 4000;
 const server: Application = new Application();
