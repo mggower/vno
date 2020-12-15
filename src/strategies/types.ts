@@ -40,11 +40,11 @@ export interface vno {
   parse: buildTools;
 }
 
-
 export interface ssr {
   root: component | null;
   children: object[];
   defaults: html;
+  html: string;
 }
 
 export interface options {

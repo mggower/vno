@@ -6,6 +6,7 @@ import Parser from "./parser.ts";
 function Renderer(this: ssr) {
   this.root = null;
   this.children = [];
+  this.html = "";
   this.defaults = {
     language: "en",
     title: "vno application",
@@ -46,8 +47,11 @@ Renderer.prototype.walk = async function (entry: string, id: string) {
   }
 };
 
-Renderer.prototype.htmlStringify = function (obj: html) {
-  const { language, title, root, meta, vue, build, link, script } = obj;
+Renderer.prototype.htmlStringify = function (
+  options: html,
+  component: (component | undefined),
+) {
+  const { language, title, root, meta, vue, build, link, script } = options;
 
   let links = "";
   if (link) {
@@ -77,25 +81,21 @@ Renderer.prototype.htmlStringify = function (obj: html) {
     <div id="${root}"></div>
     <script src="${vue}"></script>
     <script type="module" src='${build.bundle}'></script>
+    ${component && `<script> ${component.instance} </script>`}
     ${scripts ? scripts : ""}
   </body>
   </html>`.replace(/\n|\s{2,}/gm, "");
 };
 
-Renderer.prototype.createRenderer = async function (obj: object) {
-  return this.htmlStringify({ ...this.defaults, ...obj });
+Renderer.prototype.createRenderer = async function (
+  obj: object,
+  component: component | null,
+) {
+  this.html = this.htmlStringify(
+    { ...this.defaults, ...obj },
+    component && component,
+  );
+  return this.html;
 };
-44;
-const demo = new (Renderer as any)();
 
-demo.createRenderer({
-  title: "test",
-  root: "root",
-  link: { stylesheet: "sassy.scss" },
-});
-
-// demo.config({
-//   label: "App",
-//   entry: "../",
-//   cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
-// });
+export default new (Renderer as any)();
