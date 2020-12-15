@@ -76,15 +76,8 @@ Parser.prototype.script = function (current: component) {
   const open: any = split?.indexOf("<script>");
   const close: any = split?.indexOf("</script>");
 
-  current.split = split?.slice(close + 2);
-
   const script = split?.slice(open + 1, close);
-
-  const importRegEx = /^(import)/;
-  const imports = script?.filter((element) => importRegEx.test(element));
-  current.imports = imports;
-
-  // this.imports(current);
+  current.split = split?.slice(close + 2);
 
   const nameRegEx = /(name)/;
   const name = script?.filter((element) => nameRegEx.test(element))[0]
@@ -227,6 +220,7 @@ Parser.prototype.parse = async function () {
     this.instance(current);
 
     const { label, name, template, script, style, instance } = current;
+
     if (current !== this.root) {
       this.cache[label] = {
         label,

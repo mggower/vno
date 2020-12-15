@@ -11,16 +11,59 @@ import { component } from "./types.ts";
 interface ssr {
   root: component | null;
   children: object[];
+  defaults: html;
+}
+
+interface options {
+  entry: string;
+  label: string;
+  cdn?: string;
+  title?: string;
+  style?: string;
+  meta?: string[];
+  name?: string;
+  build?: string;
+}
+
+interface html {
+  language: string;
+  title: string;
+  root: string;
+  meta: object;
+  vue: string;
+  link: object;
+  script: object;
+  build: object;
 }
 
 function Renderer(this: ssr) {
   this.root = null;
   this.children = [];
+  this.defaults = {
+    language: "en",
+    title: "vno application",
+    root: "app",
+    meta: {
+      charset: "utf-8",
+      httpEquiv: ["X-UA-Compatible", "IE=edge"],
+      viewport: "width=device-width,initial-scale=1.0",
+    },
+    vue: "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
+    link: {},
+    script: {},
+    build: { bundle: "./build.js", style: "./style.css" },
+  };
 }
 
-Renderer.prototype.config = async function (options: any) {
-  const { entry, label } = options;
-  this.walk(entry, label);
+Renderer.prototype.config = async function (options: options) {
+  const { entry, label, cdn } = options;
+
+  await this.walk(entry, label);
+
+  const { root, children } = this;
+  const vno = new (Parser as any)(root, [root, ...children], cdn);
+
+  await vno.parse();
 };
 
 Renderer.prototype.walk = async function (entry: string, id: string) {
@@ -34,29 +77,32 @@ Renderer.prototype.walk = async function (entry: string, id: string) {
       this.children.push({ label, path });
     }
   }
-  const vno = new (Parser as any)(
-    this.root,
-    [this.root, ...this.children],
-    "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
-  );
+};
 
-  const results = await vno.parse();
-  console.log("REZULTZ ->", results);
+Renderer.prototype.htmlStringify = async function (obj: html) {
+  const { title, root, meta, vue, link, script, build } = obj;
+  const html = await Deno.readTextFile("../templates/index.template.html");
+  const test = `${html}`;
+  console.log("html ->", html);
+  console.log("test ->", test);
+};
+
+Renderer.prototype.createRenderer = async function (obj: object) {
+  const merge = { ...this.defaults, ...obj };
+  this.htmlStringify(merge);
+  // console.log("merge -->", merge);
 };
 
 const demo = new (Renderer as any)();
 
-demo.config({
-  label: "App",
-  entry: "../",
+demo.createRenderer({
+  title: "test",
+  root: "root",
+  script: { module: "sassy.scss" },
 });
 
-/**
- * config -->
- * {
- * root --> {
- *  label: "App"
- *  entry: "client"
- * }
- * }
- */
+// demo.config({
+//   label: "App",
+//   entry: "../",
+//   cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
+// });
