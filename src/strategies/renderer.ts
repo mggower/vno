@@ -1,40 +1,7 @@
 /* eslint-disable no-restricted-syntax */
-import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
-import {
-  ensureDir,
-  exists,
-  walk,
-} from "https://deno.land/std@0.80.0/fs/mod.ts";
+import { walk } from "https://deno.land/std@0.80.0/fs/mod.ts";
+import { component, html, options, ssr } from "./types.ts";
 import Parser from "./parser.ts";
-import { component } from "./types.ts";
-
-interface ssr {
-  root: component | null;
-  children: object[];
-  defaults: html;
-}
-
-interface options {
-  entry: string;
-  label: string;
-  cdn?: string;
-  title?: string;
-  style?: string;
-  meta?: string[];
-  name?: string;
-  build?: string;
-}
-
-interface html {
-  language: string;
-  title: string;
-  root: string;
-  meta: object;
-  vue: string;
-  link: object;
-  script: object;
-  build: object;
-}
 
 function Renderer(this: ssr) {
   this.root = null;
@@ -79,26 +46,52 @@ Renderer.prototype.walk = async function (entry: string, id: string) {
   }
 };
 
-Renderer.prototype.htmlStringify = async function (obj: html) {
-  const { title, root, meta, vue, link, script, build } = obj;
-  const html = await Deno.readTextFile("../templates/index.template.html");
-  const test = `${html}`;
-  console.log("html ->", html);
-  console.log("test ->", test);
+Renderer.prototype.htmlStringify = function (obj: html) {
+  const { language, title, root, meta, vue, build, link, script } = obj;
+
+  let links = "";
+  if (link) {
+    for (const rel in link) {
+      links += `<link rel="${rel}" href="${link[rel]}">`;
+    }
+  }
+
+  let scripts = "";
+  if (script) {
+    for (const type in script) {
+      scripts += `<script type="${type}" src='${script[type]}'></script>`;
+    }
+  }
+
+  return `<!DOCTYPE html>
+  <html lang="${language}">
+  <head>
+    <meta charset="${meta.charset}" />
+    <meta http-equiv="${meta.httpEquiv[0]}" content="${meta.httpEquiv[1]}" />
+    <meta name="viewport" content="${meta.viewport}" />
+    <link rel="stylesheet" href="${build.style}">
+    ${links ? links : ""}
+    <title>${title}</title>
+  </head>
+  <body>
+    <div id="${root}"></div>
+    <script src="${vue}"></script>
+    <script type="module" src='${build.bundle}'></script>
+    ${scripts ? scripts : ""}
+  </body>
+  </html>`.replace(/\n|\s{2,}/gm, "");
 };
 
 Renderer.prototype.createRenderer = async function (obj: object) {
-  const merge = { ...this.defaults, ...obj };
-  this.htmlStringify(merge);
-  // console.log("merge -->", merge);
+  return this.htmlStringify({ ...this.defaults, ...obj });
 };
-
+44;
 const demo = new (Renderer as any)();
 
 demo.createRenderer({
   title: "test",
   root: "root",
-  script: { module: "sassy.scss" },
+  link: { stylesheet: "sassy.scss" },
 });
 
 // demo.config({

@@ -39,3 +39,43 @@ export interface vno {
   build: buildTools;
   parse: buildTools;
 }
+
+
+export interface ssr {
+  root: component | null;
+  children: object[];
+  defaults: html;
+}
+
+export interface options {
+  entry: string;
+  label: string;
+  cdn?: string;
+  title?: string;
+  style?: string;
+  meta?: string[];
+  name?: string;
+  build?: string;
+}
+
+export interface html {
+  language: string;
+  title: string;
+  root: string;
+  vue: string;
+  link: any;
+  script: any;
+  meta: meta;
+  build: build;
+}
+
+interface meta {
+  charset: string;
+  httpEquiv: string[];
+  viewport: string;
+}
+
+interface build {
+  bundle: string;
+  style: string;
+}

@@ -9,13 +9,6 @@ await vno.parse({
   path: "client",
 });
 
-// server.use(async (context: any) => {
-//   await send(context, context.request.url.pathname, {
-//     root: join(Deno.cwd(), "public"),
-//     index: "index.html",
-//   });
-// });
-
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
   if (filePath === "/") {
