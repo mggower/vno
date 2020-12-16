@@ -79,7 +79,6 @@ Parser.prototype.template = function (current: component) {
       .join("")
       .replace(/(\s{2,})/g, "");
 
-    console.log(split);
     return this.script({ ...current, split, template });
   } catch (error) {
     console.error("Error inside of Parser.template:", { error });
@@ -94,27 +93,33 @@ Parser.prototype.template = function (current: component) {
    */
 Parser.prototype.script = function (current: component) {
   try {
-    if (!current.split) {
+    const { split } = current;
+    if (!split) {
       throw `There was an error locating 'split' data for ${current.label} component`;
     }
-    console.log(current.split);
-    const open: number | undefined = current.split.indexOf("<script>");
-    const close: number | undefined = current.split.indexOf("</script>");
+    const open: number | undefined = split.indexOf("<script>");
+    const close: number | undefined = split.indexOf("</script>");
 
     if (typeof open !== "number" || typeof close !== "number") {
       throw `There was an error isolating content inside of <script> tags for ${current.label}.vue`;
     }
 
-    const script = current.split.slice(open + 1, close);
+    const script = split.slice(open + 1, close);
+
+    if (!script) {
+      throw `There was an error while reading through the script tag in ${current.label}.vue`;
+    }
 
     const nameRegEx = /(name)/;
-    const name: string | undefined = script
-      .filter((element) => nameRegEx.test(element))[0]
-      .split(/[`'"]/)[1];
+    let name: string[] | string = script.filter((element: any) =>
+      nameRegEx.test(element)
+    );
 
-    if (!name) {
+    if (!name.length) {
       throw `There was an error while identifying the name property inside ${current.label}.vue`;
     }
+
+    name = name[0].split(/[`'"]/)[1];
 
     const exportRegEx = /^(export)/;
     const start: number | undefined = script
@@ -126,16 +131,12 @@ Parser.prototype.script = function (current: component) {
       throw `There was an error while identifying the exported instance inside ${current.label}.vue`;
     }
 
-    const split = current.split.slice(close + 2);
     const exports = script
       .slice(start + 1, end)
       .join("")
       .replace(/(\s)/g, "");
 
-    // if (!split) return this.instance({ ...current, script: exports });
-    console.log(split);
-
-    return this.style({ ...current, split, script: exports });
+    return this.style({ ...current, split, name, script: exports });
   } catch (error) {
     console.error("Error inside of Parser.script:", { error });
   }
@@ -280,25 +281,17 @@ Parser.prototype.build = async function () {
    * @param root ;; a component object { name, path }
    */
 Parser.prototype.parse = async function () {
-  try {
-    while (this.queue.length) {
-      const current: component = this.queue.shift();
-      const cached = await this.init(current);
+  while (this.queue.length) {
+    const current: component = this.queue.shift();
+    const cached = await this.init(current);
 
-      if (!cached) {
-        throw `There was an error parsing ${current.label}`;
-      }
+    if (!cached) {
+      throw `There was an error parsing ${current.label}`;
     }
-
-    const ready = this.build();
-
-    if (ready) return this.cache;
-    else {
-      throw `an error occured while bundling your application`;
-    }
-  } catch (error) {
-    return console.error("Error inside of Parser.parse:", { error });
   }
+  const ready = await this.build();
+
+  if (ready) return this.cache;
 };
 
 export default Parser;

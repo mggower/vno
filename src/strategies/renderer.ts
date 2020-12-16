@@ -47,33 +47,23 @@ Renderer.prototype.config = async function (
     const bundled = await vno.parse();
 
     if (bundled) return true;
-    else {
-      throw "an error occured bundling the application";
-    }
   } catch (error) {
     return console.error("Error inside of Renderer.config", { error });
   }
 };
 
 Renderer.prototype.walk = async function (entry: string, id: string) {
-  try {
-    for await (const file of walk(`${entry}`, { exts: ["vue"] })) {
-      const { path } = file;
+  for await (const file of walk(`${entry}`, { exts: ["vue"] })) {
+    const { path } = file;
 
-      if (path.includes(id)) this.root = { label: id, path };
-      else {
-        const regex = new RegExp(/\/(?<label>\w*)(\.vue)$/);
-        const label = path.match(regex)?.groups?.label;
-        this.children.push({ label, path });
-      }
-    }
-    if (this.root) return true;
+    if (path.includes(id)) this.root = { label: id, path };
     else {
-      throw "an error occured traversing the application's file system";
+      const regex = new RegExp(/\/(?<label>\w*)(\.vue)$/);
+      const label = path.match(regex)?.groups?.label;
+      this.children.push({ label, path });
     }
-  } catch (error) {
-    return console.error("Error inside of Renderer.walk", { error });
   }
+  if (this.root) return true;
 };
 
 Renderer.prototype.htmlStringify = function (
