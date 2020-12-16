@@ -23,27 +23,57 @@ function Renderer(this: ssr) {
   };
 }
 
-Renderer.prototype.config = async function (options: options) {
-  const { entry, label, cdn } = options;
+Renderer.prototype.config = async function (
+  label: string,
+  entry: string,
+  vue: (string | null),
+) {
+  try {
+    if (!entry) {
+      throw "an entry path is required inside of your config method";
+    }
+    if (!label) {
+      throw "a label is required to identify the root of your application";
+    }
 
-  await this.walk(entry, label);
+    const ready = await this.walk(entry, label);
 
-  const { root, children } = this;
-  const vno = new (Parser as any)(root, [root, ...children], cdn);
-  //                              'root'     'queue'    'vue cdn'
-  await vno.parse();
+    if (!ready) {
+      throw "an error occured building out the queue";
+    }
+
+    const { root, children } = this;
+
+    const vno = new (Parser as any)(root, [root, ...children], vue && vue);
+    const bundled = await vno.parse();
+
+    if (bundled) return true;
+    else {
+      throw "an error occured bundling the application";
+    }
+  } catch (error) {
+    return console.error("Error inside of Renderer.config", { error });
+  }
 };
 
 Renderer.prototype.walk = async function (entry: string, id: string) {
-  for await (const file of walk(`${entry}`, { exts: ["vue"] })) {
-    const { path } = file;
+  try {
+    for await (const file of walk(`${entry}`, { exts: ["vue"] })) {
+      const { path } = file;
 
-    if (path.includes(id)) this.root = { label: id, path };
-    else {
-      const regex = new RegExp(/\/(?<label>\w*)(\.vue)$/);
-      const label = path.match(regex)?.groups?.label;
-      this.children.push({ label, path });
+      if (path.includes(id)) this.root = { label: id, path };
+      else {
+        const regex = new RegExp(/\/(?<label>\w*)(\.vue)$/);
+        const label = path.match(regex)?.groups?.label;
+        this.children.push({ label, path });
+      }
     }
+    if (this.root) return true;
+    else {
+      throw "an error occured traversing the application's file system";
+    }
+  } catch (error) {
+    return console.error("Error inside of Renderer.walk", { error });
   }
 };
 

@@ -28,7 +28,7 @@ export interface vno {
   root: any;
   queue: any[];
   cache: object;
-  cdn: string;
+  vue: string;
   locate: filePath;
   template: buildTools;
   script: buildTools;
@@ -50,12 +50,7 @@ export interface ssr {
 export interface options {
   entry: string;
   label: string;
-  cdn?: string;
-  title?: string;
-  style?: string;
-  meta?: string[];
-  name?: string;
-  build?: string;
+  vue?: string;
 }
 
 export interface html {
