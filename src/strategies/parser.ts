@@ -76,36 +76,38 @@ Parser.prototype.script = function (current: component) {
 
     const open: any = split?.indexOf("<script>");
     const close: any = split?.indexOf("</script>");
-
     const script = split?.slice(open + 1, close);
+    
     current.split = split?.slice(close + 2);
 
-    try {
-      const nameRegEx = /(name)/;
-      const name = script?.filter((element) => nameRegEx.test(element))[0]
-        .split(/[`'"]/)[1];
+    const nameRegEx = /(name)/;
+    const name = script?.filter((element) => nameRegEx.test(element))[0]
+      .split(/[`'"]/)[1];
 
-      current.name = name;
-    } catch (error) {
+    if (!name) {
       console.error(
-        `There was an error attempting to identify the name property on ${current.label}`,
-        `{ ERROR: ${error}}`,
+        `There was an error while identifying the name property inside ${current.label}.vue`,
       );
-    }
+    } else current.name = name;
 
     const exportRegEx = /^(export)/;
-    const start: any = script?.findIndex((element) =>
-      exportRegEx.test(element)
-    );
-    const end: any = script?.lastIndexOf("}");
+    const start: number | undefined = script
+      ?.findIndex((element) => exportRegEx.test(element));
+    const end: number | undefined = script?.lastIndexOf("}");
 
-    const exports = script?.slice(start + 1, end)
-      .join("")
-      .replace(/(\s)/g, "");
+    if (!start) {
+      console.error(
+        `There was an error while identifying the exported instance inside ${current.label}.vue`,
+      );
+    } else {
+      const exports = script?.slice(start + 1, end)
+        .join("")
+        .replace(/(\s)/g, "");
 
-    current.script = exports;
+      current.script = exports;
+    }
   } catch (error) {
-    console.error(`Error inside of Parser.script:`, `{ ERROR: ${error} }`);
+    console.error("Error inside of Parser.script:", { ERROR: error });
   }
 };
 
