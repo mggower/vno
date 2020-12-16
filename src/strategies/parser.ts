@@ -71,28 +71,42 @@ Parser.prototype.template = function (current: component) {
    * @param current ;; the current active component object
    */
 Parser.prototype.script = function (current: component) {
-  const { split } = current;
+  try {
+    const { split } = current;
 
-  const open: any = split?.indexOf("<script>");
-  const close: any = split?.indexOf("</script>");
+    const open: any = split?.indexOf("<script>");
+    const close: any = split?.indexOf("</script>");
 
-  const script = split?.slice(open + 1, close);
-  current.split = split?.slice(close + 2);
+    const script = split?.slice(open + 1, close);
+    current.split = split?.slice(close + 2);
 
-  const nameRegEx = /(name)/;
-  const name = script?.filter((element) => nameRegEx.test(element))[0]
-    .split(/[`'"]/)[1];
-  current.name = name;
+    try {
+      const nameRegEx = /(name)/;
+      const name = script?.filter((element) => nameRegEx.test(element))[0]
+        .split(/[`'"]/)[1];
 
-  const exportRegEx = /^(export)/;
-  const start: any = script?.findIndex((element) => exportRegEx.test(element));
-  const end: any = script?.lastIndexOf("}");
+      current.name = name;
+    } catch (error) {
+      console.error(
+        `There was an error attempting to identify the name property on ${current.label}`,
+        `{ ERROR: ${error}}`,
+      );
+    }
 
-  const exports = script?.slice(start + 1, end)
-    .join("")
-    .replace(/(\s)/g, "");
+    const exportRegEx = /^(export)/;
+    const start: any = script?.findIndex((element) =>
+      exportRegEx.test(element)
+    );
+    const end: any = script?.lastIndexOf("}");
 
-  current.script = exports;
+    const exports = script?.slice(start + 1, end)
+      .join("")
+      .replace(/(\s)/g, "");
+
+    current.script = exports;
+  } catch (error) {
+    console.error(`Error inside of Parser.script:`, `{ ERROR: ${error} }`);
+  }
 };
 
 /**
@@ -121,7 +135,8 @@ Parser.prototype.style = function (current: component) {
    * that component is not found in the queue or cache.
    * @param data ;; collected data sourced from file
    */
-Parser.prototype.imports = function (current: component) {
+/*
+   Parser.prototype.imports = function (current: component) {
   const { imports, label } = current;
 
   const components: any = imports
@@ -145,6 +160,7 @@ Parser.prototype.imports = function (current: component) {
 
   this.queue = [...this.queue, ...components];
 };
+*/
 /**
  * instance method writes the appropriate vue instance to prep for build
  * @params: current = component object;

@@ -30,7 +30,7 @@ Renderer.prototype.config = async function (options: options) {
 
   const { root, children } = this;
   const vno = new (Parser as any)(root, [root, ...children], cdn);
-
+  //                              'root'     'queue'    'vue cdn'
   await vno.parse();
 };
 
