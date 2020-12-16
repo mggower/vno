@@ -35,7 +35,6 @@ Renderer.prototype.config = async function (
     if (!label) {
       throw "a label is required to identify the root of your application";
     }
-
     const ready = await this.walk(entry, label);
 
     if (!ready) {

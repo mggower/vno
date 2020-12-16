@@ -10,20 +10,19 @@ const bundle = await vno.config(
   "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
 );
 
-if (bundle) {
-  server.use(async (context: any) => {
-    await send(context, context.request.url.pathname, {
-      root: Deno.cwd(),
-      index: "index.html",
-    });
+server.use(async (context: any) => {
+  await send(context, context.request.url.pathname, {
+    root: Deno.cwd(),
+    index: "index.html",
   });
+});
 
+if (bundle) {
   if (import.meta.main) {
     log.info(`Server is up and running on ${port}`);
     await server.listen({ port });
   }
 }
-
 export { server };
 
 // const html = vno.createRenderer({
