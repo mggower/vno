@@ -35,11 +35,24 @@ Parser.prototype.locate = function (relative: string) {
  * @params current: component ;; the component currently being parsed;
  */
 Parser.prototype.init = async function (current: component) {
-  const { path } = current;
-  console.log(current.label, "path -->", path);
-  if (path) {
+  try {
+    const { path } = current;
+
+    if (!path) {
+      throw `There was an error identifying the path for ${current.label}`;
+    }
+
     const data = await Deno.readTextFile(path);
-    current.split = data?.split(/\n/);
+
+    if (!data) {
+      throw `There was an error reading the file for path ${path}`;
+    }
+
+    const split = data?.split(/\n/);
+
+    return this.template({ ...current, split });
+  } catch (error) {
+    console.error("Error inside of Parser.init:", { ERROR: error });
   }
 };
 
@@ -50,18 +63,27 @@ Parser.prototype.init = async function (current: component) {
    * @param current ;; the current active component object
    */
 Parser.prototype.template = function (current: component) {
-  const { split } = current;
+  try {
+    if (!current.split) {
+      throw `There was an error locating 'split' data for ${current.label} component`;
+    }
 
-  const open: any = split?.indexOf("<template>");
-  const close: any = split?.indexOf("</template>");
+    const open: number | undefined = current.split.indexOf("<template>");
+    const close: number | undefined = current.split.indexOf("</template>");
 
-  current.split = split?.slice(close + 2);
+    if (typeof open !== "number" || typeof close !== "number") {
+      throw `There was an error isolating content inside of <template> tags for ${current.label}.vue`;
+    }
 
-  const template = split?.slice(open + 1, close)
-    .join("")
-    .replace(/(\s{2,})/g, "");
+    const split = current.split.slice(close + 2);
+    const template = current.split.slice(open + 1, close)
+      .join("")
+      .replace(/(\s{2,})/g, "");
 
-  current.template = template;
+    return this.script({ ...current, split, template });
+  } catch (error) {
+    console.error("Error inside of Parser.template:", { ERROR: error });
+  }
 };
 
 /**
@@ -72,40 +94,45 @@ Parser.prototype.template = function (current: component) {
    */
 Parser.prototype.script = function (current: component) {
   try {
-    const { split } = current;
+    if (!current.split) {
+      throw `There was an error locating 'split' data for ${current.label} component`;
+    }
 
-    const open: any = split?.indexOf("<script>");
-    const close: any = split?.indexOf("</script>");
-    const script = split?.slice(open + 1, close);
-    
-    current.split = split?.slice(close + 2);
+    const open: number | undefined = current.split.indexOf("<script>");
+    const close: number | undefined = current.split.indexOf("</script>");
+
+    if (typeof open !== "number" || typeof close !== "number") {
+      throw `There was an error isolating content inside of <script> tags for ${current.label}.vue`;
+    }
+
+    const script = current.split.slice(open + 1, close);
 
     const nameRegEx = /(name)/;
-    const name = script?.filter((element) => nameRegEx.test(element))[0]
+    const name: string | undefined = script
+      .filter((element) => nameRegEx.test(element))[0]
       .split(/[`'"]/)[1];
 
     if (!name) {
-      console.error(
-        `There was an error while identifying the name property inside ${current.label}.vue`,
-      );
-    } else current.name = name;
+      throw `There was an error while identifying the name property inside ${current.label}.vue`;
+    }
 
     const exportRegEx = /^(export)/;
     const start: number | undefined = script
-      ?.findIndex((element) => exportRegEx.test(element));
-    const end: number | undefined = script?.lastIndexOf("}");
+      .findIndex((element) => exportRegEx.test(element));
 
-    if (!start) {
-      console.error(
-        `There was an error while identifying the exported instance inside ${current.label}.vue`,
-      );
-    } else {
-      const exports = script?.slice(start + 1, end)
-        .join("")
-        .replace(/(\s)/g, "");
+    const end: number | undefined = script.lastIndexOf("}");
 
-      current.script = exports;
+    if (typeof start !== "number" || typeof end !== "number") {
+      throw `There was an error while identifying the exported instance inside ${current.label}.vue`;
     }
+
+    const split = current.split.slice(close + 2);
+    const exports = script
+      .slice(start + 1, end)
+      .join("")
+      .replace(/(\s)/g, "");
+
+    return this.style({ ...current, split, script: exports });
   } catch (error) {
     console.error("Error inside of Parser.script:", { ERROR: error });
   }
@@ -118,51 +145,29 @@ Parser.prototype.script = function (current: component) {
    * @param current ;; the current active component object
    */
 Parser.prototype.style = function (current: component) {
-  const { split } = current;
+  try {
+    if (!current.split) {
+      throw `There was an error locating 'split' data for ${current.label} component`;
+    }
 
-  const open: any = split?.indexOf("<style>");
-  const close: any = split?.indexOf("</style>");
+    const open: number | undefined = current.split.indexOf("<style>");
+    const close: number | undefined = current.split.indexOf("</style>");
 
-  const style: any = split?.slice(open + 1, close)
-    .join("")
-    .replace(/(\s)/g, "");
+    if (typeof open !== "number" || typeof close !== "number") {
+      return this.instance({ ...current });
+    }
 
-  current.style = style;
+    const style: string | undefined = current.split
+      .slice(open + 1, close)
+      .join("")
+      .replace(/(\s)/g, "");
+
+    return this.instance({ ...current, style });
+  } catch (error) {
+    console.error("Error inside of Parser.style:", { ERROR: error });
+  }
 };
 
-/**
-   * imports parses through import statements, and then
-   * creates new component objects including 'name' and 'path'
-   * properties. Then the object is pushed into the queue if
-   * that component is not found in the queue or cache.
-   * @param data ;; collected data sourced from file
-   */
-/*
-   Parser.prototype.imports = function (current: component) {
-  const { imports, label } = current;
-
-  const components: any = imports
-    ?.reduce((accumulator: object[], current: string): object[] => {
-      const array: string[] | undefined = current.split(/\s/);
-      let children = accumulator.slice();
-
-      const component: component = {
-        label: array[1],
-        path: this.locate(array[3].split(/[`'"]/)[1]),
-      };
-
-      if (
-        !this.cache[label] &&
-        !this.queue.some((child: any) => child.label === component.label)
-      ) {
-        children = [...accumulator, component];
-      }
-      return children;
-    }, []);
-
-  this.queue = [...this.queue, ...components];
-};
-*/
 /**
  * instance method writes the appropriate vue instance to prep for build
  * @params: current = component object;
@@ -232,10 +237,10 @@ Parser.prototype.parse = async function () {
 
     await this.init(current);
 
-    this.template(current);
-    this.script(current);
-    this.style(current);
-    this.instance(current);
+    // this.template(current);
+    // this.script(current);
+    // this.style(current);
+    // this.instance(current);
 
     const { label, name, template, script, style, instance } = current;
 

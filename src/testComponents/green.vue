@@ -8,7 +8,6 @@
 import Orange from './testComponents/Orange.vue';
 
 export default {
-  name: 'green',
   data() {
     return {
       color: 'green',
