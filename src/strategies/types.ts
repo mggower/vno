@@ -7,7 +7,9 @@
  */
 export interface component {
   label: string;
-  path?: string | URL;
+  path: string | URL;
+  child: component | null;
+  sibling: component | null;
   split?: string[];
   imports?: string[];
   name?: string;
@@ -74,3 +76,19 @@ interface build {
   bundle: string;
   style: string;
 }
+
+/**
+ * 
+ * new Component(label, path);
+  label: string;
+  path*: string | URL;
+  child: component 
+  sibling: componenent **linked list**
+  split?: string[];
+  imports?: string[];
+  name?: string;
+  template?: string;
+  script?: string;
+  style?: string;
+  instance?: any;
+ */

@@ -189,18 +189,19 @@ Parser.prototype.instance = function (current: component) {
     if (label === this.root.label) {
       const instance: string =
         `\nvar ${label} = new Vue({template: \`${template}\`,${script}});\n`;
-      this.root = { label, name, instance, style };
 
+      this.root = { label, name, instance, style };
       return this.root;
     } else {
       const instance: string =
-        `\nvar ${label} = Vue.component("${name}", {template: \`${template}\`,${script}});`;
+        `\nvar ${label} = Vue.component("${name}", {template: \`${template}\`,${script}}});`;
 
       this.cache[label] = { label, name, instance, style };
 
       if (!this.cache[label]) {
         throw `There was an error writing ${label} to the cache`;
       }
+      
       return this.cache[label];
     }
   } catch (error) {
