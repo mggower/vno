@@ -10,10 +10,11 @@ import print from "./console.ts";
  * our cache of components and are sent through the build process.
  */
 /**
-  * The queue is used to line up component files that have not yet been parsed.
-  * After parsing, the componet object is pushed into the cache for build.
-  */
-function Parser(this: vno, root: component, queue: [], vue: string) {
+ * The queue is used to line up component files that have not yet been parsed.
+ * After parsing, the componet object is pushed into the cache for build.
+ */
+const cdn = "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
+function Parser(this: vno, root: component, queue: [], vue: string = cdn) {
   this.root = root;
   this.queue = queue;
   this.vue = vue;
@@ -181,9 +182,9 @@ Parser.prototype.instance = function (current: component) {
   try {
     const { label, name, template, script, style } = current;
 
-    // if (!label || !name || !template || !script || !style) {
-    //   throw `There was an error identifying data from ${current.label}`;
-    // }
+    if (!label || !name || !template || !script || !style) {
+      throw `There was an error identifying data from ${current.label}`;
+    }
 
     if (label === this.root.label) {
       const instance: string =
