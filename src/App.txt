@@ -1,0 +1,27 @@
+<template>
+  <div id="app">
+    <avril />
+  </div>
+</template>
+
+<script>
+import Avril from './testComponents/Avril.vue';
+
+export default {
+  name: 'app',
+  data() {
+    return {
+      color: 'none',
+    };
+  },
+  components: {
+    Avril,
+  },
+};
+</script>
+
+<style>
+body {
+  background-color: pink;
+}
+</style>
