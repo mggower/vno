@@ -153,7 +153,7 @@ Parser.prototype.instance = function (current: component) {
   const { label, name, template, script } = current;
   if (label === this.root.label) {
     current.instance =
-      `\nvar ${label} = new Vue({template: \`${template}\`,${script}});\n`;
+      `\nvar ${label} = new Vue({template: \`${template}\`,${script}}});\n`;
   } else {
     current.instance =
       `\nvar ${label} = Vue.component("${name}", {template: \`${template}\`,${script}});`;
