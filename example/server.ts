@@ -1,12 +1,13 @@
 import { Application, join, log, send } from "./deps.ts";
-import vno from "../src/strategies/parser.ts";
+import vno from "../src/strategies/renderer.ts";
 
-const port: number = 8080;
+const port: number = 3000;
 const server: Application = new Application();
 
-await vno.parse({
+await vno.config({
   label: "App",
-  path: "client",
+  entry: "./",
+  cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
 });
 
 server.use(async (ctx, next) => {
@@ -32,7 +33,7 @@ server.use(async (ctx, next) => {
 });
 
 if (import.meta.main) {
-  log.info(`Server is up and running on ${port}`);
+  log.info("Server is up and running on port" + port );
   await server.listen({ port });
 }
 
