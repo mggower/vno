@@ -74,8 +74,7 @@ Parser.prototype.template = function (current: component) {
     if (typeof open !== "number" || typeof close !== "number") {
       throw `There was an error isolating content inside of <template> tags for ${current.label}.vue`;
     }
-
-    const split = current.split.slice(close + 2);
+    const split = current.split.slice(close + 1);
     const template = current.split.slice(open + 1, close)
       .join("")
       .replace(/(\s{2,})/g, "");
@@ -201,7 +200,7 @@ Parser.prototype.instance = function (current: component) {
       if (!this.cache[label]) {
         throw `There was an error writing ${label} to the cache`;
       }
-      
+
       return this.cache[label];
     }
   } catch (error) {
@@ -295,5 +294,6 @@ Parser.prototype.parse = async function () {
 
   if (ready) return this.cache;
 };
+
 
 export default Parser;

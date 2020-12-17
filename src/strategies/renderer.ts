@@ -22,7 +22,7 @@ function Renderer(this: ssr) {
     build: { bundle: "./build.js", style: "./style.css" },
   };
 }
-
+// revert back to object: options argument
 Renderer.prototype.config = async function (
   label: string,
   entry: string,
