@@ -23,18 +23,18 @@ function Renderer(this: ssr) {
   };
 }
 // revert back to object: options argument
-Renderer.prototype.config = async function (
-  label: string,
-  entry: string,
-  vue: (string | null),
-) {
+Renderer.prototype.config = async function (options: options) {
   try {
+    let vue;
+    const { entry, label } = options;
+
     if (!entry) {
       throw "an entry path is required inside of your config method";
     }
     if (!label) {
       throw "a label is required to identify the root of your application";
     }
+
     const ready = await this.walk(entry, label);
 
     if (!ready) {
@@ -42,6 +42,7 @@ Renderer.prototype.config = async function (
     }
 
     const { root, children } = this;
+    options.vue ? { vue } = options : null;
 
     const vno = new (Parser as any)(root, [root, ...children], vue && vue);
     const bundled = await vno.parse();

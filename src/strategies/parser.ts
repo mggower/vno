@@ -193,7 +193,7 @@ Parser.prototype.instance = function (current: component) {
       return this.root;
     } else {
       const instance: string =
-        `\nvar ${label} = Vue.component("${name}", {template: \`${template}\`,${script}}});`;
+        `\nvar ${label} = Vue.component("${name}", {template: \`${template}\`,${script}});`;
 
       this.cache[label] = { label, name, instance, style };
 
@@ -294,6 +294,5 @@ Parser.prototype.parse = async function () {
 
   if (ready) return this.cache;
 };
-
 
 export default Parser;

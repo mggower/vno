@@ -4,11 +4,11 @@ import vno from "./strategies/renderer.ts";
 const port: number = 3000;
 const server: Application = new Application();
 
-await vno.config(
-  "App",
-  "./",
-  "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
-);
+await vno.config({
+  label: "App",
+  entry: "./",
+  vue: "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
+});
 
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
