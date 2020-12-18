@@ -17,7 +17,7 @@ data() {
 </script>
 
 <style>
-#orange {
-background-color: #57D3AF;
+.orange {
+color: orange;
 }
 </style>

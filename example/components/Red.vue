@@ -24,6 +24,6 @@ data() {
 
 <style>
 #red {
-background-color: maroon;
+background-color: red;
 }
 </style>

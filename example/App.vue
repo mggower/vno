@@ -1,7 +1,8 @@
 <template>
 <div id="app">
   <header class="header">
-    <img class="logo" src='https://svgshare.com/i/SNz.svg' alt="logo" />
+      <img class="logo" src='https://svgshare.com/i/SNz.svg' alt="logo" />
+      <br>
     <nav class="inner">
       <button v-on:click="handelClick('green')">Mikey</button>
       <button v-on:click="handelClick('orange')">Jordan</button>
@@ -31,8 +32,9 @@
     check out out GitHub repo at: 
     <a href="https://github.com/oslabs-beta/vno" target="_blank" rel="noopener">&nbsp;vno documentation</a>.
   </p>
+  <h3>Installed CLI Plugins</h3>
   <ul>
-  <li><a href="https://github.com/jgrubb16/vnocli" target="_blank" rel="noopener">Open Source CLI Tool</a></li>
+  <li><a href="https://github.com/jgrubb16/vnocli" target="_blank" rel="noopener">babel</a></li>
   </ul>
     </body>
 </div>
@@ -66,15 +68,6 @@ components: {
 </script>
 
 <style>
-body {
-  background-color: #34495e;
-  }
-  .header {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    justify-content: center;
-  }
 #app {
 display: flex;
 flex-direction: column;
@@ -125,5 +118,5 @@ display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
-}
-}
+};
+</style>
