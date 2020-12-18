@@ -1,6 +1,17 @@
-import { Application, join, log, send } from "./deps.ts";
-import vno from "./strategies/renderer.ts";
+/* eslint-disable */
+// prettier-ignore
 
+/**
+ * 
+ * TEMPORARY REFERENCE
+ * --> will be deleted soon xoxo
+ * 
+ * 
+ */
+
+// import { Application, join, log, send } from "./deps.ts";
+// import vno from "./strategies/renderer.ts";
+/** 
 const port: number = 3000;
 const server: Application = new Application();
 
