@@ -7,7 +7,9 @@
  */
 export interface component {
   label: string;
-  path?: string | URL;
+  path: string | URL;
+  child: component | null;
+  sibling: component | null;
   split?: string[];
   imports?: string[];
   name?: string;
@@ -28,7 +30,7 @@ export interface vno {
   root: any;
   queue: any[];
   cache: object;
-  cdn: string;
+  vue: string;
   locate: filePath;
   template: buildTools;
   script: buildTools;
@@ -50,12 +52,7 @@ export interface ssr {
 export interface options {
   entry: string;
   label: string;
-  cdn?: string;
-  title?: string;
-  style?: string;
-  meta?: string[];
-  name?: string;
-  build?: string;
+  vue?: string;
 }
 
 export interface html {
@@ -79,3 +76,19 @@ interface build {
   bundle: string;
   style: string;
 }
+
+/**
+ * 
+ * new Component(label, path);
+  label: string;
+  path*: string | URL;
+  child: component 
+  sibling: componenent **linked list**
+  split?: string[];
+  imports?: string[];
+  name?: string;
+  template?: string;
+  script?: string;
+  style?: string;
+  instance?: any;
+ */
