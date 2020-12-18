@@ -1,6 +1,6 @@
 <template>
   <div id="orange">
-    <h1> an orange gal </h1>
+    <h1>an orange gal</h1>
   </div>
 </template>
 
@@ -9,10 +9,10 @@ export default {
   name: 'orange',
   data() {
     return {
-      color: 'orange'
-    }
+      color: 'orange',
+    };
   },
-}
+};
 </script>
 
 <style>

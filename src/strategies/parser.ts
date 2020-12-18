@@ -10,13 +10,14 @@ import print from "./console.ts";
  * our cache of components and are sent through the build process.
  */
 /**
-  * The queue is used to line up component files that have not yet been parsed.
-  * After parsing, the componet object is pushed into the cache for build.
-  */
-function Parser(this: vno, root: component, queue: [], cdn: string) {
+ * The queue is used to line up component files that have not yet been parsed.
+ * After parsing, the componet object is pushed into the cache for build.
+ */
+const cdn = "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
+function Parser(this: vno, root: component, queue: [], vue: string = cdn) {
   this.root = root;
   this.queue = queue;
-  this.cdn = cdn;
+  this.vue = vue;
   this.cache = {};
 }
 
@@ -35,11 +36,23 @@ Parser.prototype.locate = function (relative: string) {
  * @params current: component ;; the component currently being parsed;
  */
 Parser.prototype.init = async function (current: component) {
-  const { path } = current;
-  console.log(current.label, "path -->", path);
-  if (path) {
+  try {
+    const { path } = current;
+
+    if (!path) {
+      throw `There was an error identifying the path for ${current.label}`;
+    }
+
     const data = await Deno.readTextFile(path);
-    current.split = data?.split(/\n/);
+
+    if (!data) {
+      throw `There was an error reading the file for path ${path}`;
+    }
+
+    const split = data.split(/\n/);
+    return this.template({ ...current, split });
+  } catch (error) {
+    console.error("Error inside of Parser.init:", { ERROR: error });
   }
 };
 
@@ -50,18 +63,26 @@ Parser.prototype.init = async function (current: component) {
    * @param current ;; the current active component object
    */
 Parser.prototype.template = function (current: component) {
-  const { split } = current;
+  try {
+    if (!current.split) {
+      throw `There was an error locating 'split' data for ${current.label} component`;
+    }
 
-  const open: any = split?.indexOf("<template>");
-  const close: any = split?.indexOf("</template>");
+    const open: number | undefined = current.split.indexOf("<template>");
+    const close: number | undefined = current.split.indexOf("</template>");
 
-  current.split = split?.slice(close + 2);
+    if (typeof open !== "number" || typeof close !== "number") {
+      throw `There was an error isolating content inside of <template> tags for ${current.label}.vue`;
+    }
+    const split = current.split.slice(close + 1);
+    const template = current.split.slice(open + 1, close)
+      .join("")
+      .replace(/(\s{2,})/g, "");
 
-  const template = split?.slice(open + 1, close)
-    .join("")
-    .replace(/(\s{2,})/g, "");
-
-  current.template = template;
+    return this.script({ ...current, split, template });
+  } catch (error) {
+    console.error("Error inside of Parser.template:", { error });
+  }
 };
 
 /**
@@ -71,28 +92,54 @@ Parser.prototype.template = function (current: component) {
    * @param current ;; the current active component object
    */
 Parser.prototype.script = function (current: component) {
-  const { split } = current;
+  try {
+    const { split } = current;
+    if (!split) {
+      throw `There was an error locating 'split' data for ${current.label} component`;
+    }
+    const open: number | undefined = split.indexOf("<script>");
+    const close: number | undefined = split.indexOf("</script>");
 
-  const open: any = split?.indexOf("<script>");
-  const close: any = split?.indexOf("</script>");
+    if (typeof open !== "number" || typeof close !== "number") {
+      throw `There was an error isolating content inside of <script> tags for ${current.label}.vue`;
+    }
 
-  const script = split?.slice(open + 1, close);
-  current.split = split?.slice(close + 2);
+    const script = split.slice(open + 1, close);
 
-  const nameRegEx = /(name)/;
-  const name = script?.filter((element) => nameRegEx.test(element))[0]
-    .split(/[`'"]/)[1];
-  current.name = name;
+    if (!script) {
+      throw `There was an error while reading through the script tag in ${current.label}.vue`;
+    }
 
-  const exportRegEx = /^(export)/;
-  const start: any = script?.findIndex((element) => exportRegEx.test(element));
-  const end: any = script?.lastIndexOf("}");
+    const nameRegEx = /(name)/;
+    let name: string[] | string = script.filter((element: any) =>
+      nameRegEx.test(element)
+    );
 
-  const exports = script?.slice(start + 1, end)
-    .join("")
-    .replace(/(\s)/g, "");
+    if (!name.length) {
+      throw `There was an error while identifying the name property inside ${current.label}.vue`;
+    }
 
-  current.script = exports;
+    name = name[0].split(/[`'"]/)[1];
+
+    const exportRegEx = /^(export)/;
+    const start: number | undefined = script
+      .findIndex((element) => exportRegEx.test(element));
+
+    const end: number | undefined = script.lastIndexOf("}");
+
+    if (typeof start !== "number" || typeof end !== "number") {
+      throw `There was an error while identifying the exported instance inside ${current.label}.vue`;
+    }
+
+    const exports = script
+      .slice(start + 1, end)
+      .join("")
+      .replace(/(\s)/g, "");
+
+    return this.style({ ...current, split, name, script: exports });
+  } catch (error) {
+    console.error("Error inside of Parser.script:", { error });
+  }
 };
 
 /**
@@ -102,61 +149,62 @@ Parser.prototype.script = function (current: component) {
    * @param current ;; the current active component object
    */
 Parser.prototype.style = function (current: component) {
-  const { split } = current;
+  try {
+    if (!current.split) {
+      throw "an error occured access split property of " + current.label;
+    }
+    const open: number | undefined = current.split.indexOf("<style>");
+    const close: number | undefined = current.split.indexOf("</style>");
 
-  const open: any = split?.indexOf("<style>");
-  const close: any = split?.indexOf("</style>");
+    if (open < 0 || close < 0) return this.instance({ ...current });
 
-  const style: any = split?.slice(open + 1, close)
-    .join("")
-    .replace(/(\s)/g, "");
+    if (typeof open !== "number" || typeof close !== "number") {
+      return this.instance({ ...current });
+    }
 
-  current.style = style;
+    const style: string | undefined = current.split
+      .slice(open + 1, close)
+      .join("")
+      .replace(/(\s)/g, "");
+
+    return this.instance({ ...current, style });
+  } catch (error) {
+    console.error("Error inside of Parser.style:", { error });
+  }
 };
 
-/**
-   * imports parses through import statements, and then
-   * creates new component objects including 'name' and 'path'
-   * properties. Then the object is pushed into the queue if
-   * that component is not found in the queue or cache.
-   * @param data ;; collected data sourced from file
-   */
-Parser.prototype.imports = function (current: component) {
-  const { imports, label } = current;
-
-  const components: any = imports
-    ?.reduce((accumulator: object[], current: string): object[] => {
-      const array: string[] | undefined = current.split(/\s/);
-      let children = accumulator.slice();
-
-      const component: component = {
-        label: array[1],
-        path: this.locate(array[3].split(/[`'"]/)[1]),
-      };
-
-      if (
-        !this.cache[label] &&
-        !this.queue.some((child: any) => child.label === component.label)
-      ) {
-        children = [...accumulator, component];
-      }
-      return children;
-    }, []);
-
-  this.queue = [...this.queue, ...components];
-};
 /**
  * instance method writes the appropriate vue instance to prep for build
  * @params: current = component object;
  */
 Parser.prototype.instance = function (current: component) {
-  const { label, name, template, script } = current;
-  if (label === this.root.label) {
-    current.instance =
-      `\nvar ${label} = new Vue({template: \`${template}\`,${script}});\n`;
-  } else {
-    current.instance =
-      `\nvar ${label} = Vue.component("${name}", {template: \`${template}\`,${script}});`;
+  try {
+    const { label, name, template, script, style } = current;
+
+    if (!label || !name || !template || !script || !style) {
+      throw `There was an error identifying data from ${current.label}`;
+    }
+
+    if (label === this.root.label) {
+      const instance: string =
+        `\nvar ${label} = new Vue({template: \`${template}\`,${script}});\n`;
+
+      this.root = { label, name, instance, style };
+      return this.root;
+    } else {
+      const instance: string =
+        `\nvar ${label} = Vue.component("${name}", {template: \`${template}\`,${script}});`;
+
+      this.cache[label] = { label, name, instance, style };
+
+      if (!this.cache[label]) {
+        throw `There was an error writing ${label} to the cache`;
+      }
+
+      return this.cache[label];
+    }
+  } catch (error) {
+    console.error("Error inside of Parser.instance:", { error });
   }
 };
 
@@ -165,11 +213,20 @@ Parser.prototype.instance = function (current: component) {
  * @params: the root component object and buildPath from build method
  */
 Parser.prototype.mount = async function (root: component, buildPath: string) {
-  const mount =
-    `\n${root.label}.$mount("#${root.name}");\nexport default ${root.label};\n`;
+  try {
+    const mount =
+      `\n${root.label}.$mount("#${root.name}");\nexport default ${root.label};\n`;
 
-  await Deno.writeTextFile(buildPath, this.root.instance, { append: true });
-  await Deno.writeTextFile(buildPath, mount, { append: true });
+    if (this.root.instance) {
+      await Deno.writeTextFile(buildPath, this.root.instance, { append: true });
+    } else throw `${this.root.label} is missing an instance property`;
+
+    await Deno.writeTextFile(buildPath, mount, { append: true });
+
+    return true;
+  } catch (error) {
+    console.error("Error inside of Parser.mount:", { error });
+  }
 };
 
 /**
@@ -177,30 +234,46 @@ Parser.prototype.mount = async function (root: component, buildPath: string) {
    * components as Vue instances into a single file for production.
    */
 Parser.prototype.build = async function () {
-  await ensureDir("./vno-build");
-  const buildPath = "./vno-build/build.js";
-  const stylePath = "./vno-build/style.css";
+  try {
+    await ensureDir("./vno-build");
+    const buildPath = "./vno-build/build.js";
+    const stylePath = "./vno-build/style.css";
 
-  const ignore = `/* eslint-disable */\n// prettier-ignore\n`;
-  const vue = `import Vue from '${this.cdn}';\n`;
+    const ignore = `/* eslint-disable */\n// prettier-ignore\n`;
+    const vue = `import Vue from '${this.vue}';\n`;
 
-  if (await exists(buildPath)) await Deno.remove(buildPath);
-  await Deno.writeTextFile(buildPath, ignore + vue, { append: true });
+    if (await exists(buildPath)) await Deno.remove(buildPath);
+    await Deno.writeTextFile(buildPath, ignore + vue, { append: true });
 
-  if (await exists(stylePath)) await Deno.remove(stylePath);
-  await Deno.writeTextFile(stylePath, this.root.style, { append: true });
+    if (await exists(stylePath)) await Deno.remove(stylePath);
+    await Deno.writeTextFile(stylePath, this.root.style, { append: true });
 
-  await Object.keys(this.cache)
-    .forEach(
-      async (child) => {
-        const { instance, style } = this.cache[child];
-        await Deno.writeTextFile(buildPath, instance, { append: true });
-        await Deno.writeTextFile(stylePath, style, { append: true });
-      },
-    );
+    await Object.keys(this.cache)
+      .forEach(
+        async (child) => {
+          const { instance } = this.cache[child];
 
-  await this.mount(this.root, buildPath);
-  print();
+          if (!instance) {
+            throw `${this.cache[child].label} is missing it's instance data`;
+          }
+          await Deno.writeTextFile(buildPath, instance, { append: true });
+
+          if (this.cache[child].style) {
+            const { style } = this.cache[child];
+            await Deno.writeTextFile(stylePath, style, { append: true });
+          }
+        },
+      );
+
+    const mounted = await this.mount(this.root, buildPath);
+
+    if (mounted) return print();
+    else {
+      throw `an error occured mounting your application's root`;
+    }
+  } catch (error) {
+    return console.error(`Error inside of Parser.build:`, { error });
+  }
 };
 
 /**
@@ -211,30 +284,15 @@ Parser.prototype.build = async function () {
 Parser.prototype.parse = async function () {
   while (this.queue.length) {
     const current: component = this.queue.shift();
+    const cached = await this.init(current);
 
-    await this.init(current);
-
-    this.template(current);
-    this.script(current);
-    this.style(current);
-    this.instance(current);
-
-    const { label, name, template, script, style, instance } = current;
-
-    if (current !== this.root) {
-      this.cache[label] = {
-        label,
-        name,
-        template,
-        script,
-        style,
-        instance,
-      };
+    if (!cached) {
+      throw `There was an error parsing ${current.label}`;
     }
   }
+  const ready = await this.build();
 
-  this.build();
-  return this.cache;
+  if (ready) return this.cache;
 };
 
 export default Parser;
