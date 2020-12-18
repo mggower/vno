@@ -24,8 +24,6 @@ data() {
 
 <style>
 #green {
-background-color: #DAF7A6;
-padding: 25px;
-color: #34495e;
+background-color: chartreuse;
 }
 </style>
