@@ -77,7 +77,7 @@ Parser.prototype.template = function (current: component) {
     const split = current.split.slice(close + 1);
     const template = current.split.slice(open + 1, close)
       .join("")
-      .replace(/(\s{2,})/g, "");
+      .replace(/(\s{2,})/g, " ");
 
     return this.script({ ...current, split, template });
   } catch (error) {
@@ -143,11 +143,12 @@ Parser.prototype.script = function (current: component) {
 };
 
 /**
-   * style parses through <style> tags, and then
-   * adds to the 'style' property on component object
-   * @param data ;; collected data sourced from file
-   * @param current ;; the current active component object
-   */
+ * style parses through <style> tags, and then
+ * adds to the 'style' property on component object
+ * @param data ;; collected data sourced from file
+ * @param current ;; the current active component object
+ */
+
 Parser.prototype.style = function (current: component) {
   try {
     if (!current.split) {
@@ -166,7 +167,6 @@ Parser.prototype.style = function (current: component) {
       .slice(open + 1, close)
       .join("")
       .replace(/(\s)/g, "");
-
     return this.instance({ ...current, style });
   } catch (error) {
     console.error("Error inside of Parser.style:", { error });
@@ -181,9 +181,9 @@ Parser.prototype.instance = function (current: component) {
   try {
     const { label, name, template, script, style } = current;
 
-    if (!label || !name || !template || !script || !style) {
-      throw `There was an error identifying data from ${current.label}`;
-    }
+    // if (!label || !name || !template || !script || !style) {
+    //   throw `There was an error identifying data from ${current.label}`;
+    // }
 
     if (label === this.root.label) {
       const instance: string =
@@ -212,7 +212,11 @@ Parser.prototype.instance = function (current: component) {
  * mount method finishes the build by writing the Application mount & root instance
  * @params: the root component object and buildPath from build method
  */
-Parser.prototype.mount = async function (root: component, buildPath: string) {
+Parser.prototype.mount = async function (
+  root: component,
+  buildPath: string,
+  stylePath: string,
+) {
   try {
     const mount =
       `\n${root.label}.$mount("#${root.name}");\nexport default ${root.label};\n`;
@@ -220,6 +224,10 @@ Parser.prototype.mount = async function (root: component, buildPath: string) {
     if (this.root.instance) {
       await Deno.writeTextFile(buildPath, this.root.instance, { append: true });
     } else throw `${this.root.label} is missing an instance property`;
+
+    if (this.root.style) {
+      await Deno.writeTextFile(stylePath, this.root.style, { append: true });
+    }
 
     await Deno.writeTextFile(buildPath, mount, { append: true });
 
@@ -265,7 +273,7 @@ Parser.prototype.build = async function () {
         },
       );
 
-    const mounted = await this.mount(this.root, buildPath);
+    const mounted = await this.mount(this.root, buildPath, stylePath);
 
     if (mounted) return print();
     else {
