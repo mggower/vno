@@ -181,13 +181,13 @@ Parser.prototype.instance = function (current: component) {
   try {
     const { label, name, template, script, style } = current;
 
-    if (!label || !name || !template || !script || !style) {
-      throw `There was an error identifying data from ${current.label}`;
-    }
+    // if (!label || !name || !template || !script || !style) {
+    //   throw `There was an error identifying data from ${current.label}`;
+    // }
 
     if (label === this.root.label) {
       const instance: string =
-        `\nvar ${label} = new Vue({template: \`${template}\`,${script}});\n`;
+        `\nvar ${label} = new Vue({template: \`${template}\`,${script}}});\n`;
 
       this.root = { label, name, instance, style };
       return this.root;
