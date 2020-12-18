@@ -1,35 +1,33 @@
-import { Application, join, log, send } from "./deps.ts";
-import vno from "./strategies/renderer.ts";
+/* eslint-disable */
+// prettier-ignore
 
+/**
+ * 
+ * TEMPORARY REFERENCE
+ * --> will be deleted soon xoxo
+ * 
+ * 
+ */
+
+// import { Application, join, log, send } from "./deps.ts";
+// import vno from "./strategies/renderer.ts";
+/** 
 const port: number = 3000;
 const server: Application = new Application();
 
 await vno.config({
   label: "App",
   entry: "./",
-  cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
+  vue: "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
 });
-
-server.use(async (context: any) => {
-  await send(context, context.request.url.pathname, {
-    root: Deno.cwd(),
-    index: "index.html",
-  });
-});
-
-
-const html = vno.createRenderer({
-  title: "test",
-  root: "app",
-}, vno.root);
-
-console.log(html, vno.root);
 
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
   if (filePath === "/") {
-    ctx.response.type = "text/html";
-    ctx.response.body = html;
+    await send(ctx, filePath, {
+      root: Deno.cwd(),
+      index: "index.html",
+    });
   } else if (filePath === "/build.js") {
     ctx.response.type = "application/javascript";
     await send(ctx, filePath, {
@@ -51,6 +49,19 @@ if (import.meta.main) {
 }
 
 export { server };
+
+// server.use(async (context: any) => {
+//   await send(context, context.request.url.pathname, {
+//     root: Deno.cwd(),
+//     index: "index.html",
+//   });
+// });
+// const html = vno.createRenderer({
+//   title: "test",
+//   root: "app",
+// }, vno.root);
+
+// console.log(html, vno.root);
 
 /**
  *  
