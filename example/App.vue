@@ -1,43 +1,4 @@
 <template>
-<<<<<<< HEAD
-<div id="app">
-  <header class="header">
-      <img class="logo" src='https://svgshare.com/i/SNz.svg' alt="logo" />
-      <br>
-    <nav class="inner">
-      <button v-on:click="handelClick('green')">Mikey</button>
-      <button v-on:click="handelClick('orange')">Jordan</button>
-      <button v-on:click="handelClick('purple')">Kyle</button>
-      <button v-on:click="handelClick('red')">Andrew</button>
-      <a class="github" href="https://github.com/oslabs-beta/vno" target="_blank"
-        ><button>Github</button>
-      </a>
-    </nav>
-  </header>
-  <body v-if="displayedComponent === 'red'">
-    <Red/>
-  </body>
-  <body v-else-if="displayedComponent === 'green'">
-    <Green />
-  </body>
-  <body v-else-if="displayedComponent === 'orange'">
-    <Orange />
-  </body>
-  <body v-else-if="displayedComponent === 'purple'">
-    <Purple />
-  </body>
-  <body v-else>
-    <h1>Welcome to Your vno Project</h1>
-    <p>
-    For a guide on project customization,<br>
-    check out out GitHub repo at: 
-    <a href="https://github.com/oslabs-beta/vno" target="_blank" rel="noopener">&nbsp;vno documentation</a>.
-  </p>
-  <h3>Installed CLI Plugins</h3>
-  <ul>
-  <li><a href="https://github.com/jgrubb16/vnocli" target="_blank" rel="noopener">babel</a></li>
-  </ul>
-=======
   <div id="app">
     <header class="header">
       <img class="logo" src="https://svgshare.com/i/SNz.svg" alt="logo" />
@@ -56,7 +17,6 @@
     </header>
     <body v-if="displayedComponent === 'red'">
       <Red />
->>>>>>> 2558e91bb28314dfd80eea19918649c5d3c0c308
     </body>
     <body v-else-if="displayedComponent === 'green'">
       <Green />
@@ -121,8 +81,6 @@ export default {
 </script>
 
 <style>
-<<<<<<< HEAD
-=======
 body {
   background-color: #34495e;
 }
@@ -132,7 +90,6 @@ body {
   align-items: center;
   justify-content: center;
 }
->>>>>>> 2558e91bb28314dfd80eea19918649c5d3c0c308
 #app {
   display: flex;
   flex-direction: column;
@@ -179,18 +136,9 @@ button {
   justify-content: center;
 }
 #purple {
-<<<<<<< HEAD
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-};
-</style>
-=======
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 </style>
->>>>>>> 2558e91bb28314dfd80eea19918649c5d3c0c308
