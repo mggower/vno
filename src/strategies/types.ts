@@ -8,7 +8,7 @@
 export interface component {
   label: string;
   path: string | URL;
-  child: component | null;
+  child: sibling | null;
   sibling: component | null;
   split?: string[];
   imports?: string[];
@@ -17,6 +17,14 @@ export interface component {
   script?: string;
   style?: string;
   instance?: any;
+}
+interface add {
+  (descendent: component): void;
+}
+export interface sibling {
+  head: component | null;
+  tail: component | null;
+  add: add;
 }
 
 interface filePath {
