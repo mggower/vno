@@ -1,13 +1,8 @@
 import { Application, join, log, send } from "./deps.ts";
-import vno from "../src/strategies/parser.ts";
+import vno from "../src/strategies/renderer.ts";
 
-const port: number = 8080;
+const port: number = 3000;
 const server: Application = new Application();
-
-await vno.parse({
-  label: "App",
-  path: "client",
-});
 
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
@@ -32,7 +27,7 @@ server.use(async (ctx, next) => {
 });
 
 if (import.meta.main) {
-  log.info(`Server is up and running on ${port}`);
+  log.info("Server is up and running on port" + port );
   await server.listen({ port });
 }
 

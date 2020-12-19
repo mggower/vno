@@ -22,16 +22,35 @@ function Renderer(this: ssr) {
     build: { bundle: "./build.js", style: "./style.css" },
   };
 }
-
+// revert back to object: options argument
 Renderer.prototype.config = async function (options: options) {
-  const { entry, label, cdn } = options;
+  try {
+    let vue;
+    const { entry, label } = options;
 
-  await this.walk(entry, label);
+    if (!entry) {
+      throw "an entry path is required inside of your config method";
+    }
+    if (!label) {
+      throw "a label is required to identify the root of your application";
+    }
 
-  const { root, children } = this;
-  const vno = new (Parser as any)(root, [root, ...children], cdn);
+    const ready = await this.walk(entry, label);
 
-  await vno.parse();
+    if (!ready) {
+      throw "an error occured building out the queue";
+    }
+
+    const { root, children } = this;
+    options.vue ? { vue } = options : null;
+
+    const vno = new (Parser as any)(root, [root, ...children], vue && vue);
+    const bundled = await vno.parse();
+
+    if (bundled) return true;
+  } catch (error) {
+    return console.error("Error inside of Renderer.config", { error });
+  }
 };
 
 Renderer.prototype.walk = async function (entry: string, id: string) {
@@ -45,6 +64,7 @@ Renderer.prototype.walk = async function (entry: string, id: string) {
       this.children.push({ label, path });
     }
   }
+  if (this.root) return true;
 };
 
 Renderer.prototype.htmlStringify = function (

@@ -6,4 +6,6 @@ export default function print() {
     \\_/ |_| |_|\\___/         
 
   `);
+
+  return true;
 }

@@ -1,3 +1,12 @@
+/**
+ * 
+ * TEMPORARY REFERENCE
+ * --> will be deleted soon xoxo
+ * 
+ * 
+ */
+/**
+
 import vno from "./strategies/parser.ts";
 import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
 // import { send } from "./deps.ts";
@@ -30,12 +39,12 @@ const style: string = parsedCache.style;
 // }
 
 /*Function which will build an html file injected with the root's template, script, name, and style values*/
-function htmlBuild(obj: any) {
+/*function htmlBuild(obj: any) {
   const cssFile = vno.locate("./bonusCSS.css");
 
   /*An object within the function which assigns the correct property-values for each component. 
   If object passed in does not havecorrect value, a default value will be inserted*/
-  const htmlObj: any = {
+/* const htmlObj: any = {
     //root of the app or "app"
     rootName: obj.rootName || "app",
 
@@ -181,5 +190,8 @@ export { app };
 // const htmlInject4 = htmlInject.split(scriptRegex)[1];
 
 // const finalHtml =
-//   `${docType}\n<div id="app">\n${template}\n</div>\n<script>${script}</script>\n${htmlInject3}\n<script type="model src=BUNDLE\n${htmlInject4}`;
-// console.log("final", finalHtml);
+//   `${docType}\n<div id="app">\n${template}\n</div>\n<script>
+${script}</script>\n${htmlInject3}\n<script type="model src=BUNDLE\n${htmlInject4}`;
+// console.log("final", finalHtml)
+
+*/
