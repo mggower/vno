@@ -81,8 +81,6 @@ export default {
 </script>
 
 <style>
-<<<<<<< HEAD
-=======
 body {
   background-color: #34495e;
 }
@@ -92,7 +90,6 @@ body {
   align-items: center;
   justify-content: center;
 }
->>>>>>> 2558e91bb28314dfd80eea19918649c5d3c0c308
 #app {
   display: flex;
   flex-direction: column;
@@ -139,18 +136,9 @@ button {
   justify-content: center;
 }
 #purple {
-<<<<<<< HEAD
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-};
-</style>
-=======
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 </style>
->>>>>>> 2558e91bb28314dfd80eea19918649c5d3c0c308
