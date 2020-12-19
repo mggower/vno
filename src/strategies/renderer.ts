@@ -1,15 +1,6 @@
-/* eslint-disable no-restricted-syntax */
-import { walk } from "https://deno.land/std@0.80.0/fs/mod.ts";
-import { component, html, options, ssr } from "./types.ts";
-import Parser from "./parser.ts";
-import Component from './component.ts';
-import SiblingList from './sibling.ts';
-
+import { component, html, ssr } from "../lib/types.ts";
 
 function Renderer(this: ssr) {
-  this.root = null;
-  this.children = [];
-  this.storage = {};
   this.html = "";
   this.defaults = {
     language: "en",
@@ -27,55 +18,9 @@ function Renderer(this: ssr) {
   };
 }
 
-Renderer.prototype.config = async function (options: options) {
-  try {
-    let vue;
-    const { entry, label } = options;
-
-    if (!entry) {
-      throw "an entry path is required inside of your config method";
-    }
-    if (!label) {
-      throw "a label is required to identify the root of your application";
-    }
-
-    const ready = await this.walk(entry, label);
-
-    if (!ready) {
-      throw "an error occured building out the queue";
-    }
-
-    const { root, children } = this;
-    options.vue ? { vue } = options : null;
-
-    const vno = new (Parser as any)(root, [root, ...children], vue && vue);
-    const bundled = await vno.parse();
-
-    if (bundled) return true;
-  } catch (error) {
-    return console.error("Error inside of Renderer.config", { error });
-  }
-};
-
-Renderer.prototype.walk = async function (entry: string, id: string) {
-  for await (const file of walk(`${entry}`, { exts: ["vue"] })) {
-    const { path } = file;
-
-    if (path.includes(id)) this.root = new (Component as any)(id, path);
-    else {
-      const regex = new RegExp(/\/(?<label>\w*)(\.vue)$/);
-      const label: string | undefined = path.match(regex)?.groups?.label;
-      this.children.push({ label, path });
-      if (label) this.storage[label] = new (Component as any)(label, path)
-      
-    }
-  }
-  if (this.root) return true;
-};
-
 Renderer.prototype.htmlStringify = function (
   options: html,
-  component: (component | undefined),
+  route: (component | undefined),
 ) {
   const { language, title, root, meta, vue, build, link, script } = options;
 
@@ -107,7 +52,7 @@ Renderer.prototype.htmlStringify = function (
     <div id="${root}"></div>
     <script src="${vue}"></script>
     <script type="module" src='${build.bundle}'></script>
-    ${component && `<script> ${component.instance} </script>`}
+    ${route && `<script> ${route.instance} </script>`}
     ${scripts ? scripts : ""}
   </body>
   </html>`.replace(/\n|\s{2,}/gm, "");
@@ -115,13 +60,13 @@ Renderer.prototype.htmlStringify = function (
 
 Renderer.prototype.createRenderer = async function (
   obj: object,
-  component: component | null,
+  route: component | null,
 ) {
   this.html = this.htmlStringify(
     { ...this.defaults, ...obj },
-    component && component,
+    route && route,
   );
   return this.html;
 };
 
-export default new (Renderer as any)();
+export default Renderer;

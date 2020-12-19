@@ -1,4 +1,4 @@
-import { component, sibling } from './types.ts';
+import { component, sibling } from "../lib/types.ts";
 
 function SiblingList(this: sibling) {
   this.head = null;
@@ -10,7 +10,6 @@ function SiblingList(this: sibling) {
  * will become the head and tail. Otherwise, the tail's sibling (ie next) will become the
  * descendent and we reassign tail to the descendent
  */
-
 SiblingList.prototype.add = function (descendent: component) {
   if (!this.head) {
     this.head = descendent;

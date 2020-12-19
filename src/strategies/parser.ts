@@ -1,8 +1,11 @@
-import { join } from "https://deno.land/std@0.74.0/path/mod.ts";
 import { ensureDir, exists } from "https://deno.land/std@0.80.0/fs/mod.ts";
 
-import { component, vno } from "./types.ts";
-import print from "./console.ts";
+import { component, parser } from "../lib/types.ts";
+import { _default_CDN } from "../lib/defaults.ts";
+import print from "../lib/console.ts";
+
+import Storage from "./storage.ts";
+
 
 /**
  * parser object interface vno contains the methods used during the parsing
@@ -13,20 +16,16 @@ import print from "./console.ts";
  * The queue is used to line up component files that have not yet been parsed.
  * After parsing, the componet object is pushed into the cache for build.
  */
-const cdn = "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
-function Parser(this: vno, root: component, queue: [], vue: string = cdn) {
+const Parser = function (
+  this: parser,
+  root: component,
+  queue: [],
+  vue: string = _default_CDN,
+) {
   this.root = root;
   this.queue = queue;
   this.vue = vue;
   this.cache = {};
-}
-
-/**
-   * locate creates an absolute path based on the current working directory
-   * @param relative ;; the relative path provided in each file
-   */
-Parser.prototype.locate = function (relative: string) {
-  return join(Deno.cwd(), `./${relative}`); // --> likely develop to `./components${relative}`
 };
 
 /**
@@ -282,6 +281,7 @@ Parser.prototype.build = async function () {
    * @param root ;; a component object { name, path }
    */
 Parser.prototype.parse = async function () {
+  console.log("Storage IN Parse", Storage);
   while (this.queue.length) {
     const current: component = this.queue.shift();
     const cached = await this.init(current);
@@ -291,7 +291,7 @@ Parser.prototype.parse = async function () {
     }
   }
   const ready = await this.build();
-
+  // if (ready) console.log("PARSED honey", this.cache);
   if (ready) return this.cache;
 };
 

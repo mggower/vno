@@ -1,10 +1,5 @@
-import { component } from "./types.ts";
+import { storage } from "../lib/types.ts";
 
-interface storage {
-  [key: string]: component;
- 
-}
-interface StorageConstructor {};
+const Storage: storage = {};
 
-const Storage = function (this: storage): storage {
-};
+export default Storage;
