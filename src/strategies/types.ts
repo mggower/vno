@@ -53,6 +53,7 @@ export interface vno {
 export interface ssr {
   root: component | null;
   children: object[];
+  storage: object;
   defaults: html;
   html: string;
 }

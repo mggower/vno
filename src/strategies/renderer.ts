@@ -2,10 +2,14 @@
 import { walk } from "https://deno.land/std@0.80.0/fs/mod.ts";
 import { component, html, options, ssr } from "./types.ts";
 import Parser from "./parser.ts";
+import Component from './component.ts';
+import SiblingList from './sibling.ts';
+
 
 function Renderer(this: ssr) {
   this.root = null;
   this.children = [];
+  this.storage = {};
   this.html = "";
   this.defaults = {
     language: "en",
@@ -22,7 +26,7 @@ function Renderer(this: ssr) {
     build: { bundle: "./build.js", style: "./style.css" },
   };
 }
-// revert back to object: options argument
+
 Renderer.prototype.config = async function (options: options) {
   try {
     let vue;
@@ -57,11 +61,13 @@ Renderer.prototype.walk = async function (entry: string, id: string) {
   for await (const file of walk(`${entry}`, { exts: ["vue"] })) {
     const { path } = file;
 
-    if (path.includes(id)) this.root = { label: id, path };
+    if (path.includes(id)) this.root = new (Component as any)(id, path);
     else {
       const regex = new RegExp(/\/(?<label>\w*)(\.vue)$/);
-      const label = path.match(regex)?.groups?.label;
+      const label: string | undefined = path.match(regex)?.groups?.label;
       this.children.push({ label, path });
+      if (label) this.storage[label] = new (Component as any)(label, path)
+      
     }
   }
   if (this.root) return true;
