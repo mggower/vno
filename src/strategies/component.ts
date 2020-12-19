@@ -1,4 +1,4 @@
-import renderer from './renderer.ts'
+import renderer from "./renderer.ts";
 // import { component } from "./types.ts";
 
 export interface component {
@@ -18,31 +18,53 @@ interface cache {
   root: component;
 }
 
-function Cache (this: cache, root: component) {
+function Cache(this: cache, root: component) {
   this.root = root;
 }
 
-function Component (this: component, label: string, path: string) {
+function Component(this: component, label: string, path: string) {
   this.label = label;
   this.path = path;
   this.child = null;
   this.sibling = null;
 }
-const App = new (Component as any)("App", './App.vue');
-const Green = new (Component as any)("Green", './components/Green.vue');
-const Purple = new (Component as any)("Purple", './components/Purple.vue');
-const Orange = new (Component as any)("Orange", './components/Orange.vue');
+/* storage <-- populated via walk with "label" as property names with a new
+component w/ (label, path) as values */
+const storage = {
+  App: new (Component as any)("App", "./App.vue"),
+  Green: new (Component as any)("Green", "./components/Green.vue"),
+  Purple: new (Component as any)("Purple", "./components/Purple.vue"),
+  Orange: new (Component as any)("Orange", "./components/Orange.vue"),
+};
 
-let const = {
-  components: {
-    Green,
-    Purple,
-    Orange,
+const komponents: string[] = ["Green", "Purple", "Orange"];
+// "Green"
+
+Component.prototype.add = function (sibling: component) {
+};
+
+function BobTheBuilder(parent: component) {
+  // this = App
+  let index = komponents.pop(); // <-- currently "Orange"
+  const child = storage[index]; // <-- storage['Orange'] = component {}
+
+  parent.child = child;
+
+  while (komponents.length) {
+    const current = komponents.pop();
+    parent.child.sibling = current;
+    // const current = storage[komponents.pop()]
   }
 }
 
+// BobTheBuilder(storage.App)
 /**
  * parser will contain the components of the tree:: cache will be the tree
  *
- *
+ * this.root = App;
+ * App.child = Green;
+ * Green.sibling = Purple
+ * Purple.sibling = Orange
+ * 
+ * queue = [ Green, Purple, Orange ]
 */
