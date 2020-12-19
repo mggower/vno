@@ -1,26 +1,5 @@
-import renderer from "./renderer.ts";
-// import { component } from "./types.ts";
-
-export interface component {
-  label: string;
-  path: string | URL;
-  child: sibling | null;
-  sibling: component | null;
-  split?: string[];
-  imports?: string[];
-  name?: string;
-  template?: string;
-  script?: string;
-  style?: string;
-  instance?: any;
-}
-interface cache {
-  root: component;
-}
-
-function Cache(this: cache, root: component) {
-  this.root = root;
-}
+// import renderer from "./renderer.ts";
+import { component, sibling } from "./types.ts";
 
 function Component(this: component, label: string, path: string) {
   this.label = label;
@@ -28,8 +7,6 @@ function Component(this: component, label: string, path: string) {
   this.child = null;
   this.sibling = null;
 }
-/* storage <-- populated via walk with "label" as property names with a new
-component w/ (label, path) as values */
 
 // interface storage {
 //   App: component;
@@ -37,6 +14,9 @@ component w/ (label, path) as values */
 //   Purple: component;
 //   Orange: component;
 // }
+
+/* storage <-- populated via walk with "label" as property names with a new
+component w/ (label, path) as values */
 // prettier-ignore
 const Storage: any = {
   "App": new (Component as any)("App", "./App.vue"),
@@ -44,15 +24,6 @@ const Storage: any = {
   "Purple": new (Component as any)("Purple", "./components/Purple.vue"),
   "Orange": new (Component as any)("Orange", "./components/Orange.vue"),
 };
-
-interface add {
-  (descendent: component): void;
-}
-interface sibling {
-  head: component | null;
-  tail: component | null;
-  add: add;
-}
 
 function SiblingList(this: sibling) {
   this.head = null;
@@ -82,8 +53,6 @@ function listBuilder(parent: component) {
   while (komponents.length) {
     const str = komponents.pop(); // <-- currently "Orange"
     const descendent = Storage[str]; // <-- storage['Orange'] = component {}
-
-    // console.log('descendent', descendent);
     parent.child?.add(descendent);
   }
   console.log("sibling list", parent.child);
