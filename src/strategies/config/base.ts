@@ -1,6 +1,6 @@
-import { config } from "../../lib/types.ts";
+import { ConfigInterface } from "../../lib/types.ts";
 
-const Config = function (this: config) {
+const Config = function (this: ConfigInterface) {
   this.root = null;
 };
 

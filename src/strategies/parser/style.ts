@@ -1,4 +1,4 @@
-import { component } from "../../lib/types.ts";
+import { ComponentInterface } from "../../lib/types.ts";
 import Parser from "./instance.ts";
 
 /**
@@ -8,7 +8,7 @@ import Parser from "./instance.ts";
    * @param current ;; the current active component object
    */
 
-Parser.prototype.style = function (current: component) {
+Parser.prototype.style = function (current: ComponentInterface) {
   try {
     if (!current.split) {
       throw "an error occured access split property of " + current.label;

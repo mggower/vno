@@ -1,12 +1,13 @@
-import { component } from "../../lib/types.ts";
 import Parser from "./base.ts";
+
+import { ComponentInterface } from "../../lib/types.ts";
 
 /**
  * instance method writes the appropriate vue instance to prep for build
  * @params: current = component object;
  */
 
-Parser.prototype.instance = function (current: component) {
+Parser.prototype.instance = function (current: ComponentInterface) {
   try {
     const { label, name, template, script, style } = current;
 

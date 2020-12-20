@@ -1,4 +1,4 @@
-import { component } from "../../lib/types.ts";
+import { ComponentInterface } from "../../lib/types.ts";
 import Parser from "./script.ts";
 
 /**
@@ -8,7 +8,7 @@ import Parser from "./script.ts";
    * @param current ;; the current active component object
    */
 
-Parser.prototype.template = function (current: component) {
+Parser.prototype.template = function (current: ComponentInterface) {
   try {
     if (!current.split) {
       throw `There was an error locating 'split' data for ${current.label} component`;

@@ -1,9 +1,9 @@
-import { html, component } from '../../lib/types.ts';
+import { HtmlInterface, ComponentInterface } from '../../lib/types.ts';
 import Renderer from './base.ts';
 
 Renderer.prototype.htmlStringify = function (
-  options: html,
-  route: (component | undefined),
+  options: HtmlInterface,
+  route: (ComponentInterface | undefined),
 ) {
   const { language, title, root, meta, vue, build, link, script } = options;
 

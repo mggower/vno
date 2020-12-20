@@ -1,6 +1,8 @@
 import Config from './base.ts';
-import Component from "../objects/component.ts";
-import Storage from "../objects/storage.ts";
+
+import Storage from "../storage.ts";
+import Component from "../component.ts";
+
 import { walk } from "https://deno.land/std@0.80.0/fs/mod.ts";
 
 

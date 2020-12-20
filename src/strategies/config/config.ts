@@ -1,11 +1,11 @@
-import Parser from "../parser/parser.ts";
-import Storage from "../objects/storage.ts";
-
-import { options } from "../../lib/types.ts";
-
 import Config from "./walk.ts";
 
-Config.prototype.config = async function (options: options) {
+import Parser from "../parser/parser.ts";
+import Storage from "../storage.ts";
+
+import { OptionsInterface } from "../../lib/types.ts";
+
+Config.prototype.config = async function (options: OptionsInterface) {
   try {
     let vue;
     const { entry, label } = options;

@@ -1,5 +1,6 @@
-import { component } from "../../lib/types.ts";
 import Parser from "./template.ts";
+
+import { ComponentInterface } from "../../lib/types.ts";
 
 /**
  * init will read the components file and break apart the data once,
@@ -8,7 +9,7 @@ import Parser from "./template.ts";
  * @params current: component ;; the component currently being parsed;
  */
 
-Parser.prototype.init = async function (current: component) {
+Parser.prototype.init = async function (current: ComponentInterface) {
   try {
     const { path } = current;
 

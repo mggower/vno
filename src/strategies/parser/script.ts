@@ -1,4 +1,4 @@
-import { component } from "../../lib/types.ts";
+import { ComponentInterface } from "../../lib/types.ts";
 import Parser from "./style.ts";
 
 
@@ -10,7 +10,7 @@ import Parser from "./style.ts";
    */
 
 
-Parser.prototype.script = function (current: component) {
+Parser.prototype.script = function (current: ComponentInterface) {
   try {
     const { split } = current;
     if (!split) {

@@ -1,7 +1,8 @@
-import Parser from "./read.ts";
-import { _CDN } from "../../lib/defaults.ts";
-import { component } from "../../lib/types.ts";
+import Parser from "./init.ts";
 import Builder from "../builder/builder.ts";
+
+import { ComponentInterface } from "../../lib/types.ts";
+import { _CDN } from "../../lib/defaults.ts";
 
 /**
    * parse is an async method that will be invoked with the application root
@@ -10,7 +11,7 @@ import Builder from "../builder/builder.ts";
    */
 Parser.prototype.parse = async function () {
   while (this.queue.length) {
-    const current: component = this.queue.shift();
+    const current: ComponentInterface = this.queue.shift();
     const cached = await this.init(current);
 
     if (!cached) {

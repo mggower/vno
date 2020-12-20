@@ -1,4 +1,4 @@
-import { component, parser } from "../../lib/types.ts";
+import { ParserInterface, ComponentInterface } from "../../lib/types.ts";
 import { _CDN } from "../../lib/defaults.ts";
 
 /**
@@ -11,7 +11,8 @@ import { _CDN } from "../../lib/defaults.ts";
  * After parsing, the componet object is pushed into the cache for build.
  */
 
-function Parser(this: parser, root: component, queue: [], vue: string = _CDN) {
+
+function Parser(this: ParserInterface, root: ComponentInterface, queue: [], vue: string = _CDN) {
   this.queue = queue;
   this.root = root;
   this.cache = {};

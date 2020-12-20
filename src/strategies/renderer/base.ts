@@ -1,6 +1,6 @@
-import { ssr } from "../../lib/types.ts";
+import { RendererInterface } from "../../lib/types.ts";
 
-function Renderer(this: ssr) {
+function Renderer(this: RendererInterface) {
   this.html = "";
 }
 

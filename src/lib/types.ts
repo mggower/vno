@@ -1,18 +1,22 @@
-export interface config {
-  root: component | null;
-  storage: storage;
+export interface ConfigInterface {
+  root: ComponentInterface | null;
 }
 
-export interface builder {
-  cache: component;
+export interface RendererInterface {
+  defaults: HtmlInterface;
+  html: string;
 }
 
-export interface parser {
+export interface BuilderInterface {
+  root: ComponentInterface;
+  cache: object;
+}
+
+export interface ParserInterface {
   root: any;
   queue: any[];
   cache: object;
   vue: string;
-  locate(): string;
   template(): any;
   script(): any;
   style(): any;
@@ -23,11 +27,11 @@ export interface parser {
   parse(): any;
 }
 
-export interface component {
+export interface ComponentInterface {
   label: string;
   path: string | URL;
-  child: sibling | null;
-  sibling: component | null;
+  child: SiblingInterface | null;
+  sibling: ComponentInterface | null;
   split?: string[];
   imports?: string[];
   name?: string;
@@ -36,46 +40,42 @@ export interface component {
   style?: string;
   instance?: any;
 }
-export interface sibling {
-  head: component | null;
-  tail: component | null;
+export interface SiblingInterface {
+  head: ComponentInterface | null;
+  tail: ComponentInterface | null;
   add(): void;
 }
 
-
-export interface storage {
-  [key: string]: component;
+export interface StorageInterface {
+  [key: string]: ComponentInterface;
 }
 
-export interface ssr {
-  defaults: html;
-  html: string;
-}
-
-export interface options {
+export interface OptionsInterface {
   entry: string;
   label: string;
   vue?: string;
 }
 
-export interface html {
+export interface HtmlInterface {
   language: string;
   title: string;
   root: string;
   vue: string;
   link: any;
   script: any;
-  meta: meta;
-  build: build;
+  meta: MetaInterface;
+  build: BuildInterface;
 }
 
-interface meta {
+interface MetaInterface {
   charset: string;
   httpEquiv: string[];
   viewport: string;
 }
 
-interface build {
+interface BuildInterface {
   bundle: string;
   style: string;
 }
+
+

@@ -1,4 +1,4 @@
-import { ensureDir, exists } from "https://deno.land/std@0.80.0/fs/mod.ts";
+import Builder from "./mount.ts";
 
 import {
   _BUILD_PATH,
@@ -6,9 +6,9 @@ import {
   _STYLE_PATH,
   _VNO_PATH,
 } from "../../lib/defaults.ts";
-import print from "../../lib/console.ts";
 
-import Builder from "./mount.ts";
+import print from "../../lib/console.ts";
+import { ensureDir, exists } from "https://deno.land/std@0.80.0/fs/mod.ts";
 
 /**
   * build method will iterate through the cache and write the
