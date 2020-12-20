@@ -1,21 +1,8 @@
+import { _HTML } from '../lib/defaults.ts';
 import { component, html, ssr } from "../lib/types.ts";
 
 function Renderer(this: ssr) {
   this.html = "";
-  this.defaults = {
-    language: "en",
-    title: "vno application",
-    root: "app",
-    meta: {
-      charset: "utf-8",
-      httpEquiv: ["X-UA-Compatible", "IE=edge"],
-      viewport: "width=device-width,initial-scale=1.0",
-    },
-    vue: "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
-    link: {},
-    script: {},
-    build: { bundle: "./build.js", style: "./style.css" },
-  };
 }
 
 Renderer.prototype.htmlStringify = function (
@@ -63,7 +50,7 @@ Renderer.prototype.createRenderer = async function (
   route: component | null,
 ) {
   this.html = this.htmlStringify(
-    { ...this.defaults, ...obj },
+    { ..._HTML, ...obj },
     route && route,
   );
   return this.html;

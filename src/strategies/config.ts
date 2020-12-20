@@ -33,12 +33,12 @@ Config.prototype.config = async function (options: options) {
 
     const children = Object.values(Storage);
 
-    const vno = new (Parser as any)(root, [root, ...children], vue && vue);
-    const bundled = await vno.parse();
+    const read = new (Parser as any)(root, [root, ...children], vue && vue);
+    const bundled = await read.parse();
 
     if (bundled) return true;
   } catch (error) {
-    return console.error("Error inside of Renderer.config", { error });
+    return console.error("Error inside of Config.config", { error });
   }
 };
 

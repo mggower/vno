@@ -1,12 +1,6 @@
-import { ensureDir, exists } from "https://deno.land/std@0.80.0/fs/mod.ts";
-
+import { _CDN } from "../lib/defaults.ts";
 import { component, parser } from "../lib/types.ts";
-import { _default_CDN } from "../lib/defaults.ts";
-import print from "../lib/console.ts";
-
-import Storage from "./storage.ts";
-
-
+import Builder from "./builder.ts";
 /**
  * parser object interface vno contains the methods used during the parsing
  * process. all methods are called inside of 'parse', which then constructs
@@ -16,17 +10,13 @@ import Storage from "./storage.ts";
  * The queue is used to line up component files that have not yet been parsed.
  * After parsing, the componet object is pushed into the cache for build.
  */
-const Parser = function (
-  this: parser,
-  root: component,
-  queue: [],
-  vue: string = _default_CDN,
-) {
-  this.root = root;
+
+function Parser(this: parser, root: component, queue: [], vue: string = _CDN) {
   this.queue = queue;
-  this.vue = vue;
+  this.root = root;
   this.cache = {};
-};
+  this.vue = vue;
+}
 
 /**
  * init will read the components file and break apart the data once,
@@ -34,6 +24,7 @@ const Parser = function (
  * hopefully to limit the time complexity of our parser
  * @params current: component ;; the component currently being parsed;
  */
+
 Parser.prototype.init = async function (current: component) {
   try {
     const { path } = current;
@@ -186,7 +177,7 @@ Parser.prototype.instance = function (current: component) {
 
     if (label === this.root.label) {
       const instance: string =
-        `\nvar ${label} = new Vue({template: \`${template}\`,${script}}});\n`;
+        `\nvar ${label} = new Vue({template: \`${template}\`,${script}});\n`;
 
       this.root = { label, name, instance, style };
       return this.root;
@@ -208,80 +199,11 @@ Parser.prototype.instance = function (current: component) {
 };
 
 /**
- * mount method finishes the build by writing the Application mount & root instance
- * @params: the root component object and buildPath from build method
- */
-Parser.prototype.mount = async function (root: component, buildPath: string) {
-  try {
-    const mount =
-      `\n${root.label}.$mount("#${root.name}");\nexport default ${root.label};\n`;
-
-    if (this.root.instance) {
-      await Deno.writeTextFile(buildPath, this.root.instance, { append: true });
-    } else throw `${this.root.label} is missing an instance property`;
-
-    await Deno.writeTextFile(buildPath, mount, { append: true });
-
-    return true;
-  } catch (error) {
-    console.error("Error inside of Parser.mount:", { error });
-  }
-};
-
-/**
-   * build method will iterate through the cache and write the
-   * components as Vue instances into a single file for production.
-   */
-Parser.prototype.build = async function () {
-  try {
-    await ensureDir("./vno-build");
-    const buildPath = "./vno-build/build.js";
-    const stylePath = "./vno-build/style.css";
-
-    const ignore = `/* eslint-disable */\n// prettier-ignore\n`;
-    const vue = `import Vue from '${this.vue}';\n`;
-
-    if (await exists(buildPath)) await Deno.remove(buildPath);
-    await Deno.writeTextFile(buildPath, ignore + vue, { append: true });
-
-    if (await exists(stylePath)) await Deno.remove(stylePath);
-    await Deno.writeTextFile(stylePath, this.root.style, { append: true });
-
-    await Object.keys(this.cache)
-      .forEach(
-        async (child) => {
-          const { instance } = this.cache[child];
-
-          if (!instance) {
-            throw `${this.cache[child].label} is missing it's instance data`;
-          }
-          await Deno.writeTextFile(buildPath, instance, { append: true });
-
-          if (this.cache[child].style) {
-            const { style } = this.cache[child];
-            await Deno.writeTextFile(stylePath, style, { append: true });
-          }
-        },
-      );
-
-    const mounted = await this.mount(this.root, buildPath);
-
-    if (mounted) return print();
-    else {
-      throw `an error occured mounting your application's root`;
-    }
-  } catch (error) {
-    return console.error(`Error inside of Parser.build:`, { error });
-  }
-};
-
-/**
    * parse is an async method that will be invoked with the application root
    * to begin app parsing. Parse calls all vno methods.
    * @param root ;; a component object { name, path }
    */
 Parser.prototype.parse = async function () {
-  console.log("Storage IN Parse", Storage);
   while (this.queue.length) {
     const current: component = this.queue.shift();
     const cached = await this.init(current);
@@ -290,9 +212,10 @@ Parser.prototype.parse = async function () {
       throw `There was an error parsing ${current.label}`;
     }
   }
-  const ready = await this.build();
-  // if (ready) console.log("PARSED honey", this.cache);
-  if (ready) return this.cache;
+
+  const write = new (Builder as any)(this.root, this.cache);
+
+  return write.build();
 };
 
 export default Parser;
