@@ -1,9 +1,5 @@
-import { _HTML } from '../lib/defaults.ts';
-import { component, html, ssr } from "../lib/types.ts";
-
-function Renderer(this: ssr) {
-  this.html = "";
-}
+import { html, component } from '../../lib/types.ts';
+import Renderer from './base.ts';
 
 Renderer.prototype.htmlStringify = function (
   options: html,
@@ -43,17 +39,6 @@ Renderer.prototype.htmlStringify = function (
     ${scripts ? scripts : ""}
   </body>
   </html>`.replace(/\n|\s{2,}/gm, "");
-};
-
-Renderer.prototype.createRenderer = async function (
-  obj: object,
-  route: component | null,
-) {
-  this.html = this.htmlStringify(
-    { ..._HTML, ...obj },
-    route && route,
-  );
-  return this.html;
 };
 
 export default Renderer;

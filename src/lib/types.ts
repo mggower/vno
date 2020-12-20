@@ -2,6 +2,27 @@ export interface config {
   root: component | null;
   storage: storage;
 }
+
+export interface builder {
+  cache: component;
+}
+
+export interface parser {
+  root: any;
+  queue: any[];
+  cache: object;
+  vue: string;
+  locate(): string;
+  template(): any;
+  script(): any;
+  style(): any;
+  imports(): any;
+  instance(): any;
+  mount(): any;
+  build(): any;
+  parse(): any;
+}
+
 export interface component {
   label: string;
   path: string | URL;
@@ -21,32 +42,9 @@ export interface sibling {
   add(): void;
 }
 
-export interface builder {
-  cache: component;
-}
 
 export interface storage {
   [key: string]: component;
-}
-
-export interface cache {
-  root: component | null;
-}
-
-export interface parser {
-  root: any;
-  queue: any[];
-  cache: object;
-  vue: string;
-  locate(): string;
-  template(): any;
-  script(): any;
-  style(): any;
-  imports(): any;
-  instance(): any;
-  mount(): any;
-  build(): any;
-  parse(): any;
 }
 
 export interface ssr {

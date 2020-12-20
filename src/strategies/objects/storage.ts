@@ -1,4 +1,4 @@
-import { storage } from "../lib/types.ts";
+import { storage } from "../../lib/types.ts";
 
 const Storage: storage = {};
 

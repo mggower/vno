@@ -1,4 +1,4 @@
-import { component, sibling } from "../lib/types.ts";
+import { component, sibling } from "../../lib/types.ts";
 
 function SiblingList(this: sibling) {
   this.head = null;

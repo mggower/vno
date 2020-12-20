@@ -1,4 +1,4 @@
-import { component } from "../lib/types.ts";
+import { component } from "../../lib/types.ts";
 
 function Component(this: component, label: string, path: string) {
   this.label = label;

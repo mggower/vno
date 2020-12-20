@@ -1,14 +1,9 @@
-import Component from "./component.ts";
-import Storage from "./storage.ts";
-import Parser from "./parser.ts";
+import Parser from "../parser/parser.ts";
+import Storage from "../objects/storage.ts";
 
-import { walk } from "https://deno.land/std@0.80.0/fs/mod.ts";
+import { options } from "../../lib/types.ts";
 
-import { config, options } from "../lib/types.ts";
-
-const Config = function (this: config) {
-  this.root = null;
-};
+import Config from "./walk.ts";
 
 Config.prototype.config = async function (options: options) {
   try {
@@ -40,20 +35,6 @@ Config.prototype.config = async function (options: options) {
   } catch (error) {
     return console.error("Error inside of Config.config", { error });
   }
-};
-
-Config.prototype.walk = async function (entry: string, id: string) {
-  for await (const file of walk(`${entry}`, { exts: ["vue"] })) {
-    const { path } = file;
-
-    if (path.includes(id)) this.root = new (Component as any)(id, path);
-    else {
-      const regex: RegExp = new RegExp(/\/(?<label>\w*)(\.vue)$/);
-      const label: string | undefined = path.match(regex)?.groups?.label;
-      if (label) Storage[label] = new (Component as any)(label, path);
-    }
-  }
-  if (this.root) return true;
 };
 
 export default Config;
