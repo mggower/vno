@@ -8,9 +8,6 @@
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "denoland.vscode-deno"
-  },
   "workbench.colorCustomizations": {
     "statusBar.background": "#42b883",
     "statusBar.foreground": "#15202b",
