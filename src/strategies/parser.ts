@@ -112,10 +112,10 @@ Parser.prototype.script = function (current: component) {
     name = name[0].split(/[`'"]/)[1];
 
     const exportRegEx = /^(export)/;
-    const start: number | undefined = script
+    let start: number | undefined = script
       .findIndex((element) => exportRegEx.test(element));
 
-    const end: number | undefined = script.lastIndexOf("}");
+    let end: number | undefined = script.lastIndexOf("}");
 
     if (typeof start !== "number" || typeof end !== "number") {
       throw `There was an error while identifying the exported instance inside ${current.label}.vue`;
@@ -125,6 +125,14 @@ Parser.prototype.script = function (current: component) {
       .slice(start + 1, end)
       .join("")
       .replace(/(\s)/g, "");
+
+    const componentRegEx = /(components:)/;
+    start = script.findIndex((element) => componentRegEx.test(element));
+    const fromComp = script.slice(start + 1);
+    end = fromComp.findIndex((el) => el.includes("}"));
+    // end = fromComp.indexOf("}");
+    console.log("SLICDCOMPON", fromComp);
+    console.log("sliceddd", fromComp.slice(0, end));
 
     return this.style({ ...current, split, name, script: exports });
   } catch (error) {
