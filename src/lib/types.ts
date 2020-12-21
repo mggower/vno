@@ -7,7 +7,7 @@ export interface RendererInterface {
   html: string;
 }
 
-export interface BuilderInterface {
+export interface CompilerInterface {
   root: ComponentInterface;
   cache: object;
 }

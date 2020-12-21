@@ -1,10 +1,4 @@
-import { ComponentInterface } from "../lib/types.ts";
-
-interface SiblingInterface {
-  head: ComponentInterface | null;
-  tail: ComponentInterface | null;
-  add(): void;
-}
+import { ComponentInterface, SiblingInterface } from "../lib/types.ts";
 
 function SiblingList(this: SiblingInterface) {
   this.head = null;
