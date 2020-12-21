@@ -12,7 +12,3 @@ export const sarahJessicaParker = function sJP(
   return array.slice(start, end).join("").replace(regex, replaced);
 };
 
-
-/*
-/(\s)/g
-*/
