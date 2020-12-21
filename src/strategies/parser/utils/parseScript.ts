@@ -7,61 +7,61 @@ import Queue from "../../queue.ts";
 
 const parseScript = function pS(current: ComponentInterface) {
   try {
-    const { split } = current;
-    if (!split) {
-      throw `There was an error locating 'split' data for ${current.label} component`;
-    }
-    const open: number | undefined = split.indexOf("<script>");
-    const close: number | undefined = split.indexOf("</script>");
+    if (current.split) {
+      const { split } = current;
 
-    if (typeof open !== "number" || typeof close !== "number") {
-      throw `There was an error isolating content inside of <script> tags for ${current.label}.vue`;
-    }
+      const open: number | undefined = split.indexOf("<script>");
+      const close: number | undefined = split.indexOf("</script>");
 
-    const script = split.slice(open + 1, close);
+      if (typeof open !== "number" || typeof close !== "number") {
+        throw `There was an error isolating content inside of <script> tags for ${current.label}.vue`;
+      }
 
-    if (!script) {
-      throw `There was an error while reading through the script tag in ${current.label}.vue`;
-    }
+      const script = split.slice(open + 1, close);
 
-    const nameIndex = indexOfRegExp(/(name)/, script);
+      if (!script) {
+        throw `There was an error while reading through the script tag in ${current.label}.vue`;
+      }
 
-    if (nameIndex < 0) {
-      throw `There was an error while identifying the name property inside ${current.label}.vue`;
-    }
+      const nameIndex = indexOfRegExp(/(name)/, script);
 
-    current.name = script[nameIndex].split(/[`'"]/)[1];
+      if (nameIndex < 0) {
+        throw `There was an error while identifying the name property inside ${current.label}.vue`;
+      }
 
-    const exportStart = indexOfRegExp(/^(export)/, script);
-    const exportEnd: number | undefined = script.lastIndexOf("}");
+      current.name = script[nameIndex].split(/[`'"]/)[1];
 
-    if (typeof exportStart !== "number" || typeof exportEnd !== "number") {
-      throw `There was an error while identifying the exported instance inside ${current.label}.vue`;
-    }
+      const exportStart = indexOfRegExp(/^(export)/, script);
+      const exportEnd: number | undefined = script.lastIndexOf("}");
 
-    current.script = sarahJessicaParker(script, exportStart + 1, exportEnd, /(\s)/g);
+      if (typeof exportStart !== "number" || typeof exportEnd !== "number") {
+        throw `There was an error while identifying the exported instance inside ${current.label}.vue`;
+      }
 
-    const cmpsStart = indexOfRegExp(/(components:)/, script);
-    const children = cmpsStart > 0 && script.slice(cmpsStart);
+      current.script = sarahJessicaParker(script, exportStart + 1, exportEnd);
 
-    if (children) {
-      const cmpsEnd = children.findIndex((element) => element.includes("}"));
-      const cmpsString = sarahJessicaParker(children, 0, cmpsEnd + 1, /(\s)/g);
+      const cmpsStart = indexOfRegExp(/(components:)/, script);
+      const children = cmpsStart > 0 && script.slice(cmpsStart);
 
-      const foundChildren = cmpsString
-        .slice(cmpsString.indexOf("{") + 1, cmpsString.indexOf("}"))
-        .split(",")
-        .filter((el) => el)
-        .map((child) => Storage[child]);
+      if (children) {
+        const cmpsEnd = children.findIndex((element) => element.includes("}"));
+        const cmpsString = sarahJessicaParker(children, 0, cmpsEnd + 1);
 
-      current.child = new (SiblingList as any)();
+        const foundChildren = cmpsString
+          .slice(cmpsString.indexOf("{") + 1, cmpsString.indexOf("}"))
+          .split(",")
+          .filter((el) => el)
+          .map((child) => Storage[child]);
 
-      while (foundChildren.length) {
-        const child: ComponentInterface | undefined = foundChildren.pop();
+        current.child = new (SiblingList as any)();
 
-        if (child) {
-          Queue.push(child);
-          current.child?.add(child);
+        while (foundChildren.length) {
+          const component: ComponentInterface | undefined = foundChildren.pop();
+
+          if (component) {
+            Queue.push(component);
+            current.child?.add(component);
+          }
         }
       }
     }

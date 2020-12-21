@@ -9,7 +9,7 @@ export interface RendererInterface {
 
 export interface CompilerInterface {
   root: ComponentInterface;
-  cache: object;
+  mount: string;
 }
 
 export interface ParserInterface {

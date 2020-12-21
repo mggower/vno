@@ -8,89 +8,47 @@ import {
 } from "../../lib/defaults.ts";
 
 import print from "../../lib/console.ts";
-import { ensureDir, exists } from "https://deno.land/std@0.80.0/fs/mod.ts";
-import { CompilerInterface, ComponentInterface } from "../../lib/types.ts";
+import { ensureDirSync, existsSync } from "https://deno.land/std@0.80.0/fs/mod.ts";
+import { ComponentInterface } from "../../lib/types.ts";
 
-/**
-  * build method will iterate through the cache and write the
-  * components as Vue instances into a single file for production.
-  */
-
-Compiler.prototype.build = async function () {
+Compiler.prototype.build = function () {
   try {
-    await ensureDir(_VNO_PATH);
+    ensureDirSync(_VNO_PATH);
 
     const ignore = `/* eslint-disable */\n// prettier-ignore\n`;
     const vue = `import Vue from '${_CDN}';\n`;
 
-    if (await exists(_BUILD_PATH)) await Deno.remove(_BUILD_PATH);
-    await Deno.writeTextFile(_BUILD_PATH, ignore + vue, { append: true });
+    Deno.writeTextFileSync(_BUILD_PATH, ignore + vue);
 
-    if (await exists(_STYLE_PATH)) await Deno.remove(_STYLE_PATH);
-    await Deno.writeTextFile(_STYLE_PATH, this.root.style, { append: true });
+    if (existsSync(_STYLE_PATH)) Deno.removeSync(_STYLE_PATH);
 
-    await Object.keys(this.cache)
-      .forEach(
-        async (child) => {
-          const { instance } = this.cache[child];
+    this.traverse(this.root);
 
-          if (!instance) {
-            throw `${this.cache[child].label} is missing it's instance data`;
-          }
+    Deno.writeTextFileSync(_BUILD_PATH, this.mount, { append: true });
 
-          await Deno.writeTextFile(_BUILD_PATH, instance, { append: true });
-
-          if (this.cache[child].style) {
-            const { style } = this.cache[child];
-            await Deno.writeTextFile(_STYLE_PATH, style, { append: true });
-          }
-        },
-      );
-
-    const mounted = await this.mount();
-
-    if (mounted) return print();
-    else {
-      throw `an error occured mounting your application's root`;
-    }
+    return print();
   } catch (error) {
     return console.error(`Error inside of Compiler.build:`, { error });
   }
 };
 
-Compiler.prototype.write = async function w(current: CompilerInterface) {
-};
+Compiler.prototype.write = function w(current: ComponentInterface) {
+  const { instance } = current;
 
-/**
- * mount method finishes the build by writing the Application mount & root instance
- * @params: the root component object and _BUILD_PATH from build method
- */
+  if (!instance) throw `${current.label} is missing it's instance data`;
 
-Compiler.prototype.mount = async function () {
-  try {
-    const mount =
-      `\n${this.root.label}.$mount("#${this.root.name}");\nexport default ${this.root.label};\n`;
+  Deno.writeTextFileSync(_BUILD_PATH, instance, { append: true });
 
-    if (this.root.instance) {
-      await Deno.writeTextFile(
-        _BUILD_PATH,
-        this.root.instance,
-        { append: true },
-      );
-    } else throw `${this.root.label} is missing an instance property`;
-
-    await Deno.writeTextFile(_BUILD_PATH, mount, { append: true });
-
-    return true;
-  } catch (error) {
-    console.error("Error inside of Parser.mount:", { error });
+  if (current.style) {
+    const { style } = current;
+    Deno.writeTextFileSync(_STYLE_PATH, style, { append: true });
   }
 };
 
-Compiler.prototype.recurse = function r(current: ComponentInterface) {
-  if (current.child) this.recurse(current.child.head);
-  if (current.sibling) this.recurse(current.sibling);
-  console.log("recursion", current.label);
+Compiler.prototype.traverse = function r(current: ComponentInterface) {
+  if (current.child) this.traverse(current.child.head);
+  if (current.sibling) this.traverse(current.sibling);
+  this.write(current);
 };
 
 export default Compiler;

@@ -8,7 +8,6 @@ import { OptionsInterface } from "../../lib/types.ts";
 
 import { walk } from "https://deno.land/std@0.80.0/fs/mod.ts";
 
-
 Initialize.prototype.config = async function (options: OptionsInterface) {
   try {
     let vue;
@@ -26,13 +25,11 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
     if (!ready) {
       throw "an error occured building out the queue";
     }
- 
-    options.vue ? { vue } = options : null;
-    
-    const children = Object.values(Storage);
 
-    const read = new (Parser as any)(this.root, [this.root, ...children], vue && vue);
-    const bundled = await read.parse();
+    options.vue ? { vue } = options : null;
+
+    const read = new (Parser as any)(this.root, vue && vue);
+    const bundled = read.parse();
 
     if (bundled) return true;
   } catch (error) {
@@ -44,13 +41,14 @@ Initialize.prototype.walk = async function (entry: string, rootLabel: string) {
   for await (const file of walk(`${entry}`, { exts: ["vue"] })) {
     const { path } = file;
 
-    if (path.includes(rootLabel)) this.root = new (Component as any)(rootLabel, path, true);
-    else {
+    if (path.includes(rootLabel)) {
+      this.root = new (Component as any)(rootLabel, path, true);
+    } else {
       const regex: RegExp = new RegExp(/\/(?<label>\w*)(\.vue)$/);
       const label: string | undefined = path.match(regex)?.groups?.label;
 
       if (label) Storage[label] = new (Component as any)(label, path);
-      else throw `there was an error reading the label on ${path}`
+      else throw `there was an error reading the label on ${path}`;
     }
   }
   if (this.root) return true;

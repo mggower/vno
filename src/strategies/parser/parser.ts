@@ -12,7 +12,7 @@ import parseStyle from "./utils/parseStyle.ts";
 
 import componentStringify from "./utils/componentStringify.ts";
 
-Parser.prototype.parse = async function () {
+Parser.prototype.parse = function () {
   while (Queue.length) {
     const current: ComponentInterface | undefined = Queue.shift();
 
@@ -26,7 +26,7 @@ Parser.prototype.parse = async function () {
 
   const demo = new (Compiler as any)(this.root);
   // console.log("cash", this.cache);
-  demo.recurse(demo.root);
+  demo.build();
 };
 
 export default Parser;
