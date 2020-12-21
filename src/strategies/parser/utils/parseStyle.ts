@@ -1,12 +1,16 @@
 import { ComponentInterface } from "../../../lib/types.ts";
+import { sarahJessicaParker } from "../../../lib/funx.ts";
 
 const parseStyle = function pSt(current: ComponentInterface) {
   try {
     if (!current.split) {
       throw "an error occured access split property of " + current.label;
     }
-    const open: number | undefined = current.split.indexOf("<style>");
-    const close: number | undefined = current.split.indexOf("</style>");
+
+    const { split } = current;
+
+    const open: number | undefined = split.indexOf("<style>");
+    const close: number | undefined = split.indexOf("</style>");
 
     if (
       (open < 0 || close < 0) ||
@@ -16,10 +20,7 @@ const parseStyle = function pSt(current: ComponentInterface) {
       return "parseStyle()=> succesful (no component styling)";
     }
 
-    current.style = current.split
-      .slice(open + 1, close)
-      .join("")
-      .replace(/(\s)/g, "");
+    current.style = sarahJessicaParker(split, open + 1, close, /(\s)/g);
 
     return "parseStyle()=> succesful";
   } catch (error) {

@@ -46,7 +46,7 @@ export interface ComponentInterface {
 export interface SiblingInterface {
   head: ComponentInterface | null;
   tail: ComponentInterface | null;
-  add(): void;
+  add(component: ComponentInterface): void;
 }
 
 export interface StorageInterface {

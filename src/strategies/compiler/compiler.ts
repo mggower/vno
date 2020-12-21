@@ -9,6 +9,7 @@ import {
 
 import print from "../../lib/console.ts";
 import { ensureDir, exists } from "https://deno.land/std@0.80.0/fs/mod.ts";
+import { CompilerInterface, ComponentInterface } from "../../lib/types.ts";
 
 /**
   * build method will iterate through the cache and write the
@@ -57,6 +58,9 @@ Compiler.prototype.build = async function () {
   }
 };
 
+Compiler.prototype.write = async function w(current: CompilerInterface) {
+};
+
 /**
  * mount method finishes the build by writing the Application mount & root instance
  * @params: the root component object and _BUILD_PATH from build method
@@ -81,6 +85,12 @@ Compiler.prototype.mount = async function () {
   } catch (error) {
     console.error("Error inside of Parser.mount:", { error });
   }
+};
+
+Compiler.prototype.recurse = function r(current: ComponentInterface) {
+  if (current.child) this.recurse(current.child.head);
+  if (current.sibling) this.recurse(current.sibling);
+  console.log("recursion", current.label);
 };
 
 export default Compiler;

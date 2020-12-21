@@ -1,16 +1,9 @@
+import { indexOfRegExp, sarahJessicaParker } from "../../../lib/funx.ts";
 import { ComponentInterface } from "../../../lib/types.ts";
 
-const indexOfRegExp = function iRe(regex: RegExp, array: any[]) {
-  return array.findIndex((element) => regex.test(element));
-};
-
-const sarahJessicaParker = function sJP(
-  array: any[],
-  start: number,
-  end: number,
-) {
-  return array.slice(start, end).join("").replace(/(\s)/g, "");
-};
+import SiblingList from "../../sibling.ts";
+import Storage from "../../storage.ts";
+import Queue from "../../queue.ts";
 
 const parseScript = function pS(current: ComponentInterface) {
   try {
@@ -46,31 +39,32 @@ const parseScript = function pS(current: ComponentInterface) {
       throw `There was an error while identifying the exported instance inside ${current.label}.vue`;
     }
 
-    current.script = sarahJessicaParker(script, exportStart + 1, exportEnd);
-  
+    current.script = sarahJessicaParker(script, exportStart + 1, exportEnd, /(\s)/g);
+
     const cmpsStart = indexOfRegExp(/(components:)/, script);
     const children = cmpsStart > 0 && script.slice(cmpsStart);
 
     if (children) {
       const cmpsEnd = children.findIndex((element) => element.includes("}"));
-      const cmpsString = sarahJessicaParker(children, 0, cmpsEnd + 1);
-      let array = cmpsString
+      const cmpsString = sarahJessicaParker(children, 0, cmpsEnd + 1, /(\s)/g);
+
+      const foundChildren = cmpsString
         .slice(cmpsString.indexOf("{") + 1, cmpsString.indexOf("}"))
         .split(",")
-        .filter((el) => el);
+        .filter((el) => el)
+        .map((child) => Storage[child]);
 
-      console.log(
-        "child comps",
-        array,
-      );
+      current.child = new (SiblingList as any)();
+
+      while (foundChildren.length) {
+        const child: ComponentInterface | undefined = foundChildren.pop();
+
+        if (child) {
+          Queue.push(child);
+          current.child?.add(child);
+        }
+      }
     }
-
-    // console.log("components exist?", cmpsStart > 0);
-    // const fromComp = script.slice(start + 1);
-    // end = fromComp.findIndex((el) => el.includes("}"));
-    // // end = fromComp.indexOf("}");
-    // console.log("SLICDCOMPON", fromComp);
-    // console.log("sliceddd", fromComp.slice(0, end));
 
     return "parseScript()=> successful";
   } catch (error) {
@@ -79,28 +73,3 @@ const parseScript = function pS(current: ComponentInterface) {
 };
 
 export default parseScript;
-
-/*
-
-function listBuilder(parent: component) {
-  parent.child = new (SiblingList as any)();
-  while (komponents.length) {
-    const str = komponents.pop(); // <-- currently "Orange"
-    const descendent = Storage[str]; // <-- storage['Orange'] = component {}
-    parent.child?.add(descendent);
-  }
-  console.log("sibling list", parent.child);
-}
-
-
-
-/**
- * parser will contain the components of the tree:: cache will be the tree
- *
- * this.root = App;
- * App.child = Green;
- * Green.sibling = Purple
- * Purple.sibling = Orange
- 
- * queue = [ Green, Purple, Orange ]
-*/
