@@ -28,10 +28,7 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
 
     options.vue ? { vue } = options : null;
 
-    const read = new (Parser as any)(this.root, vue && vue);
-    const bundled = read.parse();
-
-    if (bundled) return true;
+    return new (Parser as any)(this.root, vue && vue).parse();
   } catch (error) {
     return console.error("Error inside of Initialize.config", { error });
   }

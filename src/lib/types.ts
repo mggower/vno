@@ -10,6 +10,7 @@ export interface RendererInterface {
 export interface CompilerInterface {
   root: ComponentInterface;
   mount: string;
+  vue: string;
 }
 
 export interface ParserInterface {

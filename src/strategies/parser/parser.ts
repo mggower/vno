@@ -1,16 +1,14 @@
 import Parser from "./base.ts";
-import Compiler from "../compiler/compiler.ts";
 
 import Queue from "../queue.ts";
+import Compiler from "../compiler/compiler.ts";
 
 import { ComponentInterface } from "../../lib/types.ts";
-import { _CDN } from "../../lib/defaults.ts";
 
+import componentStringify from "./utils/componentStringify.ts";
 import parseTemplate from "./utils/parseTemplate.ts";
 import parseScript from "./utils/parseScript.ts";
 import parseStyle from "./utils/parseStyle.ts";
-
-import componentStringify from "./utils/componentStringify.ts";
 
 Parser.prototype.parse = function () {
   while (Queue.length) {
@@ -24,9 +22,7 @@ Parser.prototype.parse = function () {
     }
   }
 
-  const demo = new (Compiler as any)(this.root);
-  // console.log("cash", this.cache);
-  demo.build();
+  return new (Compiler as any)(this.root, this.vue).build();
 };
 
 export default Parser;

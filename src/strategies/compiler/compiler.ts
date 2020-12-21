@@ -7,16 +7,17 @@ import {
   _VNO_PATH,
 } from "../../lib/defaults.ts";
 
-import print from "../../lib/console.ts";
 import { ensureDirSync, existsSync } from "https://deno.land/std@0.80.0/fs/mod.ts";
 import { ComponentInterface } from "../../lib/types.ts";
+
+import print from "../../lib/console.ts";
 
 Compiler.prototype.build = function () {
   try {
     ensureDirSync(_VNO_PATH);
 
     const ignore = `/* eslint-disable */\n// prettier-ignore\n`;
-    const vue = `import Vue from '${_CDN}';\n`;
+    const vue = `import Vue from '${this.vue}';\n`;
 
     Deno.writeTextFileSync(_BUILD_PATH, ignore + vue);
 
