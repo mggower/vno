@@ -19,3 +19,5 @@ export const _HTML = {
 export const _VNO_PATH = "./vno-build";
 export const _BUILD_PATH = "./vno-build/build.js";
 export const _STYLE_PATH = "./vno-build/style.css";
+
+export const _IGNORE = `/* eslint-disable */\n// prettier-ignore\n`;

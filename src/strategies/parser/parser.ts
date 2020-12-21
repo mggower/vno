@@ -1,7 +1,7 @@
 import Parser from "./base.ts";
 
-import Queue from "../queue.ts";
 import Compiler from "../compiler/compiler.ts";
+import Queue from "../queue.ts";
 
 import { ComponentInterface } from "../../lib/types.ts";
 
