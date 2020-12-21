@@ -1,4 +1,4 @@
-export interface ConfigInterface {
+export interface InitializeInterface {
   root: ComponentInterface | null;
 }
 
@@ -32,7 +32,10 @@ export interface ComponentInterface {
   path: string | URL;
   child: SiblingInterface | null;
   sibling: ComponentInterface | null;
+  isRoot: boolean;
   split?: string[];
+  data?: string;
+  runData(): boolean;
   imports?: string[];
   name?: string;
   template?: string;
@@ -52,7 +55,7 @@ export interface StorageInterface {
 
 export interface OptionsInterface {
   entry: string;
-  label: string;
+  root: string;
   vue?: string;
 }
 
@@ -77,5 +80,3 @@ interface BuildInterface {
   bundle: string;
   style: string;
 }
-
-

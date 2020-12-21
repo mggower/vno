@@ -1,8 +1,8 @@
-import Config from "./strategies/config/config.ts";
+import Initialize from "./strategies/initialize/initialize.ts";
 
-const demo = new (Config as any)();
+const demo = new (Initialize as any)();
 
 await demo.config({
-  label: "App",
+  root: "App",
   entry: "../example",
 });
