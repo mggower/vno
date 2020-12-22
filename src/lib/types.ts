@@ -1,11 +1,10 @@
 export interface InitializeInterface {
   root: ComponentInterface | null;
   config(options: OptionsInterface): void;
-  walk(entry: string, rootLabel: string): boolean;
+  walk(entry: string, rootLabel: string): Promise<boolean>;
 }
 
 export interface RendererInterface {
-  defaults: HtmlInterface;
   html: string;
 }
 
@@ -20,16 +19,7 @@ export interface CompilerInterface {
 
 export interface ParserInterface {
   root: any;
-  queue: any[];
-  cache: object;
   vue: string;
-  template(): any;
-  script(): any;
-  style(): any;
-  imports(): any;
-  instance(): any;
-  mount(): any;
-  build(): any;
   parse(): any;
 }
 
@@ -39,9 +29,9 @@ export interface ComponentInterface {
   child: SiblingInterface | null;
   sibling: ComponentInterface | null;
   isRoot: boolean;
-  split?: string[];
-  data?: string;
-  runData(): boolean;
+  split?: string[] | null;
+  data?: string | null;
+  runData(): Promise<true | undefined>;
   imports?: string[];
   name?: string;
   template?: string;

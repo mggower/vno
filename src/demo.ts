@@ -1,8 +1,6 @@
-import Initialize from "./strategies/initialize/initialize.ts";
+import VNO from "./dist/index.ts";
 
-const demo = new (Initialize as any)();
-
-await demo.config({
+await VNO.config({
   root: "App",
   entry: "../example",
 });
