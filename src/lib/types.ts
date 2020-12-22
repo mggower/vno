@@ -1,5 +1,7 @@
 export interface InitializeInterface {
   root: ComponentInterface | null;
+  config(options: OptionsInterface): void;
+  walk(entry: string, rootLabel: string): boolean;
 }
 
 export interface RendererInterface {
@@ -11,6 +13,9 @@ export interface CompilerInterface {
   root: ComponentInterface;
   mount: string;
   vue: string;
+  build(): void;
+  write(current: ComponentInterface): void;
+  traverse(current: ComponentInterface): void;
 }
 
 export interface ParserInterface {
