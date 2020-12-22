@@ -6,9 +6,8 @@ export const sarahJessicaParker = function sJP(
   array: any[],
   start: number,
   end: number,
-  regex: RegExp = /(\s)/g,
-  replaced: string = ''
+  regex: RegExp = /(\s{2,})/g,
+  replaced: string = " ",
 ) {
   return array.slice(start, end).join("").replace(regex, replaced);
 };
-

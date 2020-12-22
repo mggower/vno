@@ -49,6 +49,7 @@ const parseScript = function pS(current: ComponentInterface) {
 
         const foundChildren = cmpsString
           .slice(cmpsString.indexOf("{") + 1, cmpsString.indexOf("}"))
+          .replace(/\s/g, "")
           .split(",")
           .filter((el) => el)
           .map((child) => Storage[child]);

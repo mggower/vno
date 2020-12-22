@@ -23,7 +23,7 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
 
     let vue;
     options.vue ? { vue } = options : null;
-
+    
     return new (Parser as any)(this.root, vue && vue).parse();
   } catch (error) {
     return console.error("Error inside of Initialize.config", { error });
@@ -34,15 +34,15 @@ Initialize.prototype.walk = async function (entry: string, rootLabel: string) {
   for await (const file of walk(`${entry}`, { exts: ["vue"] })) {
     const { path } = file;
 
-    if (path.includes(rootLabel)) {
-      this.root = new (Component as any)(rootLabel, path, true);
-      if (!this.root) throw `there was an error reading ${path}`;
-    } else {
-      const regex: RegExp = new RegExp(/\/(?<label>\w*)(\.vue)$/);
-      const label: string | undefined = path.match(regex)?.groups?.label;
-
-      if (label) Storage[label] = new (Component as any)(label, path);
-      else throw `there was an error reading ${path}`;
+    const regex: RegExp = new RegExp(/\/?(?<label>\w*)(\.vue)$/);
+    const label: string | undefined = path.match(regex)?.groups?.label;
+    
+    if (label) {
+      if (label === rootLabel) {
+        this.root = new (Component as any)(rootLabel, path, true);
+      } else {
+        Storage[label] = new (Component as any)(label, path);
+      }
     }
   }
 

@@ -41,13 +41,9 @@ Compiler.prototype.write = function w(current: ComponentInterface) {
   }
 };
 
-Compiler.prototype.traverse = function r(current: ComponentInterface) {
-  if (current.child) {
-    this.traverse(current.child.head);
-  }
-  if (current.sibling) {
-    this.traverse(current.sibling);
-  }
+Compiler.prototype.traverse = function trav(current: ComponentInterface) {
+  if (current.child) this.traverse(current.child.head);
+  if (current.sibling) this.traverse(current.sibling);
 
   this.write(current);
 };
