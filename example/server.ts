@@ -1,5 +1,5 @@
 import { Application, join, log, send } from "./deps.ts";
-import vno from "../src/dist/mod.js";
+import vno from "../src/dist/index.ts";
 
 vno.config({
   root: "App",
