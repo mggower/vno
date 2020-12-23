@@ -1,5 +1,5 @@
 import { ComponentInterface } from "../../../lib/types.ts";
-import { sarahJessicaParker } from "../../../lib/funx.ts";
+import Utils from "../../../lib/utils.ts";
 
 const parseStyle = function pSt(current: ComponentInterface) {
   try {
@@ -17,7 +17,7 @@ const parseStyle = function pSt(current: ComponentInterface) {
         return "parseStyle()=> succesful (no component styling)";
       }
 
-      current.style = sarahJessicaParker(split, open + 1, close);
+      current.style = Utils.sliceAndTrim(split, open + 1, close);
 
       return "parseStyle()=> succesful";
     }

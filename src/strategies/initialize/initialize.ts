@@ -1,11 +1,12 @@
 import Initialize from "./base.ts";
 import { OptionsInterface } from "../../lib/types.ts";
+import { walk } from '../../lib/deps.ts';
+import Utils from "../../lib/utils.ts";
 
 import Parser from "../parser/parser.ts";
 import Component from "../component.ts";
-import Storage from "../storage.ts";
 
-import { walk } from "https://deno.land/std@0.80.0/fs/mod.ts";
+const { Storage } = Utils;
 
 Initialize.prototype.config = async function (options: OptionsInterface) {
   try {

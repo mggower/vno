@@ -1,7 +1,8 @@
-import Compiler from "./base.ts";
+import { ensureDirSync, existsSync } from "../../lib/deps.ts";
 import { ComponentInterface } from "../../lib/types.ts";
+import Utils from "../../lib/utils.ts";
 
-import print from "../../lib/console.ts";
+import Compiler from "./base.ts";
 
 import {
   _BUILD_PATH,
@@ -9,11 +10,6 @@ import {
   _STYLE_PATH,
   _VNO_PATH,
 } from "../../lib/defaults.ts";
-
-import {
-  ensureDirSync,
-  existsSync,
-} from "https://deno.land/std@0.80.0/fs/mod.ts";
 
 Compiler.prototype.build = function () {
   try {
@@ -25,7 +21,7 @@ Compiler.prototype.build = function () {
     this.traverse(this.root);
     Deno.writeTextFileSync(_BUILD_PATH, this.mount, { append: true });
 
-    return print();
+    return Utils.print();
   } catch (error) {
     return console.error(`Error inside of Compiler.build:`, { error });
   }

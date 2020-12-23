@@ -1,9 +1,9 @@
-import { indexOfRegExp, sarahJessicaParker } from "../../../lib/funx.ts";
 import { ComponentInterface } from "../../../lib/types.ts";
 
 import SiblingList from "../../sibling.ts";
-import Storage from "../../storage.ts";
-import Queue from "../../queue.ts";
+import Utils from "../../../lib/utils.ts";
+
+const { Storage, Queue } = Utils;
 
 const parseScript = function pS(current: ComponentInterface) {
   try {
@@ -23,7 +23,7 @@ const parseScript = function pS(current: ComponentInterface) {
         throw `There was an error while reading through the script tag in ${current.label}.vue`;
       }
 
-      const nameIndex = indexOfRegExp(/(name)/, script);
+      const nameIndex = Utils.indexOfRegExp(/(name)/, script);
 
       if (nameIndex < 0) {
         throw `There was an error while identifying the name property inside ${current.label}.vue`;
@@ -31,21 +31,21 @@ const parseScript = function pS(current: ComponentInterface) {
 
       current.name = script[nameIndex].split(/[`'"]/)[1];
 
-      const exportStart = indexOfRegExp(/^(export)/, script);
+      const exportStart = Utils.indexOfRegExp(/^(export)/, script);
       const exportEnd: number | undefined = script.lastIndexOf("}");
 
       if (typeof exportStart !== "number" || typeof exportEnd !== "number") {
         throw `There was an error while identifying the exported instance inside ${current.label}.vue`;
       }
 
-      current.script = sarahJessicaParker(script, exportStart + 1, exportEnd);
+      current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
-      const cmpsStart = indexOfRegExp(/(components:)/, script);
+      const cmpsStart = Utils.indexOfRegExp(/(components:)/, script);
       const children = cmpsStart > 0 && script.slice(cmpsStart);
 
       if (children) {
         const cmpsEnd = children.findIndex((element) => element.includes("}"));
-        const cmpsString = sarahJessicaParker(children, 0, cmpsEnd + 1);
+        const cmpsString = Utils.sliceAndTrim(children, 0, cmpsEnd + 1);
 
         const foundChildren = cmpsString
           .slice(cmpsString.indexOf("{") + 1, cmpsString.indexOf("}"))

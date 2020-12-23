@@ -81,3 +81,17 @@ interface BuildInterface {
   bundle: string;
   style: string;
 }
+
+export interface UtilityInterface {
+  Queue: ComponentInterface[];
+  Storage: StorageInterface;
+  indexOfRegExp(regex: RegExp, array: any[]): number;
+  sliceAndTrim(
+    array: any[],
+    start: number,
+    end: number,
+    regex?: RegExp,
+    replaced?: string,
+  ): string;
+  print(): true;
+}

@@ -1,5 +1,5 @@
 import { ComponentInterface } from "../../../lib/types.ts";
-import { sarahJessicaParker } from "../../../lib/funx.ts";
+import Utils from "../../../lib/utils.ts";
 
 const parseTemplate = function pT(current: ComponentInterface) {
   try {
@@ -12,13 +12,7 @@ const parseTemplate = function pT(current: ComponentInterface) {
         throw `There was an error isolating content inside of <template> tags for ${current.label}.vue`;
       }
 
-      current.template = sarahJessicaParker(
-        split,
-        open + 1,
-        close,
-        /(\s{2,})/g,
-        " ",
-      );
+      current.template = Utils.sliceAndTrim(split, open + 1, close);
 
       current.split = split.slice(close + 1);
 
