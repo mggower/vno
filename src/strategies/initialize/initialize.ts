@@ -7,8 +7,6 @@ import { Storage } from "../../lib/utils.ts";
 import Parser from "../parser/parser.ts";
 import Component from "../component.ts";
 
-console.log("inside");
-
 Initialize.prototype.config = async function (options: OptionsInterface) {
   try {
     const { entry, root } = options;

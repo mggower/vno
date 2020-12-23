@@ -1,11 +1,14 @@
-import { UtilityInterface, ComponentInterface, StorageInterface  } from "../lib/types.ts";
+import {
+  ComponentInterface,
+  StorageInterface,
+  UtilityInterface,
+} from "../lib/types.ts";
 
 export const Queue: ComponentInterface[] = [];
 
 export const Storage: StorageInterface = {};
 
 const Utils: UtilityInterface = {
-
   indexOfRegExp(regex: RegExp, array: any[]) {
     return array.findIndex((element) => regex.test(element));
   },
@@ -18,6 +21,10 @@ const Utils: UtilityInterface = {
     replaced: string = " ",
   ) {
     return array.slice(start, end).join("").replace(regex, replaced);
+  },
+
+  toKebab(str: string) {
+    return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
   },
 
   print() {

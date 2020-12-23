@@ -96,5 +96,6 @@ export interface UtilityInterface {
     regex?: RegExp,
     replaced?: string,
   ): string;
+  toKebab(str: string): string;
   print(): true;
 }

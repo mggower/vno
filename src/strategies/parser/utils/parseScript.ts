@@ -8,33 +8,22 @@ const parseScript = function pS(current: ComponentInterface) {
     if (current.split) {
       const { split } = current;
 
-      const open: number | undefined = split.indexOf("<script>");
-      const close: number | undefined = split.indexOf("</script>");
+      const open: number = split.indexOf("<script>");
+      const close: number = split.indexOf("</script>");
 
-      if (typeof open !== "number" || typeof close !== "number") {
-        throw `There was an error isolating content inside of <script> tags for ${current.label}.vue`;
+      if (open < 0 || close < 0) {
+        console.warn(`warn: no found <script> in ${current.path}`);
       }
 
       const script = split.slice(open + 1, close);
 
-      if (!script) {
-        throw `There was an error while reading through the script tag in ${current.label}.vue`;
-      }
-
       const nameIndex = Utils.indexOfRegExp(/(name)/, script);
 
-      if (nameIndex < 0) {
-        throw `There was an error while identifying the name property inside ${current.label}.vue`;
-      }
-
-      current.name = script[nameIndex].split(/[`'"]/)[1];
+      if (nameIndex < 0) current.name = Utils.toKebab(current.label);
+      else current.name = script[nameIndex].split(/[`'"]/)[1];
 
       const exportStart = Utils.indexOfRegExp(/^(export)/, script);
-      const exportEnd: number | undefined = script.lastIndexOf("}");
-
-      if (typeof exportStart !== "number" || typeof exportEnd !== "number") {
-        throw `There was an error while identifying the exported instance inside ${current.label}.vue`;
-      }
+      const exportEnd: number = script.lastIndexOf("}");
 
       current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
