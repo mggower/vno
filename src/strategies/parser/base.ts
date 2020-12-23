@@ -1,6 +1,6 @@
 import { ComponentInterface, ParserInterface } from "../../lib/types.ts";
 import { _CDN } from "../../lib/defaults.ts";
-import Queue from "../queue.ts";
+import { Queue } from "../../lib/utils.ts";
 
 function Parser(
   this: ParserInterface,

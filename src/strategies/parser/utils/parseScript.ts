@@ -1,9 +1,7 @@
 import { ComponentInterface } from "../../../lib/types.ts";
+import Utils, { Queue, Storage } from "../../../lib/utils.ts";
 
 import SiblingList from "../../sibling.ts";
-import Utils from "../../../lib/utils.ts";
-
-const { Storage, Queue } = Utils;
 
 const parseScript = function pS(current: ComponentInterface) {
   try {

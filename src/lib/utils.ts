@@ -1,9 +1,10 @@
-import { UtilityInterface } from "../lib/types.ts";
+import { UtilityInterface, ComponentInterface, StorageInterface  } from "../lib/types.ts";
+
+export const Queue: ComponentInterface[] = [];
+
+export const Storage: StorageInterface = {};
 
 const Utils: UtilityInterface = {
-  Queue: [],
-
-  Storage: {},
 
   indexOfRegExp(regex: RegExp, array: any[]) {
     return array.findIndex((element) => regex.test(element));

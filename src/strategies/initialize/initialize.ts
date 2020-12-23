@@ -1,12 +1,11 @@
 import Initialize from "./base.ts";
+
 import { OptionsInterface } from "../../lib/types.ts";
 import { walk } from '../../lib/deps.ts';
-import Utils from "../../lib/utils.ts";
+import { Storage } from "../../lib/utils.ts";
 
 import Parser from "../parser/parser.ts";
 import Component from "../component.ts";
-
-const { Storage } = Utils;
 
 Initialize.prototype.config = async function (options: OptionsInterface) {
   try {

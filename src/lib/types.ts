@@ -1,10 +1,15 @@
+/**
+ * Bundle Cycle Objects
+ */
+
 export interface InitializeInterface {
   root: ComponentInterface | null;
 }
 
-export interface RendererInterface {
-  defaults: HtmlInterface;
-  html: string;
+export interface ParserInterface {
+  root: any;
+  vue: string;
+  parse(): any;
 }
 
 export interface CompilerInterface {
@@ -13,20 +18,14 @@ export interface CompilerInterface {
   vue: string;
 }
 
-export interface ParserInterface {
-  root: any;
-  queue: any[];
-  cache: object;
-  vue: string;
-  template(): any;
-  script(): any;
-  style(): any;
-  imports(): any;
-  instance(): any;
-  mount(): any;
-  build(): any;
-  parse(): any;
+export interface RendererInterface {
+  defaults: HtmlInterface;
+  html: string;
 }
+
+/**
+ * Data Structures
+ */
 
 export interface ComponentInterface {
   label: string;
@@ -54,6 +53,9 @@ export interface StorageInterface {
   [key: string]: ComponentInterface;
 }
 
+/**
+ * User Input Options
+ */
 export interface OptionsInterface {
   entry: string;
   root: string;
@@ -82,9 +84,11 @@ interface BuildInterface {
   style: string;
 }
 
+/**
+ * Utils
+ */
+
 export interface UtilityInterface {
-  Queue: ComponentInterface[];
-  Storage: StorageInterface;
   indexOfRegExp(regex: RegExp, array: any[]): number;
   sliceAndTrim(
     array: any[],
