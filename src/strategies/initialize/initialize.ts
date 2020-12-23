@@ -1,11 +1,13 @@
 import Initialize from "./base.ts";
 
 import { OptionsInterface } from "../../lib/types.ts";
-import { walk } from '../../lib/deps.ts';
+import { fs, path } from "../../lib/deps.ts";
 import { Storage } from "../../lib/utils.ts";
 
 import Parser from "../parser/parser.ts";
 import Component from "../component.ts";
+
+console.log("inside");
 
 Initialize.prototype.config = async function (options: OptionsInterface) {
   try {
@@ -23,7 +25,7 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
 
     let vue;
     options.vue ? { vue } = options : null;
-    
+
     return new (Parser as any)(this.root, vue && vue).parse();
   } catch (error) {
     return console.error("Error inside of Initialize.config", { error });
@@ -31,21 +33,15 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
 };
 
 Initialize.prototype.walk = async function (entry: string, rootLabel: string) {
-  for await (const file of walk(`${entry}`, { exts: ["vue"] })) {
-    const { path } = file;
+  for await (const file of fs.walk(`${entry}`, { exts: ["vue"] })) {
+    const label = path.parse(file.path).name;
 
-    const regex: RegExp = new RegExp(/\/?(?<label>\w*)(\.vue)$/);
-    const label: string | undefined = path.match(regex)?.groups?.label;
-    
-    if (label) {
-      if (label === rootLabel) {
-        this.root = new (Component as any)(rootLabel, path, true);
-      } else {
-        Storage[label] = new (Component as any)(label, path);
-      }
+    if (label === rootLabel) {
+      this.root = new (Component as any)(rootLabel, file.path, true);
+    } else if (label) {
+      Storage[label] = new (Component as any)(label, file.path);
     }
   }
-
   return true;
 };
 
