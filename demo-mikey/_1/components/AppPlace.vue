@@ -8,7 +8,6 @@
 
 <script>
 export default {
-  name: 'app-place',
   props: ['location'],
 };
 </script>
