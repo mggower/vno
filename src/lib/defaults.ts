@@ -1,7 +1,6 @@
-export const _CDN =
-  "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
+const CDN = "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
 
-export const _HTML = {
+const HTML = {
   language: "en",
   title: "vno application",
   root: "app",
@@ -10,14 +9,16 @@ export const _HTML = {
     httpEquiv: ["X-UA-Compatible", "IE=edge"],
     viewport: "width=device-width,initial-scale=1.0",
   },
-  vue: _CDN,
+  vue: CDN,
   link: {},
   script: {},
   build: { bundle: "./build.js", style: "./style.css" },
 };
 
-export const _VNO_PATH = "vno-build";
-export const _BUILD_PATH = "vno-build/build.js";
-export const _STYLE_PATH = "vno-build/style.css";
+const VNO_PATH = "vno-build";
+const BUILD_PATH = "vno-build/build.js";
+const STYLE_PATH = "vno-build/style.css";
 
-export const _IGNORE = `/* eslint-disable */\n// prettier-ignore\n`;
+const IGNORE = `/* eslint-disable */\n// prettier-ignore\n`;
+
+export default { CDN, HTML, VNO_PATH, BUILD_PATH, STYLE_PATH, IGNORE };

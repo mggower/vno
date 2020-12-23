@@ -1,25 +1,20 @@
-import { ensureDirSync, existsSync } from "../../lib/deps.ts";
+import { fs } from "../../lib/deps.ts";
 import { ComponentInterface } from "../../lib/types.ts";
 import Utils from "../../lib/utils.ts";
 
 import Compiler from "./base.ts";
 
-import {
-  _BUILD_PATH,
-  _IGNORE,
-  _STYLE_PATH,
-  _VNO_PATH,
-} from "../../lib/defaults.ts";
+import _ from "../../lib/defaults.ts";
 
 Compiler.prototype.build = function () {
   try {
-    ensureDirSync(_VNO_PATH);
+    fs.ensureDirSync(_.VNO_PATH);
 
-    if (existsSync(_STYLE_PATH)) Deno.removeSync(_STYLE_PATH);
-    Deno.writeTextFileSync(_BUILD_PATH, _IGNORE + this.vue);
+    if (fs.existsSync(_.STYLE_PATH)) Deno.removeSync(_.STYLE_PATH);
+    Deno.writeTextFileSync(_.BUILD_PATH, _.IGNORE + this.vue);
 
     this.traverse(this.root);
-    Deno.writeTextFileSync(_BUILD_PATH, this.mount, { append: true });
+    Deno.writeTextFileSync(_.BUILD_PATH, this.mount, { append: true });
 
     return Utils.print();
   } catch (error) {
@@ -30,10 +25,10 @@ Compiler.prototype.build = function () {
 Compiler.prototype.write = function w(current: ComponentInterface) {
   if (!current.instance) throw `${current.label} is missing it's instance data`;
 
-  Deno.writeTextFileSync(_BUILD_PATH, current.instance, { append: true });
+  Deno.writeTextFileSync(_.BUILD_PATH, current.instance, { append: true });
 
   if (current.style) {
-    Deno.writeTextFileSync(_STYLE_PATH, current.style, { append: true });
+    Deno.writeTextFileSync(_.STYLE_PATH, current.style, { append: true });
   }
 };
 

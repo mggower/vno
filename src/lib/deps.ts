@@ -1,7 +1,4 @@
-import {
-  ensureDirSync,
-  existsSync,
-  walk,
-} from "https://deno.land/std@0.80.0/fs/mod.ts";
+import * as fs from "https://deno.land/std/fs/mod.ts";
+import * as path from "https://deno.land/std/path/mod.ts";
 
-export { ensureDirSync, existsSync, walk };
+export { fs, path };

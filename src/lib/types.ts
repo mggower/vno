@@ -1,7 +1,6 @@
 /**
  * Bundle Cycle Objects
  */
-
 export interface InitializeInterface {
   root: ComponentInterface | null;
 }

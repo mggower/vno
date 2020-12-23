@@ -27,6 +27,5 @@ Component.prototype.runData = async function data() {
   }
 };
 
-// new (Component as any)("App", "../../example/App.vue");
 
 export default Component;
