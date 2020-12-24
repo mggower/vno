@@ -1,6 +1,3 @@
-/**
- * Bundle Cycle Objects
- */
 export interface InitializeInterface {
   root: ComponentInterface | null;
 }
@@ -21,10 +18,6 @@ export interface RendererInterface {
   defaults: HtmlInterface;
   html: string;
 }
-
-/**
- * Data Structures
- */
 
 export interface ComponentInterface {
   label: string;
@@ -82,11 +75,6 @@ interface BuildInterface {
   bundle: string;
   style: string;
 }
-
-/**
- * Utils
- */
-
 export interface UtilityInterface {
   indexOfRegExp(regex: RegExp, array: any[]): number;
   sliceAndTrim(

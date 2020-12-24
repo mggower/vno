@@ -44,7 +44,7 @@ const parseScript = function pS(current: ComponentInterface) {
         current.child = new (SiblingList as any)();
 
         while (foundChildren.length) {
-          const component: ComponentInterface | undefined = foundChildren.pop();
+          const component = foundChildren.pop();
 
           if (component) {
             Queue.push(component);
