@@ -24,7 +24,7 @@ const msg3 = "Is this a single-page application?: ";
 const htmlMSG = "Lets optimize your HTML template";
 const msg4 = "Language: ";
 
-console.log(welcome);
+// console.log(welcome);
 const title = await prompt(msg1);
 const ssr = await prompt(msg2);
 const spa = await prompt(msg3);

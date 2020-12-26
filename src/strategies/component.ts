@@ -1,10 +1,10 @@
 import { ComponentInterface } from "../lib/types.ts";
 
-function Component(this: ComponentInterface, label: string, path: string, isRoot: boolean = false) {
+async function Component(this: ComponentInterface, label: string, path: string, isRoot: boolean = false) {
   this.label = label;
   this.path = path;
   this.isRoot = isRoot;
-  this.runData();
+  await this.runData();
 }
 
 Component.prototype.runData = async function data() {
