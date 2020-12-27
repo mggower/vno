@@ -1,13 +1,15 @@
 import { Application, join, log, send } from "./deps.ts";
-import vno from "../src/dist/mod.ts";
 
-vno.config({
+import vno from "../../src/dist/mod.ts";
+import { PG_URI } from "../../keys.js";
+
+const port: number = 4040;
+const server: Application = new Application();
+
+await vno.config({
   root: "App",
   entry: "./",
 });
-
-const port: number = 3000;
-const server: Application = new Application();
 
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
@@ -32,7 +34,7 @@ server.use(async (ctx, next) => {
 });
 
 if (import.meta.main) {
-  log.info("Server is up and running on port" + port);
+  log.info(`Server is listening on localhost:${port}`);
   await server.listen({ port });
 }
 
