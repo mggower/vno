@@ -1,16 +1,14 @@
 import Initialize from "./base.ts";
 
+import { OptionsInterface } from "../../lib/types.ts";
+import { fs, path } from "../../lib/deps.ts";
+import { Storage } from "../../lib/utils.ts";
+
 import Parser from "../parser/parser.ts";
 import Component from "../component.ts";
-import Storage from "../storage.ts";
-
-import { OptionsInterface } from "../../lib/types.ts";
-
-import { walk } from "https://deno.land/std@0.80.0/fs/mod.ts";
 
 Initialize.prototype.config = async function (options: OptionsInterface) {
   try {
-    let vue;
     const { entry, root } = options;
 
     if (!entry) {
@@ -21,11 +19,9 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
     }
 
     const ready = await this.walk(entry, root);
+    if (!ready) throw "an error occured building out the queue";
 
-    if (!ready) {
-      throw "an error occured building out the queue";
-    }
-
+    let vue;
     options.vue ? { vue } = options : null;
 
     return new (Parser as any)(this.root, vue && vue).parse();
@@ -35,20 +31,16 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
 };
 
 Initialize.prototype.walk = async function (entry: string, rootLabel: string) {
-  for await (const file of walk(`${entry}`, { exts: ["vue"] })) {
-    const { path } = file;
+  for await (const file of fs.walk(`${entry}`, { exts: ["vue"] })) {
+    const label = path.parse(file.path).name;
 
-    if (path.includes(rootLabel)) {
-      this.root = new (Component as any)(rootLabel, path, true);
-    } else {
-      const regex: RegExp = new RegExp(/\/(?<label>\w*)(\.vue)$/);
-      const label: string | undefined = path.match(regex)?.groups?.label;
-
-      if (label) Storage[label] = new (Component as any)(label, path);
-      else throw `there was an error reading the label on ${path}`;
+    if (label === rootLabel) {
+      this.root = new (Component as any)(rootLabel, file.path, true);
+    } else if (label) {
+      Storage[label] = new (Component as any)(label, file.path);
     }
   }
-  if (this.root) return true;
+  return true;
 };
 
 export default Initialize;

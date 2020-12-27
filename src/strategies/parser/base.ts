@@ -1,11 +1,11 @@
 import { ComponentInterface, ParserInterface } from "../../lib/types.ts";
-import { _CDN } from "../../lib/defaults.ts";
-import Queue from "../queue.ts";
+import { Queue } from "../../lib/utils.ts";
+import _ from "../../lib/defaults.ts";
 
 function Parser(
   this: ParserInterface,
   root: ComponentInterface,
-  vue: string = _CDN,
+  vue: string = _.CDN,
 ) {
   Queue.push(root);
   this.root = root;

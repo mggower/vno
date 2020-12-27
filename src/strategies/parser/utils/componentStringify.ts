@@ -6,10 +6,10 @@ const componentStringify = function cS(current: ComponentInterface) {
 
     if (current.isRoot) {
       current.instance =
-        `\nvar ${label} = new Vue({template: \`${template}\`,${script}});\n`;
+        `\nconst ${label} = new Vue({template: \`${template}\`,${script}});\n`;
     } else {
       current.instance =
-        `\nvar ${label} = Vue.component("${name}", {template: \`${template}\`,${script}});`;
+        `\nconst ${label} = Vue.component("${name}", {template: \`${template}\`,${script}});`;
     }
 
     return "componentStringify()=> successful";
