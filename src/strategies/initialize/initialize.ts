@@ -33,7 +33,7 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
 Initialize.prototype.walk = async function (entry: string, rootLabel: string) {
   for await (const file of fs.walk(`${entry}`, { exts: ["vue"] })) {
     const label = path.parse(file.path).name;
-    
+
     if (label === rootLabel) {
       this.root = new (Component as any)(rootLabel, file.path, true);
     } else if (label) {
