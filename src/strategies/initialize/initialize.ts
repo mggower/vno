@@ -12,21 +12,33 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
     const { entry, root } = options;
 
     if (!entry) {
-      throw "an entry path is required inside of your config method";
+      throw (
+        "an entry path is required inside of your config method"
+      );
     }
     if (!root) {
-      throw "a root label is required to identify the root of your application";
+      throw (
+        "a root label is required to identify the root of your application"
+      );
     }
 
     const ready = await this.walk(entry, root);
-    if (!ready) throw "an error occured building out the queue";
+
+    if (!ready) {
+      throw (
+        "an error occured building out the queue"
+      );
+    }
 
     let vue;
     options.vue ? { vue } = options : null;
 
     return new (Parser as any)(this.root, vue && vue).parse();
   } catch (error) {
-    return console.error("Error inside of Initialize.config", { error });
+    return console.error(
+      "Error inside of Initialize.config",
+      { error },
+    );
   }
 };
 

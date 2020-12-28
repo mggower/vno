@@ -14,7 +14,10 @@ const componentStringify = function cS(current: ComponentInterface) {
 
     return "componentStringify()=> successful";
   } catch (error) {
-    console.error("Error inside of componentStringify()=>:", { error });
+    console.error(
+      "Error inside of componentStringify()=>:",
+      { error }
+    );
   }
 };
 

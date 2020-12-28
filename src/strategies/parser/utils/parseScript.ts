@@ -3,7 +3,7 @@ import Utils, { Queue, Storage } from "../../../lib/utils.ts";
 
 import SiblingList from "../../sibling.ts";
 
-const parseScript = function pS(current: ComponentInterface) {
+const parseScript = function pSc(current: ComponentInterface) {
   try {
     if (current.split) {
       const { split } = current;
@@ -12,19 +12,19 @@ const parseScript = function pS(current: ComponentInterface) {
       const close: number = split.indexOf("</script>");
 
       if (open < 0 || close < 0) {
-        console.warn(`warn: no found <script> in ${current.path}`);
+        console.warn(
+          `warn: no found <script> in ${current.path}`,
+        );
       }
 
       const script = split.slice(open + 1, close);
 
       const nameIndex = Utils.indexOfRegExp(/(name)/, script);
-
       if (nameIndex < 0) current.name = Utils.toKebab(current.label);
       else current.name = script[nameIndex].split(/[`'"]/)[1];
 
       const exportStart = Utils.indexOfRegExp(/^(export)/, script);
       const exportEnd: number = script.lastIndexOf("}");
-
       current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
       const cmpsStart = Utils.indexOfRegExp(/(components:)/, script);
@@ -56,7 +56,10 @@ const parseScript = function pS(current: ComponentInterface) {
 
     return "parseScript()=> successful";
   } catch (error) {
-    console.error("Error inside of Parser.script:", { error });
+    console.error(
+      "Error inside of Parser.script:",
+      { error },
+    );
   }
 };
 
