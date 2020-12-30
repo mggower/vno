@@ -27,8 +27,8 @@ const parseScript = function pS(current: ComponentInterface) {
 
       current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
-      const cmpsStart = Utils.indexOfRegExp(/(components:)/, script);
-      const children = cmpsStart > 0 && script.slice(cmpsStart);
+      const componentsStart = Utils.indexOfRegExp(/(components:)/, script);
+      const children = componentsStart > 0 && script.slice(componentsStart);
 
       if (children) {
         const cmpsEnd = children.findIndex((element) => element.includes("}"));
