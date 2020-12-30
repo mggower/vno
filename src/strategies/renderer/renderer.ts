@@ -1,23 +1,19 @@
-import Renderer from './base.ts';
-import _ from '../../lib/defaults.ts';
+import Renderer from "./base.ts";
+import _ from "../../lib/defaults.ts";
 import { ComponentInterface, HtmlInterface } from "../../lib/types.ts";
 
 Renderer.prototype.createRenderer = function (
   obj: object,
-  route: ComponentInterface | null,
+  route?: ComponentInterface,
 ) {
-  this.html = this.htmlStringify(
-    { ..._.HTML, ...obj },
-    route && route,
-  );
+  this.html = this.htmlStringify({ ..._.HTML, ...obj }, route && route);
   return this.html;
 };
 
-
 Renderer.prototype.htmlStringify = function (
   options: HtmlInterface,
-  route: (ComponentInterface | undefined),
-) {
+  route?: ComponentInterface,
+): string {
   const { language, title, root, meta, vue, build, link, script } = options;
 
   let links = "";

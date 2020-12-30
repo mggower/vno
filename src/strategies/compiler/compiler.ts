@@ -18,12 +18,19 @@ Compiler.prototype.build = function () {
 
     return Utils.print();
   } catch (error) {
-    return console.error(`Error inside of Compiler.build:`, { error });
+    return console.error(
+      `Error inside of Compiler.build:`,
+      { error },
+    );
   }
 };
 
 Compiler.prototype.write = function w(current: ComponentInterface) {
-  if (!current.instance) throw `${current.label} is missing its instance data`;
+  if (!current.instance) {
+    throw (
+      `${current.label} is missing it's instance data`
+    );
+  }
 
   Deno.writeTextFileSync(_.BUILD_PATH, current.instance, { append: true });
 

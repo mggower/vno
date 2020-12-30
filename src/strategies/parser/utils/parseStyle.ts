@@ -17,7 +17,10 @@ const parseStyle = function pSt(current: ComponentInterface) {
       return "parseStyle()=> succesful";
     }
   } catch (error) {
-    console.error("Error inside of parseStyle()=>:", { error });
+    console.error(
+      "Error inside of parseStyle()=>:",
+      { error },
+    );
   }
 };
 
