@@ -1,13 +1,13 @@
 import Renderer from './base.ts';
-import { _HTML } from '../../lib/defaults.ts';
+import _ from '../../lib/defaults.ts';
 import { ComponentInterface, HtmlInterface } from "../../lib/types.ts";
 
-Renderer.prototype.createRenderer = async function (
+Renderer.prototype.createRenderer = function (
   obj: object,
   route: ComponentInterface | null,
 ) {
   this.html = this.htmlStringify(
-    { ..._HTML, ...obj },
+    { ..._.HTML, ...obj },
     route && route,
   );
   return this.html;
