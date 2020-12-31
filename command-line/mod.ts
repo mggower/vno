@@ -96,7 +96,7 @@ const additionalComponent: string = `<template>
 </template>
 <script>
 export default {
-  name: ${userOptions[2]},
+  name: '${userOptions[2]}',
   props: {
     msg: String
   },
@@ -120,15 +120,15 @@ a {
 </style>`;
 
 const rootComp: string = `<template>
-<div id=${userOptions[1].toLowerCase()}>
+<div id="${userOptions[1].toLowerCase()}">
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-<${userOptions[2]} msg=${userOptions[0]}/>
+<${userOptions[2]} msg='You are building ${userOptions[0]} with vno'/>
 </div>
 </template>
 <script>
-import ${userOptions[2]} from ./components/${userOptions[2]}.vue
+import ${userOptions[2]} from './components/${userOptions[2]}.vue'
 export default {
-  name: ${userOptions[1].toLowerCase()},
+  name: '${userOptions[1].toLowerCase()}',
   components: {
     ${userOptions[2]}
   }
@@ -151,15 +151,15 @@ const html = `<!DOCTYPE html>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <script src=${userOptions[3]}></script>
+    <script src="${userOptions[3]}"></script>
     <link rel="stylesheet" href="./style.css">
     <title>${userOptions[0]}</title>
   </head>
   <body>
-    <div id=${userOptions[1].toLocaleLowerCase()}>
+    <div id="${userOptions[1].toLocaleLowerCase()}">
       <!-- built files will be auto injected -->
     </div>
-    <script src=${userOptions[3]}></script>
+    <script src="${userOptions[3]}"></script>
     <script type="module" src='./build.js'></script>
   </body>
 </html>
@@ -171,9 +171,9 @@ import vno from "../src/strategies/renderer.ts";
 const port: number = ${userOptions[4]};
 const server: Application = new Application();
 await vno.config({
-  label: ${userOptions[1]},
+  label: "${userOptions[1]}",
   entry: "./",
-  cdn: ${userOptions[3]},
+  cdn: "${userOptions[3]}",
 });
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
