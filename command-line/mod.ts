@@ -12,7 +12,7 @@ const userOptions = [
 ];
 
 
-const run = function customize() {
+  const runner: any = function customize() {
   const msg1: string = "Please enter a project title:";
   const msg2: string =
     "What would you like to name your root Vue component?(recommend App.vue): ";
@@ -48,8 +48,10 @@ const run = function customize() {
 
 // const welcome = "initializing your vno project...";
 const decide = "Would you like to customize your project?(yes/no):";
-if (decide.toLowerCase() === "yes") {
-  return customize()
+const decision: string = await prompt(decide);
+
+if (decision.toLowerCase() === "yes") {
+   runner()
 } else {
   console.log('Creating vno Project')
 }
@@ -75,23 +77,23 @@ function run() {
 run();
 
 console.log(`Writing parent component app.vue`);
-const helloVno: string = `<template>
+const additionalComponent: string = `<template>
 <div class="hello">
   <h1>{{ msg }}</h1>
   <p>
-    For a guide and preview of our osLabs repo<br>
-    check out
+    For github documentation:<br>
+    
     <a href="https://github.com/oslabs-beta/vno" target="_blank" rel="noopener">&nbsp;vno documentation</a>.
   </p>
-  <h3>Installed CLI Plugins</h3>
+  <h3>Installed CLI Plugin</h3>
   <ul>
-  <li><a href="https://github.com/jgrubb16/vnocli" target="_blank" rel="noopener">babel</a></li>
+  <li><a href="https://github.com/oslabs-beta/vno/tree/main/command-line" target="_blank" rel="noopener">babel</a></li>
   </ul>
 </div>
 </template>
 <script>
 export default {
-  name: 'HelloVno',
+  name: ${userOptions[3]},
   props: {
     msg: String
   },
@@ -117,15 +119,15 @@ a {
 const App: string = `<template>
 <div id="app">
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-<HelloVno msg="Welcome to vno!"/>
+<HelloVno msg=${userOptions[1]}/>
 </div>
 </template>
 <script>
-import HelloVno from './components/HelloVno.vue'
+import ${userOptions[3]} from ./components/${userOptions[3]}.vue
 export default {
   name: 'app',
   components: {
-    HelloVno
+    ${userOptions[3]}
   }
 }
 </script>
