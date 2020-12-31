@@ -3,9 +3,9 @@ import vno from "../src/strategies/renderer.ts";
 const port: number = 8080;
 const server: Application = new Application();
 await vno.config({
-  label: TestRoot,
+  label: "TestRoot",
   entry: "./",
-  cdn: https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js,
+  cdn: "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js",
 });
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;

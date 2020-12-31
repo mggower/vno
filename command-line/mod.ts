@@ -122,7 +122,7 @@ a {
 const rootComp: string = `<template>
 <div id="${userOptions[1].toLowerCase()}">
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-<${userOptions[2]} msg='You are building ${userOptions[0]} with vno'/>
+<${userOptions[2]} msg='You are building: ${userOptions[0]} with vno'/>
 </div>
 </template>
 <script>

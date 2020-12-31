@@ -1,13 +1,13 @@
 <template>
-<div id=testroot>
+<div id="testroot">
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-<TestChild msg=My Test Project/>
+<TestChild msg='You are building Test Project with vno'/>
 </div>
 </template>
 <script>
-import TestChild from ./components/TestChild.vue
+import TestChild from './components/TestChild.vue'
 export default {
-  name: testroot,
+  name: 'testroot',
   components: {
     TestChild
   }
