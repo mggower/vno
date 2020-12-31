@@ -18,21 +18,29 @@ import { prompt } from "./utils.ts";
 // console.log(title);
 
 const welcome = "initializing your vno project...";
-const msg1 =
+const msg1 = "Please enter a project title:";
+const msg2 =
   "What would you like to name your root Vue component?(recommend App.vue): ";
-const msg2 = "Would like to optimize your project with SSR?(yes/no): ";
-const msg4 = "Language: ";
-const msg5 = "Confirm these results and create your project?(yes/no)";
-
+const msg3 = "Port number for server:";
+const msg4 = "Confirm these results and create your project?(yes/no)";
 // const htmlMSG = "Lets optimize your HTML template";
+// const msg2 = "Would like to optimize your project with SSR?(yes/no): ";
 console.log(welcome);
 const title = await prompt(msg1);
-const ssr = await prompt(msg2);
+const root = await prompt(msg2);
 // const spa = await prompt(msg3);
 // const msg3 = "Is this a single-page application?(yes/no): ";
 // console.log(htmlMSG);
-const lang = await prompt(msg4);
+const port = await prompt(msg3);
 console.log(
-  `results are in:\n Root: ${title}, \n ssr: ${ssr}, \n lang: ${lang}`,
+  `Your Options:\n Title: ${title}, \n Root: ${root}, \n Port: ${port}`,
 );
-const confirm = await prompt(msg5);
+const confirm = await prompt(msg4);
+const userOptions = [];
+if (confirm.toLowerCase() === "yes") {
+  userOptions.push(
+    title || "Your vno project",
+    root || "App.vue",
+    port || "3000",
+  );
+}
