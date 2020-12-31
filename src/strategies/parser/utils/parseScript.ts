@@ -31,11 +31,11 @@ const parseScript = function pSc(current: ComponentInterface) {
       const children = componentsStart > 0 && script.slice(componentsStart);
 
       if (children) {
-        const cmpsEnd = children.findIndex((element) => element.includes("}"));
-        const cmpsString = Utils.sliceAndTrim(children, 0, cmpsEnd + 1);
+        const componentsEnd = children.findIndex((element) => element.includes("}"));
+        const componentsString = Utils.sliceAndTrim(children, 0, componentsEnd + 1);
 
-        const foundChildren = cmpsString
-          .slice(cmpsString.indexOf("{") + 1, cmpsString.indexOf("}"))
+        const foundChildren = componentsString
+          .slice(componentsString.indexOf("{") + 1, componentsString.indexOf("}"))
           .replace(/\s/g, "")
           .split(",")
           .filter((el) => el)
