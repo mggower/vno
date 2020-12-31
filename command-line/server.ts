@@ -1,9 +1,9 @@
 import { Application, join, log, send } from "./deps.ts";
-import vno from "../src/strategies/renderer.ts";
-const port: number = 8080;
+import vno from "../src/strategies/initialize/initialize.ts";
+const port: number = 3000;
 const server: Application = new Application();
 await vno.config({
-  label: "TestRoot",
+  label: "App",
   entry: "./",
   cdn: "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js",
 });
@@ -29,7 +29,7 @@ server.use(async (ctx, next) => {
   } else await next();
 });
 if (import.meta.main) {
-  log.info("Server is up and running on port" + 8080 );
-  await server.listen(8080);
+  log.info("Server is up and running on port 3000");
+  await server.listen(`${port}`);
 }
 export { server };

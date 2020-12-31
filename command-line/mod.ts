@@ -197,8 +197,8 @@ server.use(async (ctx, next) => {
   } else await next();
 });
 if (import.meta.main) {
-  log.info("Server is up and running on port" + ${userOptions[4]} );
-  await server.listen(${userOptions[4]});
+  log.info("Server is up and running on port ${userOptions[4]}");
+  await server.listen({{ port }});
 }
 export { server };`;
 
