@@ -74,7 +74,7 @@ function run() {
 }
 run();
 
-console.log(`Writing parent component app.vue`);
+console.log(`Writing root component ${userOptions[2]}.vue`);
 const additionalComponent: string = `<template>
 <div class="hello">
   <h1>{{ msg }}</h1>
