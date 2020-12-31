@@ -43,6 +43,7 @@ const runner: any = async function customize() {
     if (vue) userOptions[3] = vue;
     if (port) userOptions[4] = port;
   } else {
+    console.log("Resetting User Options");
     await runner();
   }
 };
