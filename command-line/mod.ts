@@ -5,7 +5,7 @@ import { ensureDir, ensureFile } from "https://deno.land/std/fs/mod.ts";
 
 const userOptions = [
   "Your vno project",
-  "App.vue",
+  `${userOptions}`,
   "HelloVno",
   "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js",
   "3000",
@@ -219,10 +219,10 @@ console.log("Done writing component dir!");
 // ensureDir("assets");
 // console.log("Done writing assets dir!");
 
-ensureFile("App.vue")
+ensureFile(`${userOptions[2]}.vue`)
   .then(() => {
-    Deno.writeTextFile("App.vue", App);
-    console.info("Done writing App component!");
+    Deno.writeTextFile(`${userOptions[2]}.vue`, `${userOptions[2]}`);
+    console.info(`Done writing ${userOptions[2]} component!`);
   });
 
 ensureFile("public/index.html")
@@ -237,9 +237,9 @@ ensureFile("deps.ts")
     console.info("Done writing deps file!");
   });
 
-ensureFile(`components/${HelloVno}.vue`)
+ensureFile(`components/${userOptions[3]}.vue`)
   .then(() => {
-    Deno.writeTextFile("components/HelloVno.vue", `${HelloVno}`);
+    Deno.writeTextFile(`components/${userOptions[3]}.vue`, `${userOptions[3]}`);
     console.info("Done writing");
   });
 
@@ -249,5 +249,5 @@ ensureFile("server.ts")
     console.info("Done writing server");
   });
 
-console.log("writing App.vue");
+console.log(`writing ${userOptions[1]}.vue`);
 console.log("DONE!");
