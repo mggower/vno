@@ -32,7 +32,10 @@ const runner: any = async function customize() {
   if (vue === "default") vue = "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js";
   const port: string = await prompt(msg5);
   console.log(
-    `Your Options:\n Title: ${title}, \n Root: ${root}, \n Additional Component: ${child} \n Vue Version: ${vue} \n Port: ${port}`,
+    `Your Options:\n Title: ${title || userOptions[0]}, \n Root: ${root ||
+      userOptions[1]}, \n Additional Component: ${child ||
+      userOptions[2]} \n Vue Version: ${vue ||
+      userOptions[3]} \n Port: ${port || userOptions[4]}`,
   );
   const confirm: string = await prompt(msg6);
 
