@@ -11,8 +11,7 @@ const userOptions = [
   "3000",
 ];
 
-
-  const runner: any = function customize() {
+const runner: any = function customize() {
   const msg1: string = "Please enter a project title:";
   const msg2: string =
     "What would you like to name your root Vue component?(recommend App.vue): ";
@@ -26,7 +25,6 @@ const userOptions = [
 
   console.log("Initializing your vno project");
 
-  
   const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
   const child: string = await prompt(msg3);
@@ -38,22 +36,22 @@ const userOptions = [
   const confirm: string = await prompt(msg6);
 
   if (confirm.toLowerCase() === "yes") {
-    if(title) userOptions[0] = title
-    if(root)userOptions[1] = root
-    if(child)userOptions[2] = child
-    if(vue)userOptions[3] = vue
-    if(port)userOptions[4] = port
+    if (title) userOptions[0] = title;
+    if (root) userOptions[1] = root;
+    if (child) userOptions[2] = child;
+    if (vue) userOptions[3] = vue;
+    if (port) userOptions[4] = port;
   }
-}
+};
 
 // const welcome = "initializing your vno project...";
 const decide = "Would you like to customize your project?(yes/no):";
 const decision: string = await prompt(decide);
 
 if (decision.toLowerCase() === "yes") {
-   runner()
+  runner();
 } else {
-  console.log('Creating vno Project')
+  console.log("Creating vno Project");
 }
 
 const total = 100;
@@ -148,15 +146,15 @@ const html = `<!DOCTYPE html>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <script src=`${vue}`></script>
+    <script src=${userOptions[4]}></script>
     <link rel="stylesheet" href="./style.css">
-    <title>`${title}`</title>
+    <title>${userOptions[1]}</title>
   </head>
   <body>
-    <div id="app">
+    <div id=${userOptions[2].toLocaleLowerCase()}>
       <!-- built files will be auto injected -->
     </div>
-    <script src=`${vue}`></script>
+    <script src=${userOptions[4]}></script>
     <script type="module" src='./build.js'></script>
   </body>
 </html>
@@ -165,12 +163,12 @@ const html = `<!DOCTYPE html>
 const server: string =
   `import { Application, join, log, send } from "./deps.ts";
 import vno from "../src/strategies/renderer.ts";
-const port: number = 3000;
+const port: number = ${userOptions[5]};
 const server: Application = new Application();
 await vno.config({
-  label: "App",
+  label: ${userOptions[2]},
   entry: "./",
-  cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js",
+  cdn: ${userOptions[4]},
 });
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
@@ -194,25 +192,23 @@ server.use(async (ctx, next) => {
   } else await next();
 });
 if (import.meta.main) {
-  log.info("Server is up and running on port" + port );
-  await server.listen({ port });
+  log.info("Server is up and running on port" + ${userOptions[5]} );
+  await server.listen(${userOptions[5]});
 }
 export { server };`;
 
 const deps: string =
   `export { dirname, join } from "https://deno.land/std@0.74.0/path/mod.ts";
 export * as log from "https://deno.land/std@0.74.0/log/mod.ts";
-// oak
 export {
   Application,
   Router,
   send,
 } from "https://deno.land/x/oak@v6.3.1/mod.ts";
-// dotenv
 export { config } from "https://deno.land/x/dotenv/mod.ts";
 `;
-const appPath: string = "./";
-const componentPath: string = "./components/";
+// const appPath: string = "./";
+// const componentPath: string = "./components/";
 
 ensureDir("public");
 console.info("Done writing public dir!");
