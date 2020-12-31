@@ -18,9 +18,7 @@ data() {
     color: 'purple',
   };
 },
-components: {
-  LilOrange,
-}
+components: { LilOrange },
 };
 </script>
 

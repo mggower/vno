@@ -21,9 +21,7 @@ data() {
     color: 'red',
   };
 },
-components: {
-  LilOrange,
-}
+components: { LilOrange },
 };
 </script>
 
