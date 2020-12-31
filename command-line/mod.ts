@@ -3,31 +3,32 @@ import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
 import { prompt } from "./utils.ts";
 import { ensureDir, ensureFile } from "https://deno.land/std/fs/mod.ts";
 
-const userOptions = ["Your vno project","App.vue","HelloVno","https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js","3000"];
+const userOptions = [
+  "Your vno project",
+  "App.vue",
+  "HelloVno",
+  "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js",
+  "3000",
+];
 
-function customize() {
+
+const run = function customize() {
   const msg1: string = "Please enter a project title:";
   const msg2: string =
     "What would you like to name your root Vue component?(recommend App.vue): ";
-  const msg3: string = "What would you like to name your additional component?:";
+  const msg3: string =
+    "What would you like to name your additional component?:";
   const msg4: string =
     "Which version of Vue would you like to use? (type 'default' for 2.6.12):";
   const msg5: string = "Port number for server:";
-  const msg6: string = "Confirm these results and create your project?(yes/no):";
-  // const htmlMSG = "Lets optimize your HTML template";
-  // const msg2 = "Would like to optimize your project with SSR?(yes/no): ";
-  console.log(welcome);
-  const titlePrompt: any = function t() {
-     await prompt(msg1);
-  }
-  if (!titlePrompt) {
-    console.log('Please enter a valid entry');
-    return titlePrompt();
-  };
+  const msg6: string =
+    "Confirm these results and create your project?(yes/no):";
+
+  console.log("Initializing your vno project");
+
+  
+  const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
-  // const spa = await prompt(msg3);
-  // const msg3 = "Is this a single-page application?(yes/no): ";
-  // console.log(htmlMSG);
   const child: string = await prompt(msg3);
   const vue: string = await prompt(msg4);
   const port: string = await prompt(msg5);
@@ -35,18 +36,17 @@ function customize() {
     `Your Options:\n Title: ${title}, \n Root: ${root}, \n Additional Component: ${child} \n Vue Version: ${vue} \n Port: ${port}`,
   );
   const confirm: string = await prompt(msg6);
-  
+
   if (confirm.toLowerCase() === "yes") {
-    userOptions[0] = title
-    userOptions[1] = root
-    userOptions[2] = child
-    userOptions[3] = vue
-    userOptions[4] = port
+    if(title) userOptions[0] = title
+    if(root)userOptions[1] = root
+    if(child)userOptions[2] = child
+    if(vue)userOptions[3] = vue
+    if(port)userOptions[4] = port
   }
 }
 
-
-const welcome = "initializing your vno project...";
+// const welcome = "initializing your vno project...";
 const decide = "Would you like to customize your project?(yes/no):";
 if (decide.toLowerCase() === "yes") {
   return customize()
@@ -80,7 +80,7 @@ const helloVno: string = `<template>
   <h1>{{ msg }}</h1>
   <p>
     For a guide and preview of our osLabs repo<br>
-    check out 
+    check out
     <a href="https://github.com/oslabs-beta/vno" target="_blank" rel="noopener">&nbsp;vno documentation</a>.
   </p>
   <h3>Installed CLI Plugins</h3>
