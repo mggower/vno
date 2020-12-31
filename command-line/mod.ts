@@ -3,7 +3,7 @@ import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
 import { prompt } from "./utils.ts";
 import { ensureDir, ensureFile } from "https://deno.land/std/fs/mod.ts";
 
-const userOptions = [];
+const userOptions = ["Your vno project","App.vue","HelloVno","https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js","3000"];
 
 function customize() {
   const msg1: string = "Please enter a project title:";
@@ -17,7 +17,13 @@ function customize() {
   // const htmlMSG = "Lets optimize your HTML template";
   // const msg2 = "Would like to optimize your project with SSR?(yes/no): ";
   console.log(welcome);
-  const title: string = await prompt(msg1);
+  const titlePrompt: any = function t() {
+     await prompt(msg1);
+  }
+  if (!titlePrompt) {
+    console.log('Please enter a valid entry');
+    return titlePrompt();
+  };
   const root: string = await prompt(msg2);
   // const spa = await prompt(msg3);
   // const msg3 = "Is this a single-page application?(yes/no): ";
@@ -31,13 +37,11 @@ function customize() {
   const confirm: string = await prompt(msg6);
   
   if (confirm.toLowerCase() === "yes") {
-    userOptions.push(
-      title || "Your vno project",
-      root || "App.vue",
-      child || "HelloVno",
-      vue || "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js",
-      port || "3000",
-    );
+    userOptions[0] = title
+    userOptions[1] = root
+    userOptions[2] = child
+    userOptions[3] = vue
+    userOptions[4] = port
   }
 }
 
