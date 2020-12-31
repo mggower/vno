@@ -95,15 +95,15 @@ const html = `<!DOCTYPE html>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src=`${vue}`></script>
     <link rel="stylesheet" href="./style.css">
-    <title>vno test</title>
+    <title>`${title}`</title>
   </head>
   <body>
     <div id="app">
       <!-- built files will be auto injected -->
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+    <script src=`${vue}`></script>
     <script type="module" src='./build.js'></script>
   </body>
 </html>
@@ -167,8 +167,8 @@ console.info("Done writing public dir!");
 ensureDir("components");
 console.log("Done writing component dir!");
 
-ensureDir("assets");
-console.log("Done writing assets dir!");
+// ensureDir("assets");
+// console.log("Done writing assets dir!");
 
 ensureFile("App.vue")
   .then(() => {
@@ -188,9 +188,9 @@ ensureFile("deps.ts")
     console.info("Done writing deps file!");
   });
 
-ensureFile("components/HelloVno.vue")
+ensureFile(`components/${HelloVno}.vue`)
   .then(() => {
-    Deno.writeTextFile("components/HelloVno.vue", helloVno);
+    Deno.writeTextFile("components/HelloVno.vue", `${HelloVno}`);
     console.info("Done writing");
   });
 
