@@ -12,23 +12,24 @@ const userOptions = [
 ];
 
 const runner: any = async function customize() {
-  const msg1: string = "Please enter a project title: ";
+  const msg1: string = "Please enter a project title:";
   const msg2: string =
-    "What would you like to name your root Vue component?(recommend App.vue): ";
+    "What would you like to name your root Vue component?(recommend App.vue):";
   const msg3: string =
-    "What would you like to name your additional component?: ";
+    "What would you like to name your additional component?:";
   const msg4: string =
-    "Which version of Vue would you like to use? (type 'default' for 2.6.12): ";
-  const msg5: string = "Port number for server: ";
+    "Which version of Vue would you like to use? (type 'default' for 2.6.12):";
+  const msg5: string = "Port number for server:";
   const msg6: string =
-    "Confirm these results and create your project?(yes/no): ";
+    "Confirm these results and create your project?(yes/no):";
 
   console.log("Initializing your vno project");
 
   const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
   const child: string = await prompt(msg3);
-  const vue: string = await prompt(msg4);
+  let vue: string = await prompt(msg4);
+  if (vue === "default") vue = "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js";
   const port: string = await prompt(msg5);
   console.log(
     `Your Options:\n Title: ${title}, \n Root: ${root}, \n Additional Component: ${child} \n Vue Version: ${vue} \n Port: ${port}`,
@@ -41,6 +42,8 @@ const runner: any = async function customize() {
     if (child) userOptions[2] = child;
     if (vue) userOptions[3] = vue;
     if (port) userOptions[4] = port;
+  } else {
+    await runner();
   }
 };
 
