@@ -5,23 +5,23 @@ import { ensureDir, ensureFile } from "https://deno.land/std/fs/mod.ts";
 
 const userOptions = [
   "Your vno project",
-  `${userOptions}`,
+  "App",
   "HelloVno",
   "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js",
   "3000",
 ];
 
-const runner: any = function customize() {
-  const msg1: string = "Please enter a project title:";
+const runner: any = async function customize() {
+  const msg1: string = "Please enter a project title: ";
   const msg2: string =
     "What would you like to name your root Vue component?(recommend App.vue): ";
   const msg3: string =
-    "What would you like to name your additional component?:";
+    "What would you like to name your additional component?: ";
   const msg4: string =
-    "Which version of Vue would you like to use? (type 'default' for 2.6.12):";
-  const msg5: string = "Port number for server:";
+    "Which version of Vue would you like to use? (type 'default' for 2.6.12): ";
+  const msg5: string = "Port number for server: ";
   const msg6: string =
-    "Confirm these results and create your project?(yes/no):";
+    "Confirm these results and create your project?(yes/no): ";
 
   console.log("Initializing your vno project");
 
@@ -49,7 +49,7 @@ const decide = "Would you like to customize your project?(yes/no):";
 const decision: string = await prompt(decide);
 
 if (decision.toLowerCase() === "yes") {
-  runner();
+  await runner();
 } else {
   console.log("Creating vno Project");
 }
