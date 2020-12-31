@@ -30,10 +30,9 @@ const runner: any = async function customize() {
   if (vue === "default") vue = "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js";
   const port: string = await prompt(msg5);
   console.log(
-    `Your Options:\n Title: ${title ||
-      userOptions[0]}, \n Root: ${root + ".vue" ||
-      userOptions[1]} + '.vue', \n Additional Component: ${child + ".vue" ||
-      userOptions[2]} + '.vue. \n Vue Version: ${vue ||
+    `Your Options:\n Title: ${title || userOptions[0]}, \n Root: ${root ||
+      userOptions[1]}.vue, \n Additional Component: ${child ||
+      userOptions[2]}.vue \n Vue Version: ${vue ||
       userOptions[3]} \n Port: ${port || userOptions[4]}`,
   );
   const confirm: string = await prompt(msg6);
@@ -51,7 +50,7 @@ const runner: any = async function customize() {
 };
 
 // const welcome = "initializing your vno project...";
-const decide = "Would you like to customize your project?(yes/no):";
+const decide = "Would you like to customize your project?(yes/no)";
 const decision: string = await prompt(decide);
 
 if (decision.toLowerCase() === "yes") {
