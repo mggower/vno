@@ -77,7 +77,7 @@ function run() {
 }
 run();
 
-console.log(`Writing root component ${userOptions[2]}.vue`);
+console.log(`Writing root component ${userOptions[1]}.vue`);
 const additionalComponent: string = `<template>
 <div class="hello">
   <h1>{{ msg }}</h1>
@@ -94,7 +94,7 @@ const additionalComponent: string = `<template>
 </template>
 <script>
 export default {
-  name: ${userOptions[3]},
+  name: ${userOptions[2]},
   props: {
     msg: String
   },
@@ -118,22 +118,22 @@ a {
 </style>`;
 
 const rootComp: string = `<template>
-<div id=${userOptions[2].toLowerCase()}>
+<div id=${userOptions[1].toLowerCase()}>
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-<${userOptions[3]} msg=${userOptions[1]}/>
+<${userOptions[2]} msg=${userOptions[0]}/>
 </div>
 </template>
 <script>
-import ${userOptions[3]} from ./components/${userOptions[3]}.vue
+import ${userOptions[2]} from ./components/${userOptions[2]}.vue
 export default {
-  name: ${userOptions[2].toLowerCase()},
+  name: ${userOptions[1].toLowerCase()},
   components: {
-    ${userOptions[3]}
+    ${userOptions[2]}
   }
 }
 </script>
 <style>
-#${userOptions[2].toLowerCase()} {
+#${userOptions[1].toLowerCase()} {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -149,15 +149,15 @@ const html = `<!DOCTYPE html>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <script src=${userOptions[4]}></script>
+    <script src=${userOptions[3]}></script>
     <link rel="stylesheet" href="./style.css">
-    <title>${userOptions[1]}</title>
+    <title>${userOptions[0]}</title>
   </head>
   <body>
-    <div id=${userOptions[2].toLocaleLowerCase()}>
+    <div id=${userOptions[1].toLocaleLowerCase()}>
       <!-- built files will be auto injected -->
     </div>
-    <script src=${userOptions[4]}></script>
+    <script src=${userOptions[3]}></script>
     <script type="module" src='./build.js'></script>
   </body>
 </html>
@@ -166,12 +166,12 @@ const html = `<!DOCTYPE html>
 const server: string =
   `import { Application, join, log, send } from "./deps.ts";
 import vno from "../src/strategies/renderer.ts";
-const port: number = ${userOptions[5]};
+const port: number = ${userOptions[4]};
 const server: Application = new Application();
 await vno.config({
-  label: ${userOptions[2]},
+  label: ${userOptions[1]},
   entry: "./",
-  cdn: ${userOptions[4]},
+  cdn: ${userOptions[3]},
 });
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
@@ -195,8 +195,8 @@ server.use(async (ctx, next) => {
   } else await next();
 });
 if (import.meta.main) {
-  log.info("Server is up and running on port" + ${userOptions[5]} );
-  await server.listen(${userOptions[5]});
+  log.info("Server is up and running on port" + ${userOptions[4]} );
+  await server.listen(${userOptions[4]});
 }
 export { server };`;
 
@@ -222,10 +222,10 @@ console.log("Done writing component dir!");
 // ensureDir("assets");
 // console.log("Done writing assets dir!");
 
-ensureFile(`${userOptions[2]}.vue`)
+ensureFile(`${userOptions[1]}.vue`)
   .then(() => {
-    Deno.writeTextFile(`${userOptions[2]}.vue`, rootComp);
-    console.info(`Done writing ${userOptions[2]} component!`);
+    Deno.writeTextFile(`${userOptions[1]}.vue`, rootComp);
+    console.info(`Done writing ${userOptions[1]} component!`);
   });
 
 ensureFile("public/index.html")
@@ -240,9 +240,9 @@ ensureFile("deps.ts")
     console.info("Done writing deps file!");
   });
 
-ensureFile(`components/${userOptions[3]}.vue`)
+ensureFile(`components/${userOptions[2]}.vue`)
   .then(() => {
-    Deno.writeTextFile(`components/${userOptions[3]}.vue`, additionalComponent);
+    Deno.writeTextFile(`components/${userOptions[2]}.vue`, additionalComponent);
     console.info("Done writing");
   });
 
