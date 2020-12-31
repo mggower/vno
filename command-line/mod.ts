@@ -114,23 +114,23 @@ a {
 }
 </style>`;
 
-const App: string = `<template>
-<div id="app">
+const rootComp: string = `<template>
+<div id=${userOptions[2].toLowerCase()}>
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-<HelloVno msg=${userOptions[1]}/>
+<${userOptions[3]} msg=${userOptions[1]}/>
 </div>
 </template>
 <script>
 import ${userOptions[3]} from ./components/${userOptions[3]}.vue
 export default {
-  name: 'app',
+  name: ${userOptions[2].toLowerCase()},
   components: {
     ${userOptions[3]}
   }
 }
 </script>
 <style>
-#app {
+#${userOptions[2].toLowerCase()} {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -221,7 +221,7 @@ console.log("Done writing component dir!");
 
 ensureFile(`${userOptions[2]}.vue`)
   .then(() => {
-    Deno.writeTextFile(`${userOptions[2]}.vue`, `${userOptions[2]}`);
+    Deno.writeTextFile(`${userOptions[2]}.vue`, rootComp);
     console.info(`Done writing ${userOptions[2]} component!`);
   });
 
@@ -239,7 +239,7 @@ ensureFile("deps.ts")
 
 ensureFile(`components/${userOptions[3]}.vue`)
   .then(() => {
-    Deno.writeTextFile(`components/${userOptions[3]}.vue`, `${userOptions[3]}`);
+    Deno.writeTextFile(`components/${userOptions[3]}.vue`, additionalComponent);
     console.info("Done writing");
   });
 
