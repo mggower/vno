@@ -14,7 +14,7 @@
 </template>
 <script>
 export default {
-  name: 'HelloVno',
+  name: 'TestChild',
   props: {
     msg: String
   },

@@ -1,20 +1,20 @@
 <template>
-<div id="app">
+<div id="testroot">
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-<HelloVno msg='You are building: Your vno project with vno'/>
+<TestChild msg='You are building: My Test Project with vno'/>
 </div>
 </template>
 <script>
-import HelloVno from './components/HelloVno.vue'
+import TestChild from './components/TestChild.vue'
 export default {
-  name: 'app',
+  name: 'testroot',
   components: {
-    HelloVno
+    TestChild
   }
 }
 </script>
 <style>
-#app {
+#testroot {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
