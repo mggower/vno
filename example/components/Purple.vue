@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import LilOrange from './components/LilOrange';
+
 export default {
 name: 'purple',
 data() {
@@ -16,6 +18,9 @@ data() {
     color: 'purple',
   };
 },
+components: {
+  LilOrange,
+}
 };
 </script>
 
