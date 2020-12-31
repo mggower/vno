@@ -14,7 +14,7 @@ const userOptions = [
 const runner: any = async function customize() {
   const msg1: string = "Please enter a project title:";
   const msg2: string =
-    "What would you like to name your root Vue component?(recommend App.vue):";
+    "What would you like to name your root Vue component?(recommend App):";
   const msg3: string =
     "What would you like to name your additional component?:";
   const msg4: string =
