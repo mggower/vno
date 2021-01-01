@@ -34,7 +34,7 @@ const runner: any = async function customize() {
   }
   const port: string = await prompt(msg5);
   console.log(
-    `Your Options \n Title: ${title || userOptions[0]}, \n Root: ${root ||
+    `Your Options: \n Title: ${title || userOptions[0]}, \n Root: ${root ||
       userOptions[1]}, \n Additional Component(s): ${child + "," +
         addedComps ||
       child ||
