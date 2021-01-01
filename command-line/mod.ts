@@ -38,7 +38,7 @@ const runner: any = async function customize() {
       userOptions[1]}, \n Additional Component(s): ${child + "," +
         addedComps ||
       child ||
-      userOptions[2]}.vue \n  Port: ${port || userOptions[4]}`,
+      userOptions[2]} \n  Port: ${port || userOptions[4]}`,
   );
   const confirm: string = await prompt(msg6);
 
