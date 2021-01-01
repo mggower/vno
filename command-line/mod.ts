@@ -1,7 +1,12 @@
 import ProgressBar from "https://deno.land/x/progress@v1.2.3/mod.ts";
 import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
 import { prompt } from "./utils.ts";
-import { ensureDir, ensureFile } from "https://deno.land/std/fs/mod.ts";
+import {
+  ensureDir,
+  ensureDirSync,
+  ensureFile,
+  ensureFileSync,
+} from "https://deno.land/std/fs/mod.ts";
 import utils from "../src/lib/utils.ts";
 const { toKebab } = utils;
 const userOptions = [
@@ -70,7 +75,7 @@ const progress = new ProgressBar({
   total,
   complete: bgGreen(" "),
   incomplete: bgWhite(" "),
-  display: ":completed/:total hello :time [:bar] :percent",
+  display: ":completed/:total vno load :time [:bar] :percent",
   clear: true,
 });
 let completed = 0;
@@ -233,10 +238,10 @@ name:
 <style>
 
 </style>`;
-ensureDir("public");
+ensureDirSync("public");
 console.info("Done writing public dir!");
 
-ensureDir("components");
+ensureDirSync("components");
 console.log("Done writing component dir!");
 
 // ensureDir("assets");
@@ -244,13 +249,13 @@ console.log("Done writing component dir!");
 
 ensureFile(`${toKebab(userOptions[1])}.vue`)
   .then(() => {
-    Deno.writeTextFile(`${toKebab(userOptions[1])}.vue`, rootComp);
+    Deno.writeTextFileSync(`${toKebab(userOptions[1])}.vue`, rootComp);
     console.info(`Done writing ${userOptions[1]}`);
   });
 
 ensureFile(`components/${toKebab(userOptions[2])}.vue`)
   .then(() => {
-    Deno.writeTextFile(
+    Deno.writeTextFileSync(
       `components/${toKebab(userOptions[2])}.vue`,
       additionalComponent,
     );
@@ -261,7 +266,7 @@ let compsArray = addedComps.split(",");
 for (let i = 0; i < compsArray.length; i += 1) {
   ensureFile(`components/${toKebab(compsArray[i])}.vue`)
     .then(() => {
-      Deno.writeTextFile(
+      Deno.writeTextFileSync(
         `components/${toKebab(compsArray[i])}.vue`,
         `//created component ${toKebab(compsArray[i])}` + "\n" + genericComp,
       );
@@ -274,19 +279,19 @@ console.log("Done writing additional components");
 
 ensureFile("public/index.html")
   .then(() => {
-    Deno.writeTextFile("public/index.html", html);
+    Deno.writeTextFileSync("public/index.html", html);
     console.info("Done writing html file!");
   });
 
 ensureFile("deps.ts")
   .then(() => {
-    Deno.writeTextFile("deps.ts", deps);
+    Deno.writeTextFileSync("deps.ts", deps);
     console.info("Done writing deps file!");
   });
 
 ensureFile("server.ts")
   .then(() => {
-    Deno.writeTextFile("server.ts", server);
+    Deno.writeTextFileSync("server.ts", server);
     console.info("Done writing server");
   });
 
