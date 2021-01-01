@@ -244,20 +244,8 @@ console.log("Done writing component dir!");
 
 ensureFile(`${toKebab(userOptions[1])}.vue`)
   .then(() => {
-    Deno.writeTextFile(`${userOptions[1]}.vue`, rootComp);
+    Deno.writeTextFile(`${toKebab(userOptions[1])}.vue`, rootComp);
     console.info(`Done writing ${userOptions[1]}`);
-  });
-
-ensureFile("public/index.html")
-  .then(() => {
-    Deno.writeTextFile("public/index.html", html);
-    console.info("Done writing html file!");
-  });
-
-ensureFile("deps.ts")
-  .then(() => {
-    Deno.writeTextFile("deps.ts", deps);
-    console.info("Done writing deps file!");
   });
 
 ensureFile(`components/${toKebab(userOptions[2])}.vue`)
@@ -267,7 +255,9 @@ ensureFile(`components/${toKebab(userOptions[2])}.vue`)
       additionalComponent,
     );
   });
+
 let compsArray = addedComps.split(",");
+
 for (let i = 0; i < compsArray.length; i += 1) {
   ensureFile(`components/${toKebab(compsArray[i])}.vue`)
     .then(() => {
@@ -281,11 +271,23 @@ for (let i = 0; i < compsArray.length; i += 1) {
     });
 }
 console.log("Done writing additional components");
+
+ensureFile("public/index.html")
+  .then(() => {
+    Deno.writeTextFile("public/index.html", html);
+    console.info("Done writing html file!");
+  });
+
+ensureFile("deps.ts")
+  .then(() => {
+    Deno.writeTextFile("deps.ts", deps);
+    console.info("Done writing deps file!");
+  });
+
 ensureFile("server.ts")
   .then(() => {
     Deno.writeTextFile("server.ts", server);
     console.info("Done writing server");
   });
 
-console.log(`writing ${userOptions[1]}.vue`);
 console.log("DONE!");
