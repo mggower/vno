@@ -35,9 +35,7 @@ Compiler.prototype.write = function w(current: ComponentInterface) {
       `${current.label} is missing its instance data`
     );
   }
-
   Deno.writeTextFileSync(_.BUILD_PATH, current.instance, { append: true });
-
   if (current.style) {
     Deno.writeTextFileSync(_.STYLE_PATH, current.style, { append: true });
   }
@@ -46,7 +44,6 @@ Compiler.prototype.write = function w(current: ComponentInterface) {
 Compiler.prototype.traverse = function trav(current: ComponentInterface) {
   if (current.child?.head) this.traverse(current.child.head);
   if (current.sibling) this.traverse(current.sibling);
-
   this.write(current);
 };
 

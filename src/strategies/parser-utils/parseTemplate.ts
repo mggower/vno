@@ -1,7 +1,7 @@
 import { ComponentInterface } from "../../lib/types.ts";
 import Utils from "../../lib/utils.ts";
 
-const parseTemplate = function pT(current: ComponentInterface) {
+export default function parseTemplate(current: ComponentInterface) {
   try {
     if (current.split) {
       const { split } = current;
@@ -26,6 +26,4 @@ const parseTemplate = function pT(current: ComponentInterface) {
       { error },
     );
   }
-};
-
-export default parseTemplate;
+}

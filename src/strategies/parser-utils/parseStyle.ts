@@ -1,7 +1,7 @@
 import { ComponentInterface } from "../../lib/types.ts";
 import Utils from "../../lib/utils.ts";
 
-const parseStyle = function pSt(current: ComponentInterface) {
+export default function parseStyle(current: ComponentInterface) {
   try {
     if (current.split) {
       const open = Utils.indexOfRegExp(/<style.*>/gi, current.split);
@@ -22,6 +22,4 @@ const parseStyle = function pSt(current: ComponentInterface) {
       { error },
     );
   }
-};
-
-export default parseStyle;
+}

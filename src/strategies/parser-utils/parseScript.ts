@@ -3,7 +3,7 @@ import Utils, { Queue, Storage } from "../../lib/utils.ts";
 
 import SiblingList from "../sibling.ts";
 
-const parseScript = function pS(current: ComponentInterface) {
+export default function parseScript(current: ComponentInterface) {
   try {
     if (current.split) {
       const { split } = current;
@@ -20,51 +20,48 @@ const parseScript = function pS(current: ComponentInterface) {
       const script = split.slice(open + 1, close);
 
       const nameIndex = Utils.indexOfRegExp(/(name)/, script);
-      if (nameIndex < 0) current.name = Utils.toKebab(current.label);
-      else current.name = script[nameIndex].split(/[`'"]/)[1];
+
+      if (nameIndex < 0) {
+        current.name = Utils.toKebab(current.label);
+      } else {
+        current.name = script[nameIndex].split(/[`'"]/)[1];
+      }
 
       const exportStart = Utils.indexOfRegExp(/^(export)/, script);
-      const exportEnd: number = script.lastIndexOf("}");
+      const exportEnd = script.lastIndexOf("}");
+
       current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
       const componentsStart = Utils.indexOfRegExp(/(components:)/, script);
-      const children = componentsStart > 0 && script.slice(componentsStart);
+      const children = script.slice(componentsStart) || false;
 
       if (children) {
-        const componentsEnd = children.findIndex((element) =>
-          element.includes("}")
-        );
-        const componentsString = Utils.sliceAndTrim(
-          children,
-          0,
-          componentsEnd + 1,
-        );
+        const componentsEnd = children.findIndex((el) => el.includes("}")) + 1;
+        const componentsStr = Utils.sliceAndTrim(children, 0, componentsEnd);
 
-        const foundChildren = componentsString
-          .slice(
-            componentsString.indexOf("{") + 1,
-            componentsString.indexOf("}"),
-          )
+        const open = componentsStr.indexOf("{") + 1;
+        const close = componentsStr.indexOf("}");
+
+        const childComponents = componentsStr
+          .slice(open, close)
           .replace(/\s/g, "")
           .split(",")
-          .filter((el) => el)
+          .filter((child) => child)
           .map((child) => Storage[child]);
 
         current.child = new (SiblingList as any)();
 
-        while (foundChildren.length) {
-          const component = foundChildren.pop();
+        while (childComponents.length) {
+          const component = childComponents.pop();
 
           if (component) {
-            Queue.push(component);
-
+            if (!component.isParsed) Queue.push(component);
             Utils.preorderScrub(Storage.root, component.label);
             current.child?.add(component);
           }
         }
       }
     }
-
     return "parseScript()=> successful";
   } catch (error) {
     console.error(
@@ -72,6 +69,4 @@ const parseScript = function pS(current: ComponentInterface) {
       { error },
     );
   }
-};
-
-export default parseScript;
+}

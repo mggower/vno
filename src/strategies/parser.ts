@@ -13,12 +13,11 @@ Parser.prototype.parse = function () {
   while (Queue.length) {
     const current = Queue.shift();
 
-    if (current && !current.isParsed) {
+    if (current) {
       fn.parseTemplate(current);
       fn.parseScript(current);
       fn.parseStyle(current);
       fn.componentStringify(current);
-
       current.isParsed = true;
     }
   }

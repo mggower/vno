@@ -56,7 +56,7 @@ SiblingList.prototype.scrub = function (label: string) {
     this.tail = prev;
     this.tail.sibling = null;
     removed.sibling = null;
-    
+
     return true;
   }
 
