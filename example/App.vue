@@ -77,6 +77,7 @@ export default {
     Green,
     Orange,
     Purple,
+    LilOrange,
   },
 };
 </script>
