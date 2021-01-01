@@ -73,10 +73,10 @@ if (decision.toLowerCase() === "yes") {
 const total = 100;
 const progress = new ProgressBar({
   total,
+  clear: true,
   complete: bgGreen(" "),
   incomplete: bgWhite(" "),
   display: ":completed/:total vno load :time [:bar] :percent",
-  clear: true,
 });
 let completed = 0;
 function run() {
@@ -287,6 +287,7 @@ ensureFile("deps.ts")
   .then(() => {
     Deno.writeTextFileSync("deps.ts", deps);
     console.info("Done writing deps file!");
+    console.log("DONE!");
   });
 
 ensureFile("server.ts")
@@ -294,5 +295,3 @@ ensureFile("server.ts")
     Deno.writeTextFileSync("server.ts", server);
     console.info("Done writing server");
   });
-
-console.log("DONE!");
