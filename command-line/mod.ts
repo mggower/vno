@@ -34,12 +34,12 @@ const runner: any = async function customize() {
   }
   const port: string = await prompt(msg5);
   console.log(
-    `Your Options: \n    Title: ${title ||
+    `Your Options: \n \n    Title: ${title ||
       userOptions[0]}, \n    Root: ${root ||
       userOptions[1]}, \n    Additional Component(s): ${child + "," +
         addedComps ||
       child ||
-      userOptions[2]} \n    Port: ${port || userOptions[4]}`,
+      userOptions[2]} \n    Port: ${port || userOptions[4]} \n`,
   );
   const confirm: string = await prompt(msg6);
 
