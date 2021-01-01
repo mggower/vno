@@ -1,6 +1,6 @@
 import { fs } from "../../lib/deps.ts";
 import { ComponentInterface } from "../../lib/types.ts";
-import Utils from "../../lib/utils.ts";
+import Utils, { Storage } from "../../lib/utils.ts";
 
 import Compiler from "./base.ts";
 
@@ -13,7 +13,7 @@ Compiler.prototype.build = function () {
     if (fs.existsSync(_.STYLE_PATH)) Deno.removeSync(_.STYLE_PATH);
     Deno.writeTextFileSync(_.BUILD_PATH, _.IGNORE + this.vue);
 
-    this.traverse(this.root);
+    this.traverse(Storage.root);
     Deno.writeTextFileSync(_.BUILD_PATH, this.mount, { append: true });
 
     return Utils.print();
@@ -26,26 +26,24 @@ Compiler.prototype.build = function () {
 };
 
 Compiler.prototype.write = function w(current: ComponentInterface) {
-  if (!current.instance) throw `${current.label} is missing its instance data`;
-  // if (!this.cache[current.label]) {
+  if (!current.instance) {
+    throw (
+      `${current.label} is missing its instance data`
+    );
+  }
+
   Deno.writeTextFileSync(_.BUILD_PATH, current.instance, { append: true });
 
   if (current.style) {
     Deno.writeTextFileSync(_.STYLE_PATH, current.style, { append: true });
   }
-
-  // this.cache[current.label] = true;
-  // }
 };
 
 Compiler.prototype.traverse = function trav(current: ComponentInterface) {
-  console.log(`current: ${current}`);
   if (current.child?.head) {
-    console.log(`curr head: ${current.child.head}`);
     this.traverse(current.child.head);
   }
   if (current.sibling) {
-    console.log(`curr sibling: ${current.sibling}`);
     this.traverse(current.sibling);
   }
 

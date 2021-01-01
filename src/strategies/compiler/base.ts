@@ -1,14 +1,14 @@
 import { CompilerInterface, ComponentInterface } from "../../lib/types.ts";
+import { Storage } from '../../lib/utils.ts';
+
 
 function Compiler(
   this: CompilerInterface,
-  root: ComponentInterface,
   vue: string,
 ) {
   this.mount =
-    `\n${root.label}.$mount("#${root.name}");\nexport default ${root.label};\n`;
+    `\n${Storage.root.label}.$mount("#${Storage.root.name}");\nexport default ${Storage.root.label};\n`;
   this.vue = `import Vue from '${vue}';\n`;
-  this.root = root;
   this.cache = {};
 }
 

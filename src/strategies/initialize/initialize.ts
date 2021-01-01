@@ -2,7 +2,7 @@ import Initialize from "./base.ts";
 
 import { OptionsInterface } from "../../lib/types.ts";
 import { fs, path } from "../../lib/deps.ts";
-import { Root, Storage } from "../../lib/utils.ts";
+import { Storage } from "../../lib/utils.ts";
 
 import Parser from "../parser/parser.ts";
 import Component from "../component.ts";
@@ -32,8 +32,8 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
 
     let vue;
     options.vue ? { vue } = options : null;
-    Root.push(this.root);
-    return new (Parser as any)(this.root, vue && vue).parse();
+
+    return new (Parser as any)(vue && vue).parse();
   } catch (error) {
     return console.error(
       "Error inside of Initialize.config",
@@ -47,7 +47,7 @@ Initialize.prototype.walk = async function (entry: string, rootLabel: string) {
     const label = path.parse(file.path).name;
 
     if (label === rootLabel) {
-      this.root = new (Component as any)(rootLabel, file.path, true);
+      Storage.root = new (Component as any)(rootLabel, file.path, true);
     } else if (label) {
       Storage[label] = new (Component as any)(label, file.path);
     }

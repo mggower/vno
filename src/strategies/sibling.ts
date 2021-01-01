@@ -5,7 +5,7 @@ function SiblingList(this: SiblingInterface) {
   this.tail = null;
 }
 
-SiblingList.prototype.add = function (component: object) {
+SiblingList.prototype.add = function (component: ComponentInterface) {
   if (!this.head) {
     this.head = component;
     this.tail = component;
@@ -17,100 +17,50 @@ SiblingList.prototype.add = function (component: object) {
 };
 
 SiblingList.prototype.scrub = function (label: string) {
-  try {
-    if (!this.head) return false;
-    if (this.head.label === label) {
-      if (this.head.sibling) this.head = this.head.sibling;
-      else this.head = null;
-      return true;
-    }
-    let current;
-    let prev;
-    if (this.head.sibling) {
-      current = this.head.sibling;
-      prev = this.head;
-    } else {
-      return false;
-    }
+  if (!this.head) return false;
 
-    while (current.sibling) {
-      // console.log(`current: ${current.label}`);
-      // console.log(`sibling: ${current.sibling.label}`);
-      // if (prev) console.log("prev", prev.sibling.label || "not found");
+  let removed, current, prev;
 
-      if (current.label === label) {
-        console.log("line 44");
-        prev.sibling = current.sibling;
-        console.log("line 46");
+  if (this.head.label === label) {
+    removed = this.head;
 
-        return true;
-      }
-      prev = current;
-      current = current.sibling;
-    }
-    if (current.label === label) {
-      this.tail = prev;
-      this.tail.sibling = null;
+    if (this.head.sibling) this.head = this.head.sibling;
+    else this.head = null;
 
-      return true;
-    }
-
-    return false;
-  } catch (error) {
-    console.error(`ERROR IN SCRUB`, { error });
+    removed.sibling = null;
+    return true;
   }
-};
-SiblingList.prototype.scrub = function (label: string) {
-  try {
-    if (!this.head) return false;
-    let removed;
 
-    if (this.head.label === label) {
-      removed = this.head;
-      
-      if (this.head.sibling) this.head = this.head.sibling;
-      else this.head = null;
+  if (this.head.sibling) {
+    current = this.head.sibling;
+    prev = this.head;
+  } else {
+    return false;
+  }
 
-      removed.sibling = null;
-      return true;
-    }
-
-    let current;
-    let prev;
-    if (this.head.sibling) {
-      current = this.head.sibling;
-      prev = this.head;
-    } else return false;
-    
-
-    while (current.sibling) {
-      if (current.label === label) {
-        removed = current;
-        
-        prev.sibling = current.sibling;
-
-        removed.sibling = null;
-        return true;
-      }
-
-      prev = current;
-      current = current.sibling;
-    }
+  while (current.sibling) {
     if (current.label === label) {
       removed = current;
-    
-      this.tail = prev;
-      this.tail.sibling = null;
-
+      prev.sibling = current.sibling;
       removed.sibling = null;
+
       return true;
     }
 
-    return false;
-  } catch (error) {
-    console.error(`ERROR IN SCRUB`, { error });
+    prev = current;
+    current = current.sibling;
   }
-};
 
+  if (current.label === label) {
+    removed = current;
+    this.tail = prev;
+    this.tail.sibling = null;
+    removed.sibling = null;
+    
+    return true;
+  }
+
+  return false;
+};
 
 export default SiblingList;

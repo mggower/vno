@@ -1,7 +1,7 @@
 import Parser from "./base.ts";
 import Compiler from "../compiler/compiler.ts";
 
-import { Queue } from "../../lib/utils.ts";
+import { Queue, Storage } from "../../lib/utils.ts";
 import fn from "./parser-utils/_fn.ts";
 
 Parser.prototype.parse = function () {
@@ -21,7 +21,7 @@ Parser.prototype.parse = function () {
     }
   }
 
-  return new (Compiler as any)(this.root, this.vue).build();
+  return new (Compiler as any)(this.vue).build();
 };
 
 export default Parser;
