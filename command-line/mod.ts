@@ -35,8 +35,10 @@ const runner: any = async function customize() {
   const port: string = await prompt(msg5);
   console.log(
     `Your Options:\n Title: ${title || userOptions[0]}, \n Root: ${root ||
-      userOptions[1]}.vue, \n Additional Component: ${child ||
-      userOptions[2]}.vue \n Port: ${port || userOptions[4]}`,
+      userOptions[1]}.vue, \n Additional Component(s): ${child + "," +
+        addedComps ||
+      child ||
+      userOptions[2]}.vue \n  Port: ${port || userOptions[4]}`,
   );
   const confirm: string = await prompt(msg6);
 
@@ -237,7 +239,7 @@ console.log("Done writing component dir!");
 // ensureDir("assets");
 // console.log("Done writing assets dir!");
 
-ensureFile(`${userOptions[1]}.vue`)
+ensureFile(`${toKebab(userOptions[1])}.vue`)
   .then(() => {
     Deno.writeTextFile(`${userOptions[1]}.vue`, rootComp);
     console.info(`Done writing ${userOptions[1]} component!`);
@@ -257,16 +259,19 @@ ensureFile("deps.ts")
 
 ensureFile(`components/${toKebab(userOptions[2])}.vue`)
   .then(() => {
-    Deno.writeTextFile(`components/${userOptions[2]}.vue`, additionalComponent);
+    Deno.writeTextFile(
+      `components/${toKebab(userOptions[2])}.vue`,
+      additionalComponent,
+    );
     console.info("Done writing");
   });
 let compsArray = addedComps.split(",");
 for (let i = 0; i < compsArray.length; i += 1) {
-  ensureFile(`components/${compsArray[i]}.vue`)
+  ensureFile(`components/${toKebab(compsArray[i])}.vue`)
     .then(() => {
       Deno.writeTextFile(
-        `components/${compsArray[i]}.vue`,
-        `//created component ${compsArray[i]}` + "\n" + genericComp,
+        `components/${toKebab(compsArray[i])}.vue`,
+        `//created component ${toKebab(compsArray[i])}` + "\n" + genericComp,
       );
       console.log(`done writing ${compsArray[i]}.vue`);
     })
