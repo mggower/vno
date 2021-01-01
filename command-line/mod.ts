@@ -12,20 +12,20 @@ const userOptions = [
 ];
 let addedComps: string = "";
 const runner: any = async function customize() {
-  const msg1: string = "\n Please enter a project title";
+  const msg1: string = "\nPlease enter a project title";
   const msg2: string =
-    "\n What would you like to name your root Vue component?(recommend App)";
+    "\nWhat would you like to name your root Vue component?(recommend App)";
   const msg3: string =
-    "\n What would you like to name your additional component?";
+    "\nWhat would you like to name your additional component?";
   const msg3b: string =
-    "\n Would you like to create any additional components?(yes/no)";
+    "\nWould you like to create any additional components?(yes/no)";
   const msg3c: string =
-    "\n list the names (seperated by commas) of your additional components";
-  const msg5: string = "\n Port number for server";
+    "\nlist the names (seperated by commas) of your additional components";
+  const msg5: string = "\nPort number for server";
   const msg6: string =
-    "\n Confirm these results and create your project?(yes/no)";
+    "\nConfirm these results and create your project?(yes/no)";
 
-  console.log("\n Initializing your vno project");
+  console.log("\nInitializing your vno project...");
 
   const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
@@ -36,7 +36,7 @@ const runner: any = async function customize() {
   }
   const port: string = await prompt(msg5);
   console.log(
-    `\n Your Options: \n \n    Title: ${title ||
+    `\nYour Options: \n \n    Title: ${title ||
       userOptions[0]}, \n    Root: ${root ||
       userOptions[1]}, \n    Additional Component(s): ${child + "," +
         addedComps ||
@@ -51,12 +51,12 @@ const runner: any = async function customize() {
     if (child) userOptions[2] = child;
     if (port) userOptions[4] = port;
   } else {
-    console.log("\n Resetting User Options");
+    console.log("\nResetting User Options");
     await runner();
   }
 };
 
-const decide = "\n Would you like to customize your vno project?(yes/no)";
+const decide = "\nWould you like to customize your vno project?(yes/no)";
 const decision: string = await prompt(decide);
 
 if (decision.toLowerCase() === "yes") {
@@ -85,7 +85,7 @@ function run() {
 }
 run();
 
-console.log(`Writing root component ${userOptions[1]}.vue`);
+console.log(`\nWriting root component ${userOptions[1]}.vue`);
 const additionalComponent: string = `<template>
 <div class="hello">
   <h1>{{ msg }}</h1>
