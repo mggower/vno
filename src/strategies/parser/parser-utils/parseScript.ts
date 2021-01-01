@@ -1,7 +1,20 @@
 import { ComponentInterface } from "../../../lib/types.ts";
-import Utils, { Queue, Storage } from "../../../lib/utils.ts";
+import Utils, { Queue, Root, Storage } from "../../../lib/utils.ts";
 
 import SiblingList from "../../sibling.ts";
+
+function traverseTreePreorder(current: ComponentInterface, label: string) {
+  if (current.child) {
+    // console.log(`before:${current.child.head}`);
+    const test = current.child.scrub(label);
+    // console.log(`after:${current.child.head}`);
+    console.log("scrub return", test);
+  }
+  if (current.child?.head) traverseTreePreorder(current.child.head, label);
+  if (current.sibling) {
+    traverseTreePreorder(current.sibling, label);
+  }
+}
 
 const parseScript = function pS(current: ComponentInterface) {
   try {
@@ -47,7 +60,10 @@ const parseScript = function pS(current: ComponentInterface) {
           const component: ComponentInterface | undefined = foundChildren.pop();
 
           if (component) {
+            console.log(`foundChildren Length: ${foundChildren.length}`);
+
             Queue.push(component);
+            traverseTreePreorder(Root[0], component.label);
             current.child?.add(component);
           }
         }

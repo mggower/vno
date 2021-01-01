@@ -9,6 +9,7 @@ function Compiler(
     `\n${root.label}.$mount("#${root.name}");\nexport default ${root.label};\n`;
   this.vue = `import Vue from '${vue}';\n`;
   this.root = root;
+  this.cache = {};
 }
 
 export default Compiler;

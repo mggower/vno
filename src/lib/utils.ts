@@ -8,6 +8,8 @@ export const Queue: ComponentInterface[] = [];
 
 export const Storage: StorageInterface = {};
 
+export const Root: ComponentInterface[] = [];
+
 const Utils: UtilityInterface = {
   indexOfRegExp(regex: RegExp, array: any[]) {
     return array.findIndex((element) => regex.test(element));
