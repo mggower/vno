@@ -132,7 +132,7 @@ const rootComp: string = `<template>
 </div>
 </template>
 <script>
-import ${userOptions[2]} from './components/${userOptions[2]}.vue'
+import ${toKebab(userOptions[2])} from './components/${userOptions[2]}.vue'
 export default {
   name: '${userOptions[1].toLowerCase()}',
   components: {
@@ -173,7 +173,7 @@ const html = `<!DOCTYPE html>
 
 const server: string =
   `import { Application, join, log, send } from "./deps.ts";
-import vno from "../src/strategies/renderer.ts";
+import vno from "../src/dist/mod.ts";
 const port: number = ${userOptions[4]};
 const server: Application = new Application();
 await vno.config({
