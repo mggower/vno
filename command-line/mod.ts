@@ -56,7 +56,7 @@ const runner: any = async function customize() {
   }
 };
 
-const decide = "\n Would you like to customize your project?(yes/no)";
+const decide = "\n Would you like to customize your vno project?(yes/no)";
 const decision: string = await prompt(decide);
 
 if (decision.toLowerCase() === "yes") {
