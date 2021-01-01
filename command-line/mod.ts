@@ -226,7 +226,7 @@ const genericComp: string = `<template>
 
 <script>
 export default {
-name: ,
+name: 
 
 };
 </script>
@@ -245,7 +245,7 @@ console.log("Done writing component dir!");
 ensureFile(`${toKebab(userOptions[1])}.vue`)
   .then(() => {
     Deno.writeTextFile(`${userOptions[1]}.vue`, rootComp);
-    console.info(`Done writing ${userOptions[1]} component!`);
+    console.info(`Done writing ${userOptions[1]}`);
   });
 
 ensureFile("public/index.html")
@@ -266,7 +266,6 @@ ensureFile(`components/${toKebab(userOptions[2])}.vue`)
       `components/${toKebab(userOptions[2])}.vue`,
       additionalComponent,
     );
-    console.info("Done writing");
   });
 let compsArray = addedComps.split(",");
 for (let i = 0; i < compsArray.length; i += 1) {
@@ -276,13 +275,12 @@ for (let i = 0; i < compsArray.length; i += 1) {
         `components/${toKebab(compsArray[i])}.vue`,
         `//created component ${toKebab(compsArray[i])}` + "\n" + genericComp,
       );
-      console.log(`done writing ${compsArray[i]}.vue`);
     })
     .catch(() => {
       console.log(`error writing component: ${compsArray[i]}.vue`);
     });
 }
-
+console.log("Done writing additional components");
 ensureFile("server.ts")
   .then(() => {
     Deno.writeTextFile("server.ts", server);
