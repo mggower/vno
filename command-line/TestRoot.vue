@@ -1,7 +1,7 @@
 <template>
 <div id="testroot">
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-<TestChild msg='You are building: My Test Project with vno'/>
+<TestChild msg='You are building: Test Project with vno'/>
 </div>
 </template>
 <script>

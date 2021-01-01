@@ -1,11 +1,11 @@
 import { Application, join, log, send } from "./deps.ts";
-import vno from "../src/strategies/initialize/initialize.ts";
+import vno from "../src/dist/mod.ts";
 const port: number = 8080;
 const server: Application = new Application();
 await vno.config({
-  label: "TestRoot",
+  root: "TestRoot",
   entry: "./",
-  cdn: "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js",
+  // vue: "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js",
 });
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
