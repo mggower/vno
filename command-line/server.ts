@@ -4,7 +4,7 @@ const port: number = 8080;
 const server: Application = new Application();
 await vno.config({
   root: "App",
-  path: "./",
+  entry: "./",
   cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12",
 });
 server.use(async (ctx, next) => {

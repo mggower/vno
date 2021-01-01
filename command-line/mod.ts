@@ -101,7 +101,7 @@ const additionalComponent: string = `<template>
   </p>
   <h3>Installed CLI Plugin</h3>
   <ul>
-  <li><a href="https://github.com/oslabs-beta/vno/tree/main/command-line" target="_blank" rel="noopener">babel</a></li>
+  <li><a href="https://github.com/oslabs-beta/vno/tree/main/command-line" target="_blank" rel="noopener">Click Here</a></li>
   </ul>
 </div>
 </template>

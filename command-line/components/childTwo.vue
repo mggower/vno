@@ -1,4 +1,4 @@
-//created component child-two
+//created component childTwo
 <template>
 
 </template>
