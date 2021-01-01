@@ -15,7 +15,8 @@ const runner: any = async function customize() {
   const msg1: string = "\n Please enter a project title";
   const msg2: string =
     "\n What would you like to name your root Vue component?(recommend App)";
-  const msg3: string = "What would you like to name your additional component?";
+  const msg3: string =
+    "\n What would you like to name your additional component?";
   const msg3b: string =
     "\n Would you like to create any additional components?(yes/no)";
   const msg3c: string =
@@ -35,7 +36,7 @@ const runner: any = async function customize() {
   }
   const port: string = await prompt(msg5);
   console.log(
-    `Your Options: \n \n    Title: ${title ||
+    `\n Your Options: \n \n    Title: ${title ||
       userOptions[0]}, \n    Root: ${root ||
       userOptions[1]}, \n    Additional Component(s): ${child + "," +
         addedComps ||
@@ -50,12 +51,12 @@ const runner: any = async function customize() {
     if (child) userOptions[2] = child;
     if (port) userOptions[4] = port;
   } else {
-    console.log("Resetting User Options");
+    console.log("\n Resetting User Options");
     await runner();
   }
 };
 
-const decide = "Would you like to customize your project?(yes/no)";
+const decide = "\n Would you like to customize your project?(yes/no)";
 const decision: string = await prompt(decide);
 
 if (decision.toLowerCase() === "yes") {
