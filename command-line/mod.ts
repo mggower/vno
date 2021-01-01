@@ -10,7 +10,7 @@ const userOptions = [
   "Hello-Vno",
   "3000",
 ];
-
+let addedComps: string = "";
 const runner: any = async function customize() {
   const msg1: string = "Please enter a project title";
   const msg2: string =
@@ -29,7 +29,6 @@ const runner: any = async function customize() {
   const root: string = await prompt(msg2);
   const child: string = await prompt(msg3);
   const compQuestion: string = await prompt(msg3b);
-  let addedComps: string;
   if (compQuestion === "yes") {
     addedComps = await prompt(msg3c);
   }
@@ -216,7 +215,19 @@ export { config } from "https://deno.land/x/dotenv/mod.ts";
 `;
 // const appPath: string = "./";
 // const componentPath: string = "./components/";
+const genericComp: string = `<template>
 
+</template>
+
+<script>
+export default {
+name: ,
+
+};
+</script>
+<style>
+
+</style>`;
 ensureDir("public");
 console.info("Done writing public dir!");
 
@@ -244,11 +255,25 @@ ensureFile("deps.ts")
     console.info("Done writing deps file!");
   });
 
-ensureFile(`components/${userOptions[2]}.vue`)
+ensureFile(`components/${toKebab(userOptions[2])}.vue`)
   .then(() => {
     Deno.writeTextFile(`components/${userOptions[2]}.vue`, additionalComponent);
     console.info("Done writing");
   });
+let compsArray = addedComps.split(",");
+for (let i = 0; i < compsArray.length; i += 1) {
+  ensureFile(`components/${compsArray[i]}.vue`)
+    .then(() => {
+      Deno.writeTextFile(
+        `components/${compsArray[i]}.vue`,
+        `//created component ${compsArray[i]}` + "\n" + genericComp,
+      );
+      console.log(`done writing ${compsArray[i]}.vue`);
+    })
+    .catch(() => {
+      console.log(`error writing component: ${compsArray[i]}.vue`);
+    });
+}
 
 ensureFile("server.ts")
   .then(() => {
