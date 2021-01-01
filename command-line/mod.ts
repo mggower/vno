@@ -12,18 +12,19 @@ const userOptions = [
 ];
 let addedComps: string = "";
 const runner: any = async function customize() {
-  const msg1: string = "Please enter a project title";
+  const msg1: string = "\n Please enter a project title";
   const msg2: string =
-    "What would you like to name your root Vue component?(recommend App)";
+    "\n What would you like to name your root Vue component?(recommend App)";
   const msg3: string = "What would you like to name your additional component?";
   const msg3b: string =
-    "Would you like to create any additional components?(yes/no)";
+    "\n Would you like to create any additional components?(yes/no)";
   const msg3c: string =
-    "list the names (seperated by commas) of your additional components";
-  const msg5: string = "Port number for server";
-  const msg6: string = "Confirm these results and create your project?(yes/no)";
+    "\n list the names (seperated by commas) of your additional components";
+  const msg5: string = "\n Port number for server";
+  const msg6: string =
+    "\n Confirm these results and create your project?(yes/no)";
 
-  console.log("Initializing your vno project");
+  console.log("\n Initializing your vno project");
 
   const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
