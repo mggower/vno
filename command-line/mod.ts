@@ -287,12 +287,12 @@ ensureFile("deps.ts")
   .then(() => {
     Deno.writeTextFileSync("deps.ts", deps);
     console.info("Done writing deps file!");
-  }).then(() => {
-    console.log("DONE!");
   });
 
 ensureFile("server.ts")
   .then(() => {
     Deno.writeTextFileSync("server.ts", server);
     console.info("Done writing server");
+  }).then(() => {
+    console.log("DONE!");
   });
