@@ -12,7 +12,7 @@ const { toKebab } = utils;
 const userOptions = [
   "Your vno project",
   "App",
-  "Hello-Vno",
+  "HelloVno",
   "3000",
 ];
 let addedComps: string = "";
@@ -183,7 +183,7 @@ const port: number = ${userOptions[4]};
 const server: Application = new Application();
 await vno.config({
   root: "${userOptions[1]}",
-  path: "./",
+  entry: "./",
   cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12",
 });
 server.use(async (ctx, next) => {
