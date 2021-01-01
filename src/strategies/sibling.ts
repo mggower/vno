@@ -60,52 +60,57 @@ SiblingList.prototype.scrub = function (label: string) {
     console.error(`ERROR IN SCRUB`, { error });
   }
 };
+SiblingList.prototype.scrub = function (label: string) {
+  try {
+    if (!this.head) return false;
+    let removed;
 
-SiblingList.prototype.contains = function (label: string) {
-  if (!this.head) return false;
+    if (this.head.label === label) {
+      removed = this.head;
+      
+      if (this.head.sibling) this.head = this.head.sibling;
+      else this.head = null;
 
-  if (this.head.label === label) {
-    if (this.head.sibling) {
-      this.head = this.head.sibling;
-    } else {
-      this.head = null;
-    }
-    return true;
-  }
-
-  let current;
-  let prev;
-
-  if (this.head.sibling) {
-    current = this.head.sibling;
-    prev = this.head;
-  } else {
-    current = this.head;
-  }
-
-  while (current.sibling) {
-    if (current.label === label) {
-      if (current === this.head) {
-        this.head = current.sibling;
-      }
-      if (prev) {
-        prev.sibling = current.sibling;
-      }
-
+      removed.sibling = null;
       return true;
     }
 
-    prev = current;
-    current = current.sibling;
-  }
-  if (current.label === label) {
-    this.tail = prev;
-    this.tail.sibling = null;
+    let current;
+    let prev;
+    if (this.head.sibling) {
+      current = this.head.sibling;
+      prev = this.head;
+    } else return false;
+    
 
-    return true;
-  }
+    while (current.sibling) {
+      if (current.label === label) {
+        removed = current;
+        
+        prev.sibling = current.sibling;
 
-  return false;
+        removed.sibling = null;
+        return true;
+      }
+
+      prev = current;
+      current = current.sibling;
+    }
+    if (current.label === label) {
+      removed = current;
+    
+      this.tail = prev;
+      this.tail.sibling = null;
+
+      removed.sibling = null;
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.error(`ERROR IN SCRUB`, { error });
+  }
 };
+
 
 export default SiblingList;
