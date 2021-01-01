@@ -16,6 +16,10 @@ const runner: any = async function customize() {
   const msg2: string =
     "What would you like to name your root Vue component?(recommend App)";
   const msg3: string = "What would you like to name your additional component?";
+  const msg3b: string =
+    "Would you like to create any additional components?(yes/no)";
+  const msg3c: string =
+    "list the names (seperated by commas) of your additional components:";
   const msg5: string = "Port number for server";
   const msg6: string = "Confirm these results and create your project?(yes/no)";
 
@@ -24,8 +28,11 @@ const runner: any = async function customize() {
   const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
   const child: string = await prompt(msg3);
-  // let vue: string = await prompt(msg4);
-  // if (vue === "default") vue = "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js";
+  const compQuestion: string = await prompt(msg3b);
+  let addedComps: string;
+  if (compQuestion === "yes") {
+    addedComps = await prompt(msg3c);
+  }
   const port: string = await prompt(msg5);
   console.log(
     `Your Options:\n Title: ${title || userOptions[0]}, \n Root: ${root ||
@@ -45,7 +52,6 @@ const runner: any = async function customize() {
   }
 };
 
-// const welcome = "initializing your vno project...";
 const decide = "Would you like to customize your project?(yes/no)";
 const decision: string = await prompt(decide);
 
@@ -147,7 +153,7 @@ const html = `<!DOCTYPE html>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <script src="${userOptions[3]}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <link rel="stylesheet" href="./style.css">
     <title>${userOptions[0]}</title>
   </head>
@@ -155,7 +161,7 @@ const html = `<!DOCTYPE html>
     <div id="${userOptions[1].toLowerCase()}">
       <!-- built files will be auto injected -->
     </div>
-    <script src="${userOptions[3]}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <script type="module" src='./build.js'></script>
   </body>
 </html>
@@ -169,7 +175,7 @@ const server: Application = new Application();
 await vno.config({
   label: "${userOptions[1]}",
   entry: "./",
-  cdn: "${userOptions[3]}",
+  cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12",
 });
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
