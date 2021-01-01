@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import LilOrange from './components/LilOrange';
+
 export default {
 name: 'red',
 data() {
@@ -19,6 +21,7 @@ data() {
     color: 'red',
   };
 },
+components: { LilOrange },
 };
 </script>
 

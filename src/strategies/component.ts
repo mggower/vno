@@ -9,6 +9,7 @@ function Component(
   this.label = label;
   this.path = path;
   this.isRoot = isRoot;
+  this.isParsed = false;
   this.runData();
 }
 

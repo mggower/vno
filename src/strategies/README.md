@@ -16,3 +16,7 @@
 #### Add Method
 
 - Establish the location of the current component in the sibling list
+
+#### Scrub Method
+
+- Removes repeat instances of components from the bottom to the top until the final instance of the component is written.

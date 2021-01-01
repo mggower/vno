@@ -26,22 +26,28 @@ Compiler.prototype.build = function () {
 };
 
 Compiler.prototype.write = function w(current: ComponentInterface) {
-  if (!current.instance) {
-    throw (
-      `${current.label} is missing it's instance data`
-    );
-  }
-
+  if (!current.instance) throw `${current.label} is missing its instance data`;
+  // if (!this.cache[current.label]) {
   Deno.writeTextFileSync(_.BUILD_PATH, current.instance, { append: true });
 
   if (current.style) {
     Deno.writeTextFileSync(_.STYLE_PATH, current.style, { append: true });
   }
+
+  // this.cache[current.label] = true;
+  // }
 };
 
 Compiler.prototype.traverse = function trav(current: ComponentInterface) {
-  if (current.child) this.traverse(current.child.head);
-  if (current.sibling) this.traverse(current.sibling);
+  console.log(`current: ${current}`);
+  if (current.child?.head) {
+    console.log(`curr head: ${current.child.head}`);
+    this.traverse(current.child.head);
+  }
+  if (current.sibling) {
+    console.log(`curr sibling: ${current.sibling}`);
+    this.traverse(current.sibling);
+  }
 
   this.write(current);
 };

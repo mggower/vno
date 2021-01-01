@@ -10,7 +10,7 @@
 
 ## Deps
 
-- Needs no explanation
+- Needs no explanation  
 
 ## Types
 
@@ -19,7 +19,7 @@
 ## Utils
 
 - [ ] Global Queue - Temporary for the purpose of queueing components to be parsed (i.e. In line for the ride)
-- [ ] Global Storage - Holds the components before the parsing begins. Populated by the intialize.ts file via the walk method (i.e. Waiting to get into the park)
+- [ ] Global Storage - Holds the components before the parsing begins. Populated by the intialize.ts file via the walk method (i.e. waiting to get into the park)
 
 #### Utils
 

@@ -12,6 +12,7 @@ export interface CompilerInterface {
   root: ComponentInterface;
   mount: string;
   vue: string;
+  cache: object;
 }
 
 export interface RendererInterface {
@@ -24,6 +25,7 @@ export interface ComponentInterface {
   path: string | URL;
   child: SiblingInterface | null;
   sibling: ComponentInterface | null;
+  isParsed: boolean;
   isRoot: boolean;
   split?: string[];
   data?: string;
@@ -39,6 +41,7 @@ export interface SiblingInterface {
   head: ComponentInterface | null;
   tail: ComponentInterface | null;
   add(component: ComponentInterface): void;
+  scrub(label: string): boolean;
 }
 
 export interface StorageInterface {
