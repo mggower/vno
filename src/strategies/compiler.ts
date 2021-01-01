@@ -1,10 +1,14 @@
-import { fs } from "../../lib/deps.ts";
-import { ComponentInterface } from "../../lib/types.ts";
-import Utils, { Storage } from "../../lib/utils.ts";
+import { fs } from "../lib/deps.ts";
+import { CompilerInterface, ComponentInterface } from "../lib/types.ts";
+import Utils, { Storage } from "../lib/utils.ts";
 
-import Compiler from "./base.ts";
+import _ from "../lib/defaults.ts";
 
-import _ from "../../lib/defaults.ts";
+function Compiler(this: CompilerInterface) {
+  this.vue = `import Vue from '${Storage.root.vue}';\n`;
+  this.mount =
+    `\n${Storage.root.label}.$mount("#${Storage.root.name}");\nexport default ${Storage.root.label};\n`;
+}
 
 Compiler.prototype.build = function () {
   try {

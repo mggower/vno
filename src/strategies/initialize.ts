@@ -1,12 +1,12 @@
-import Initialize from "./base.ts";
+import { InitializeInterface, OptionsInterface } from "../lib/types.ts";
+import { fs, path } from "../lib/deps.ts";
+import { Storage } from "../lib/utils.ts";
+import _ from "../lib/defaults.ts";
 
-import { OptionsInterface } from "../../lib/types.ts";
-import { fs, path } from "../../lib/deps.ts";
-import { Storage } from "../../lib/utils.ts";
-import _ from "../../lib/defaults.ts";
+import Parser from "./parser.ts";
+import Component from "./component.ts";
 
-import Parser from "../parser/parser.ts";
-import Component from "../component.ts";
+const Initialize = function (this: InitializeInterface) {};
 
 Initialize.prototype.config = async function (options: OptionsInterface) {
   try {
@@ -32,7 +32,7 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
     }
 
     Storage.root.vue = options.vue || _.CDN;
-  
+
     return new (Parser as any)().parse();
   } catch (error) {
     return console.error(

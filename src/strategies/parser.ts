@@ -1,8 +1,13 @@
-import Parser from "./base.ts";
-import Compiler from "../compiler/compiler.ts";
+import Compiler from "./compiler.ts";
 
-import { Queue } from "../../lib/utils.ts";
+import { ParserInterface } from "../lib/types.ts";
+import { Queue, Storage } from "../lib/utils.ts";
+
 import fn from "./parser-utils/_fn.ts";
+
+function Parser(this: ParserInterface) {
+  Queue.push(Storage.root);
+}
 
 Parser.prototype.parse = function () {
   while (Queue.length) {

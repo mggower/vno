@@ -1,4 +1,4 @@
-import { ComponentInterface } from "../../../lib/types.ts";
+import { ComponentInterface } from "../../lib/types.ts";
 
 const componentStringify = function cS(current: ComponentInterface) {
   try {

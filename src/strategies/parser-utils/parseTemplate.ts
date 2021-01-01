@@ -1,5 +1,5 @@
-import { ComponentInterface } from "../../../lib/types.ts";
-import Utils from "../../../lib/utils.ts";
+import { ComponentInterface } from "../../lib/types.ts";
+import Utils from "../../lib/utils.ts";
 
 const parseTemplate = function pT(current: ComponentInterface) {
   try {

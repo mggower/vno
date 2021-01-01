@@ -1,6 +1,14 @@
-import Renderer from "./base.ts";
-import _ from "../../lib/defaults.ts";
-import { ComponentInterface, HtmlInterface } from "../../lib/types.ts";
+import {
+  ComponentInterface,
+  HtmlInterface,
+  RendererInterface,
+} from "../lib/types.ts";
+
+import _ from "../lib/defaults.ts";
+
+function Renderer(this: RendererInterface) {
+  this.html = "";
+}
 
 Renderer.prototype.createRenderer = function (
   obj: object,

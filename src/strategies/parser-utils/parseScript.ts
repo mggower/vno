@@ -1,7 +1,7 @@
-import { ComponentInterface } from "../../../lib/types.ts";
-import Utils, { Queue, Storage } from "../../../lib/utils.ts";
+import { ComponentInterface } from "../../lib/types.ts";
+import Utils, { Queue, Storage } from "../../lib/utils.ts";
 
-import SiblingList from "../../sibling.ts";
+import SiblingList from "../sibling.ts";
 
 const parseScript = function pS(current: ComponentInterface) {
   try {
