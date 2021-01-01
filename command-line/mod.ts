@@ -107,7 +107,7 @@ const additionalComponent: string = `<template>
 </template>
 <script>
 export default {
-  name: '${userOptions[2]}',
+  name: '${toKebab(userOptions[2])}',
   props: {
     msg: String
   },
@@ -137,9 +137,9 @@ const rootComp: string = `<template>
 </div>
 </template>
 <script>
-import ${toKebab(userOptions[2])} from './components/${userOptions[2]}.vue'
+import '${userOptions[2]}' from './components/${userOptions[2]}.vue'
 export default {
-  name: '${userOptions[1].toLowerCase()}',
+  name: '${toKebab(userOptions[1])}',
   components: {
     ${userOptions[2]}
   }
@@ -182,8 +182,8 @@ import vno from "../src/dist/mod.ts";
 const port: number = ${userOptions[4]};
 const server: Application = new Application();
 await vno.config({
-  label: "${userOptions[1]}",
-  entry: "./",
+  root: "${userOptions[1]}",
+  path: "./",
   cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12",
 });
 server.use(async (ctx, next) => {
@@ -247,16 +247,16 @@ console.log("Done writing component dir!");
 // ensureDir("assets");
 // console.log("Done writing assets dir!");
 
-ensureFile(`${toKebab(userOptions[1])}.vue`)
+ensureFile(`${userOptions[1]}.vue`)
   .then(() => {
-    Deno.writeTextFileSync(`${toKebab(userOptions[1])}.vue`, rootComp);
+    Deno.writeTextFileSync(`${userOptions[1]}.vue`, rootComp);
     console.info(`Done writing ${userOptions[1]}`);
   });
 
-ensureFile(`components/${toKebab(userOptions[2])}.vue`)
+ensureFile(`components/${userOptions[2]}.vue`)
   .then(() => {
     Deno.writeTextFileSync(
-      `components/${toKebab(userOptions[2])}.vue`,
+      `components/${userOptions[2]}.vue`,
       additionalComponent,
     );
   });
@@ -264,11 +264,11 @@ ensureFile(`components/${toKebab(userOptions[2])}.vue`)
 let compsArray = addedComps.split(",");
 
 for (let i = 0; i < compsArray.length; i += 1) {
-  ensureFile(`components/${toKebab(compsArray[i])}.vue`)
+  ensureFile(`components/${compsArray[i]}.vue`)
     .then(() => {
       Deno.writeTextFileSync(
-        `components/${toKebab(compsArray[i])}.vue`,
-        `//created component ${toKebab(compsArray[i])}` + "\n" + genericComp,
+        `components/${compsArray[i]}.vue`,
+        `//created component ${compsArray[i]}` + "\n" + genericComp,
       );
     })
     .catch(() => {
@@ -287,6 +287,7 @@ ensureFile("deps.ts")
   .then(() => {
     Deno.writeTextFileSync("deps.ts", deps);
     console.info("Done writing deps file!");
+  }).then(() => {
     console.log("DONE!");
   });
 
