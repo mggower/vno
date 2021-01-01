@@ -20,7 +20,7 @@ const runner: any = async function customize() {
   const msg3b: string =
     "\nWould you like to create any additional components?(yes/no)";
   const msg3c: string =
-    "\nlist the names (seperated w/ commas *no spaces*) of your additional components";
+    "\nList the names (seperated w/ commas *no spaces*) of your additional components";
   const msg5: string = "\nPort number for server";
   const msg6: string =
     "\nConfirm these results and create your project?(yes/no)";
