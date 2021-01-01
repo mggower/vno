@@ -27,6 +27,7 @@ export interface ComponentInterface {
   sibling: ComponentInterface | null;
   isParsed: boolean;
   isRoot: boolean;
+  vue?: string;
   split?: string[];
   data?: string;
   runData(): boolean;

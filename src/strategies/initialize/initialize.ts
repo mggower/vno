@@ -3,6 +3,7 @@ import Initialize from "./base.ts";
 import { OptionsInterface } from "../../lib/types.ts";
 import { fs, path } from "../../lib/deps.ts";
 import { Storage } from "../../lib/utils.ts";
+import _ from "../../lib/defaults.ts";
 
 import Parser from "../parser/parser.ts";
 import Component from "../component.ts";
@@ -30,10 +31,9 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
       );
     }
 
-    let vue;
-    options.vue ? { vue } = options : null;
-
-    return new (Parser as any)(vue && vue).parse();
+    Storage.root.vue = options.vue || _.CDN;
+  
+    return new (Parser as any)().parse();
   } catch (error) {
     return console.error(
       "Error inside of Initialize.config",
