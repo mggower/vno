@@ -1,5 +1,5 @@
 <template>
-  <div id="lilorange">
+  <div id="lil-orange">
     <h1>i'm just a clementine</h1>
   </div>
 </template>
@@ -15,7 +15,7 @@ export default {
 </script>
 
 <style>
-body {
+#lil-orange {
   background-color: orange;
 }
 </style>

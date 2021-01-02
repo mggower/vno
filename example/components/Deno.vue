@@ -31,7 +31,14 @@ export default {
 
 <style>
 #deno {
-  background-color: white;
-  color: black;
+  color: #fff;
+  letter-spacing: 0.04em;
+  text-align: center;
+  margin: 60px;
+  width: 370px;
+  margin: 0 auto;
+  display: table;
+  padding: 20px;
+  line-height: 1.4em;
 }
 </style>

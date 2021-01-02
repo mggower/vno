@@ -9,6 +9,7 @@
       />
       <nav class="inner">
         <button v-on:click="handelClick('')">Home</button>
+        <button v-on:click="handelClick('vue')">Vue</button>
         <button v-on:click="handelClick('deno')">Deno</button>
         <button v-on:click="handelClick('travel')">Travel</button>
         <button v-on:click="handelClick('lighthouse')">Lighthouse</button>
@@ -25,6 +26,9 @@
     </body>
     <body v-else-if="displayedComponent === 'travel'">
       <Travel />
+    </body>
+    <body v-else-if="displayedComponent === 'vue'">
+      <VueJs />
     </body>
     <body v-else-if="displayedComponent === 'deno'">
       <Deno />
@@ -60,6 +64,7 @@
 import Travel from './components/Travel';
 import Lighthouse from './components/Lighthouse';
 import Deno from './components/Deno';
+import VueJs from './components/VueJs';
 import LilOrange from './components/LilOrange';
 export default {
   name: 'app',
@@ -79,6 +84,7 @@ export default {
     Deno,
     Travel,
     Lighthouse,
+    VueJs,
   },
 };
 </script>
@@ -119,29 +125,5 @@ button {
   text-size-adjust: auto;
   border-radius: 15px;
   margin: 10px;
-}
-#green {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-#red {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-#orange {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-#purple {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 </style>
