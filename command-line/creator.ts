@@ -27,7 +27,7 @@ const runner: any = async function customize() {
   const msg5: string =
     "\nConfirm these results and create your project?(yes/no)";
 
-  console.log(Colors.green("\nInitializing your vno project..."));
+  console.log(Colors.blue("\nInitializing your vno project..."));
 
   const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
