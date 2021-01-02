@@ -27,6 +27,9 @@ export const Queue: ComponentInterface[] = [];
 export const Storage: StorageInterface = {};
 
 const Utils: UtilityInterface = {
+  preorderScrub: memoize(),
+  terminal: true,
+
   indexOfRegExp(regex: RegExp, array: any[]) {
     return array.findIndex((element) => regex.test(element));
   },
@@ -52,7 +55,6 @@ const Utils: UtilityInterface = {
     return str.slice(start, end).replace(regex, replaced).split(split);
   },
 
-  preorderScrub: memoize(),
 
   print() {
     console.log(` 
