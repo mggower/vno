@@ -3,20 +3,17 @@ import ProgressBar from "https://deno.land/x/progress@v1.2.3/mod.ts";
 import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
 import { prompt } from "./utils.ts";
 
-import {
-  ensureDir,
-  ensureDirSync,
-  ensureFile,
-  ensureFileSync,
-} from "https://deno.land/std/fs/mod.ts";
+import { ensureDirSync,ensureFile } from "https://deno.land/std/fs/mod.ts";
 import utils from "../src/lib/utils.ts";
 const { toKebab } = utils;
-const userOptions = [
-  "Your vno project",
-  "App",
-  "HelloVno",
-  "3000",
-];
+
+const userOptions = {
+  title: "Your vno project",
+  root: "App",
+  child: "HelloVno",
+  port: "3000",
+};
+
 let newAddedComps: string | string[] = "";
 
 //runner function initializes prompts/stores answers
@@ -41,27 +38,28 @@ in CLI demo page */
   const port: string = await prompt(msg4);
   console.log(
     `\nYour Options: \n \n    Title: ${title ||
-      userOptions[0]}, \n    Root: ${root ||
-      userOptions[1]}, \n    Additional Component(s): ${addedComps} \n    Port: ${port || userOptions[4]} \n`,
+      userOptions.title}, \n    Root: ${root ||
+      userOptions.root}, \n    Additional Component(s): ${addedComps} \n    Port: ${port || userOptions.port} \n`,
   );
   /*re-assign global newAddedComps the value of splitting the addedComps string by 
   empty spaces into an array of comp names | logic works for any amount of spaces*/
 
   newAddedComps = addedComps.split(/\ +/);
 
-  //if user enters yes either 1) use default array settings or 2)overwrite default array settings with user inputs
+  /*if user enters yes either confirm which entries are empty and need defaults and which can overwrite defaults*/
+
   const confirm: string = await prompt(msg5);
   if (confirm.toLowerCase() === "yes") {
-    if (title) userOptions[0] = title;
-    if (root) userOptions[1] = root;
+    if (title) userOptions.title = title;
+    if (root) userOptions.root = root;
     //if user enters 'none' or as an edgecases: '0' and a valid entry...
     if (addedComps !== 'none' && addedComps !== '0' && !addedComps){
   //reassigning the first comp name to the userOptions array
       if(newAddedComps) {
-        userOptions[2] = newAddedComps[0]
+        userOptions.child = newAddedComps[0]
       }
     } 
-    if (port) userOptions[4] = port;
+    if (port) userOptions.port = port;
   } else {
     //user inputs 'no' and CLI resets to beginning
     console.log("\nResetting User Options");
@@ -100,7 +98,7 @@ function run() {
 }
 run();
 
-console.log(`\nWriting root component ${userOptions[1]}.vue`);
+console.log(`\nWriting root component ${userOptions.root}.vue`);
 
 //template literal strings for HTML/Components/Server/Deps
 const additionalComponent: string = `<template>
@@ -119,7 +117,7 @@ const additionalComponent: string = `<template>
 </template>
 <script>
 export default {
-  name: '${toKebab(userOptions[2])}',
+  name: '${toKebab(userOptions.child)}',
   props: {
     msg: String
   },
@@ -143,22 +141,22 @@ a {
 </style>`;
 
 const rootComp: string = `<template>
-<div id="${userOptions[1].toLowerCase()}">
+<div id="${userOptions.root.toLowerCase()}">
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-<${userOptions[2]} msg="You are building: ${userOptions[0]} with vno"/>
+<${userOptions.child} msg="You are building: ${userOptions.title} with vno"/>
 </div>
 </template>
 <script>
-import '${userOptions[2]}' from './components/${userOptions[2]}.vue'
+import '${userOptions.child}' from './components/${userOptions.child}.vue'
 export default {
-  name: '${toKebab(userOptions[1])}',
+  name: '${toKebab(userOptions.root)}',
   components: {
-    ${userOptions[2]}
+    ${userOptions.child}
   }
 }
 </script>
 <style>
-#${userOptions[1].toLowerCase()} {
+#${userOptions.root.toLowerCase()} {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -176,10 +174,10 @@ const html = `<!DOCTYPE html>
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <link rel="stylesheet" href="./style.css">
-    <title>${userOptions[0]}</title>
+    <title>${userOptions.title}</title>
   </head>
   <body>
-    <div id="${userOptions[1].toLowerCase()}">
+    <div id="${userOptions.root.toLowerCase()}">
       <!-- built files will be auto injected -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
@@ -191,10 +189,10 @@ const html = `<!DOCTYPE html>
 const server: string =
   `import { Application, join, log, send } from "./deps.ts";
 import vno from "../src/dist/mod.ts";
-const port: number = ${userOptions[4]};
+const port: number = ${userOptions.port};
 const server: Application = new Application();
 await vno.config({
-  root: "${userOptions[1]}",
+  root: "${userOptions.root}",
   entry: "./",
   cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12",
 });
@@ -220,7 +218,7 @@ server.use(async (ctx, next) => {
   } else await next();
 });
 if (import.meta.main) {
-  log.info("Server is up and running on port ${userOptions[4]}");
+  log.info("Server is up and running on port ${userOptions.port}");
   await server.listen({ port });
 }
 export { server };`;
@@ -256,19 +254,16 @@ console.info("Done writing public dir!");
 ensureDirSync("components");
 console.log("Done writing component dir!");
 
-// ensureDir("assets");
-// console.log("Done writing assets dir!");
-
-ensureFile(`${userOptions[1]}.vue`)
+ensureFile(`${userOptions.root}.vue`)
   .then(() => {
-    Deno.writeTextFileSync(`${userOptions[1]}.vue`, rootComp);
-    console.info(`Done writing ${userOptions[1]}`);
+    Deno.writeTextFileSync(`${userOptions.root}.vue`, rootComp);
+    console.info(`Done writing ${userOptions.root}`);
   });
 
-ensureFile(`components/${userOptions[2]}.vue`)
+ensureFile(`components/${userOptions.child}.vue`)
   .then(() => {
     Deno.writeTextFileSync(
-      `components/${userOptions[2]}.vue`,
+      `components/${userOptions.child}.vue`,
       additionalComponent,
     );
   });
