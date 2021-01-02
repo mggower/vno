@@ -11,8 +11,21 @@ import Component from "../strategies/component.ts";
 import fn from "../strategies/parser-utils/_fn.ts";
 
 const appTest = new (Component as any)("App", "./test-app/App.vue", true);
+
+//The following test checks for correct stringification of components
+
+fn.componentStringify(appTest);
+
+Deno.test({
+  name: "Component instance exists as string",
+  fn(): void {
+  },
+});
+
 //The following test is to ensure correct build of component object
+
 const keyArray = Object.keys(appTest);
+
 Deno.test({
   name: "Component object contains correct properties",
   fn(): void {
@@ -22,7 +35,9 @@ Deno.test({
     );
   },
 });
+
 //The following tests are for measuring functionality of parseScript
+
 fn.parseScript(appTest);
 
 Deno.test({
@@ -40,13 +55,14 @@ Deno.test({
 });
 
 Deno.test({
-  name: "Checks for existence of child components",
+  name: "Child components should not exist yet in the child list",
   fn(): void {
     assertEquals(appTest.child.head, null);
   },
 });
 
 //The following tests are for measuring functionality of parseStyle
+
 fn.parseStyle(appTest);
 
 Deno.test({
@@ -74,8 +90,8 @@ Deno.test({
 });
 
 //The following tests are for measuring functionality of parseTemplate
+
 fn.parseTemplate(appTest);
-console.log(appTest.template);
 
 Deno.test({
   name: "Template exists",
@@ -83,7 +99,7 @@ Deno.test({
     assertNotEquals(appTest.template, undefined || null);
   },
 });
-// <div id="test">{{ result }}</div>;
+
 Deno.test({
   name: "Should contain HTML tags",
   fn(): void {
