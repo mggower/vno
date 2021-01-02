@@ -1,75 +1,79 @@
+// deno-lint-ignore-file
 import ProgressBar from "https://deno.land/x/progress@v1.2.3/mod.ts";
 import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
 import { prompt } from "./utils.ts";
-import {
-  ensureDir,
-  ensureDirSync,
-  ensureFile,
-  ensureFileSync,
-} from "https://deno.land/std/fs/mod.ts";
+
+import { ensureDirSync,ensureFile } from "https://deno.land/std/fs/mod.ts";
 import utils from "../src/lib/utils.ts";
-const { toKebab } = utils;
-const userOptions = [
-  "Your vno project",
-  "App",
-  "HelloVno",
-  "3000",
-];
-let addedComps: string = "";
+import _ from "https://cdn.skypack.dev/lodash";
+import * as Colors from "https://deno.land/std/fmt/colors.ts"
+const userOptions = {
+  title: "Your vno project",
+  root: "App",
+  child: "HelloVno",
+  port: "3000",
+};
+
+let newAddedComps: string | string[] = "";
+
+//runner function initializes prompts/stores answers
 const runner: any = async function customize() {
   const msg1: string = "\nPlease enter a project title";
   const msg2: string =
     "\nWhat would you like to name your root Vue component?(recommend App)";
   const msg3: string =
-    "\nWhat would you like to name your additional component?";
-  const msg3b: string =
-    "\nWould you like to create any additional components?(yes/no)";
-  const msg3c: string =
-    "\nList the names (seperated w/ commas *no spaces*) of your additional components";
-  const msg5: string = "\nPort number for server";
-  const msg6: string =
+    "\nName of additional components?(enter 'none' for default)";
+  const msg4: string = "\nPort number for server";
+  const msg5: string =
     "\nConfirm these results and create your project?(yes/no)";
 
-  console.log("\nInitializing your vno project...");
+  console.log(Colors.blue("\nInitializing your vno project..."));
 
   const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
-  const child: string = await prompt(msg3);
-  const compQuestion: string = await prompt(msg3b);
-  if (compQuestion === "yes") {
-    addedComps = await prompt(msg3c);
-  }
-  const port: string = await prompt(msg5);
+/*ask user for additional comps / if user inputs them, by default, their first comp will be the first child
+in CLI demo page */
+  const addedComps: string = await prompt(msg3);
+  const port: string = await prompt(msg4);
   console.log(
     `\nYour Options: \n \n    Title: ${title ||
-      userOptions[0]}, \n    Root: ${root ||
-      userOptions[1]}, \n    Additional Component(s): ${child + "," +
-        addedComps ||
-      child ||
-      userOptions[2]} \n    Port: ${port || userOptions[4]} \n`,
+      userOptions.title}, \n    Root: ${root ||
+      userOptions.root}, \n    Additional Component(s): ${addedComps} \n    Port: ${port || userOptions.port} \n`,
   );
-  const confirm: string = await prompt(msg6);
+  /*re-assign global newAddedComps the value of splitting the addedComps string by 
+  empty spaces into an array of comp names | logic works for any amount of spaces*/
 
+  newAddedComps = addedComps.split(/\ +/);
+  /*if user enters yes either confirm which entries are empty and need defaults and which can overwrite defaults*/
+
+  const confirm: string = await prompt(msg5);
   if (confirm.toLowerCase() === "yes") {
-    if (title) userOptions[0] = title;
-    if (root) userOptions[1] = root;
-    if (child) userOptions[2] = child;
-    if (port) userOptions[4] = port;
+    if (title) userOptions.title = title;
+    if (root) userOptions.root = root;
+    //if user enters 'none' or as an edgecases: '0' and a valid entry...
+    if (addedComps !== 'none' && addedComps !== '0' && addedComps){
+  //reassigning the first comp name to the userOptions array
+        userOptions.child = newAddedComps[0]
+    }
+    if (port) userOptions.port = port;
   } else {
+    //user inputs 'no' and CLI resets to beginning
     console.log("\nResetting User Options");
     await runner();
   }
 };
-
+/*First terminal entry. If 'yes' user guided through runner function prompts, 
+otherwise default file structure is made*/
 const decide = "\nWould you like to customize your vno project?(yes/no)";
 const decision: string = await prompt(decide);
 
 if (decision.toLowerCase() === "yes") {
-  await runner();
+   await runner();
 } else {
-  console.log("Creating vno Project");
+  console.log(Colors.green('Creating your vno Project'));
 }
 
+//Progress bar logic
 const total = 100;
 const progress = new ProgressBar({
   total,
@@ -90,7 +94,8 @@ function run() {
 }
 run();
 
-console.log(`\nWriting root component ${userOptions[1]}.vue`);
+
+//template literal strings for HTML/Components/Server/Deps
 const additionalComponent: string = `<template>
 <div class="hello">
   <h1>{{ msg }}</h1>
@@ -102,12 +107,13 @@ const additionalComponent: string = `<template>
   <h3>Installed CLI Plugin</h3>
   <ul>
   <li><a href="https://github.com/oslabs-beta/vno/tree/main/command-line" target="_blank" rel="noopener">Click Here</a></li>
+  <br>
   </ul>
 </div>
 </template>
 <script>
 export default {
-  name: '${toKebab(userOptions[2])}',
+  name: '${_.kebabCase(userOptions.child)}',
   props: {
     msg: String
   },
@@ -131,22 +137,22 @@ a {
 </style>`;
 
 const rootComp: string = `<template>
-<div id="${userOptions[1].toLowerCase()}">
+<div id="${userOptions.root.toLowerCase()}">
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-<${userOptions[2]} msg="You are building: ${userOptions[0]} with vno"/>
+<${userOptions.child} msg="You are building: ${userOptions.title} with vno"/>
 </div>
 </template>
 <script>
-import '${userOptions[2]}' from './components/${userOptions[2]}.vue'
+import '${userOptions.child}' from './components/${userOptions.child}.vue'
 export default {
-  name: '${toKebab(userOptions[1])}',
+  name: '${_.kebabCase(userOptions.root)}',
   components: {
-    ${userOptions[2]}
+    ${userOptions.child}
   }
 }
 </script>
 <style>
-#${userOptions[1].toLowerCase()} {
+#${userOptions.root.toLowerCase()} {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -164,10 +170,10 @@ const html = `<!DOCTYPE html>
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <link rel="stylesheet" href="./style.css">
-    <title>${userOptions[0]}</title>
+    <title>${userOptions.title}</title>
   </head>
   <body>
-    <div id="${userOptions[1].toLowerCase()}">
+    <div id="${userOptions.root.toLowerCase()}">
       <!-- built files will be auto injected -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
@@ -179,10 +185,10 @@ const html = `<!DOCTYPE html>
 const server: string =
   `import { Application, join, log, send } from "./deps.ts";
 import vno from "../src/dist/mod.ts";
-const port: number = ${userOptions[4]};
+const port: number = ${userOptions.port};
 const server: Application = new Application();
 await vno.config({
-  root: "${userOptions[1]}",
+  root: "${userOptions.root}",
   entry: "./",
   cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12",
 });
@@ -208,7 +214,7 @@ server.use(async (ctx, next) => {
   } else await next();
 });
 if (import.meta.main) {
-  log.info("Server is up and running on port ${userOptions[4]}");
+  log.info("Server is up and running on port ${userOptions.port}");
   await server.listen({ port });
 }
 export { server };`;
@@ -239,60 +245,50 @@ name:
 
 </style>`;
 ensureDirSync("public");
-console.info("Done writing public dir!");
 
 ensureDirSync("components");
-console.log("Done writing component dir!");
 
-// ensureDir("assets");
-// console.log("Done writing assets dir!");
-
-ensureFile(`${userOptions[1]}.vue`)
+ensureFile(`${userOptions.root}.vue`)
   .then(() => {
-    Deno.writeTextFileSync(`${userOptions[1]}.vue`, rootComp);
-    console.info(`Done writing ${userOptions[1]}`);
+    Deno.writeTextFileSync(`${userOptions.root}.vue`, rootComp);
   });
 
-ensureFile(`components/${userOptions[2]}.vue`)
+ensureFile(`components/${userOptions.child}.vue`)
   .then(() => {
     Deno.writeTextFileSync(
-      `components/${userOptions[2]}.vue`,
+      `components/${userOptions.child}.vue`,
       additionalComponent,
     );
   });
-
-let compsArray = addedComps.split(",");
-
-for (let i = 0; i < compsArray.length; i += 1) {
-  ensureFile(`components/${compsArray[i]}.vue`)
+/*If there are additional comps, they are added to file tree here. All of these will have default templating*/
+if(newAddedComps[1]){
+for (let i = 1; i < newAddedComps.length; i += 1) {
+  ensureFile(`components/${newAddedComps[i]}.vue`)
     .then(() => {
       Deno.writeTextFileSync(
-        `components/${compsArray[i]}.vue`,
-        `//created component ${compsArray[i]}` + "\n" + genericComp,
+        `components/${newAddedComps[i]}.vue`,
+        `//created component ${newAddedComps[i]}` + "\n" + genericComp,
       );
     })
     .catch(() => {
-      console.log(`error writing component: ${compsArray[i]}.vue`);
+      console.log(`error writing component: ${newAddedComps[i]}.vue`);
     });
+  }
 }
-console.log("Done writing additional components");
 
 ensureFile("public/index.html")
   .then(() => {
     Deno.writeTextFileSync("public/index.html", html);
-    console.info("Done writing html file!");
   });
 
 ensureFile("deps.ts")
   .then(() => {
     Deno.writeTextFileSync("deps.ts", deps);
-    console.info("Done writing deps file!");
   });
 
 ensureFile("server.ts")
   .then(() => {
     Deno.writeTextFileSync("server.ts", server);
-    console.info("Done writing server");
   }).then(() => {
-    console.log("DONE!");
   });
+
