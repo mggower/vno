@@ -55,7 +55,6 @@ const Utils: UtilityInterface = {
     return str.slice(start, end).replace(regex, replaced).split(split);
   },
 
-
   print() {
     console.log(` 
   __   ___ __   ___  
