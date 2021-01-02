@@ -261,7 +261,7 @@ ensureFile(`components/${userOptions[2]}.vue`)
     );
   });
 
-let compsArray = addedComps.split(" +");
+let compsArray = addedComps.split(/\ +/);
 
 for (let i = 0; i < compsArray.length; i += 1) {
   ensureFile(`components/${compsArray[i]}.vue`)
