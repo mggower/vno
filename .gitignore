@@ -1,4 +1,4 @@
 #vscode settings
-.vscode
+.vscode/*
 .DS_Store
 keys.js

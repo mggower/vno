@@ -1,6 +1,6 @@
-import { ComponentInterface } from "../../../lib/types.ts";
+import { ComponentInterface } from "../../lib/types.ts";
 
-const componentStringify = function cS(current: ComponentInterface) {
+export default function componentStringify(current: ComponentInterface) {
   try {
     const { label, name, template, script } = current;
 
@@ -14,8 +14,9 @@ const componentStringify = function cS(current: ComponentInterface) {
 
     return "componentStringify()=> successful";
   } catch (error) {
-    console.error("Error inside of componentStringify()=>:", { error });
+    console.error(
+      "Error inside of componentStringify()=>:",
+      { error },
+    );
   }
-};
-
-export default componentStringify;
+}
