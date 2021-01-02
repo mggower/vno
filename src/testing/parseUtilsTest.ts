@@ -3,6 +3,7 @@ import {
   assertArrayIncludes,
   assertEquals,
   assertNotEquals,
+  assertNotMatch,
   assertStringIncludes,
 } from "https://deno.land/std@0.83.0/testing/asserts.ts";
 
@@ -80,5 +81,19 @@ Deno.test({
   name: "Template exists",
   fn(): void {
     assertNotEquals(appTest.template, undefined || null);
+  },
+});
+// <div id="test">{{ result }}</div>;
+Deno.test({
+  name: "Should contain HTML tags",
+  fn(): void {
+    assertStringIncludes(appTest.template, "div");
+  },
+});
+
+Deno.test({
+  name: "Template is properly formatted",
+  fn() {
+    assertNotMatch(appTest.template, /<\/?template>/);
   },
 });
