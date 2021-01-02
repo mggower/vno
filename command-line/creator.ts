@@ -3,10 +3,10 @@ import ProgressBar from "https://deno.land/x/progress@v1.2.3/mod.ts";
 import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
 import { prompt } from "./utils.ts";
 
-import { ensureDirSync,ensureFile } from "https://deno.land/std/fs/mod.ts";
+import { ensureDirSync, ensureFile } from "https://deno.land/std/fs/mod.ts";
 import utils from "../src/lib/utils.ts";
 import _ from "https://cdn.skypack.dev/lodash";
-import * as Colors from "https://deno.land/std/fmt/colors.ts"
+import * as Colors from "https://deno.land/std/fmt/colors.ts";
 const userOptions = {
   title: "Your vno project",
   root: "App",
@@ -31,14 +31,16 @@ const runner: any = async function customize() {
 
   const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
-/*ask user for additional comps / if user inputs them, by default, their first comp will be the first child
+  /*ask user for additional comps / if user inputs them, by default, their first comp will be the first child
 in CLI demo page */
   const addedComps: string = await prompt(msg3);
   const port: string = await prompt(msg4);
   console.log(
     `\nYour Options: \n \n    Title: ${title ||
       userOptions.title}, \n    Root: ${root ||
-      userOptions.root}, \n    Additional Component(s): ${addedComps} \n    Port: ${port || userOptions.port} \n`,
+      userOptions
+        .root}, \n    Additional Component(s): ${addedComps} \n    Port: ${port ||
+      userOptions.port} \n`,
   );
   /*re-assign global newAddedComps the value of splitting the addedComps string by 
   empty spaces into an array of comp names | logic works for any amount of spaces*/
@@ -51,9 +53,9 @@ in CLI demo page */
     if (title) userOptions.title = title;
     if (root) userOptions.root = root;
     //if user enters 'none' or as an edgecases: '0' and a valid entry...
-    if (addedComps !== 'none' && addedComps !== '0' && addedComps){
-  //reassigning the first comp name to the userOptions array
-        userOptions.child = newAddedComps[0]
+    if (addedComps !== "none" && addedComps !== "0" && addedComps) {
+      //reassigning the first comp name to the userOptions array
+      userOptions.child = newAddedComps[0];
     }
     if (port) userOptions.port = port;
   } else {
@@ -68,9 +70,9 @@ const decide = "\nWould you like to customize your vno project?(yes/no)";
 const decision: string = await prompt(decide);
 
 if (decision.toLowerCase() === "yes") {
-   await runner();
+  await runner();
 } else {
-  console.log(Colors.green('Creating your vno Project'));
+  console.log(Colors.green("Creating your vno Project"));
 }
 
 //Progress bar logic
@@ -93,7 +95,6 @@ function run() {
   }
 }
 run();
-
 
 //template literal strings for HTML/Components/Server/Deps
 const additionalComponent: string = `<template>
@@ -261,18 +262,18 @@ ensureFile(`components/${userOptions.child}.vue`)
     );
   });
 /*If there are additional comps, they are added to file tree here. All of these will have default templating*/
-if(newAddedComps[1]){
-for (let i = 1; i < newAddedComps.length; i += 1) {
-  ensureFile(`components/${newAddedComps[i]}.vue`)
-    .then(() => {
-      Deno.writeTextFileSync(
-        `components/${newAddedComps[i]}.vue`,
-        `//created component ${newAddedComps[i]}` + "\n" + genericComp,
-      );
-    })
-    .catch(() => {
-      console.log(`error writing component: ${newAddedComps[i]}.vue`);
-    });
+if (newAddedComps[1]) {
+  for (let i = 1; i < newAddedComps.length; i += 1) {
+    ensureFile(`components/${newAddedComps[i]}.vue`)
+      .then(() => {
+        Deno.writeTextFileSync(
+          `components/${newAddedComps[i]}.vue`,
+          `//created component ${newAddedComps[i]}` + "\n" + genericComp,
+        );
+      })
+      .catch(() => {
+        console.log(`error writing component: ${newAddedComps[i]}.vue`);
+      });
   }
 }
 
@@ -289,6 +290,4 @@ ensureFile("deps.ts")
 ensureFile("server.ts")
   .then(() => {
     Deno.writeTextFileSync("server.ts", server);
-  }).then(() => {
   });
-
