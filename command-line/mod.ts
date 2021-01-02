@@ -1,3 +1,4 @@
+// deno-lint-ignore-file
 import ProgressBar from "https://deno.land/x/progress@v1.2.3/mod.ts";
 import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
 import { prompt } from "./utils.ts";
@@ -57,7 +58,7 @@ in CLI demo page and is sliced off array. Remaining comps are created with defau
     if (root) userOptions[1] = root;
     if (addedComps !== 'none' && addedComps !== '0' && !addedComps){
   //reassigning the first comp name to the userOptions array
-      if(newAddedComps[0]) {
+      if(newAddedComps) {
         userOptions[2] = newAddedComps[0]
       }
     } 
@@ -267,8 +268,8 @@ ensureFile(`components/${userOptions[2]}.vue`)
       additionalComponent,
     );
   });
-
-
+/*If there are additional comps, they are added to file tree here. All of these will have default templating*/
+if(newAddedComps[1]){
 for (let i = 1; i < newAddedComps.length; i += 1) {
   ensureFile(`components/${newAddedComps[i]}.vue`)
     .then(() => {
@@ -280,6 +281,7 @@ for (let i = 1; i < newAddedComps.length; i += 1) {
     .catch(() => {
       console.log(`error writing component: ${newAddedComps[i]}.vue`);
     });
+  }
 }
 console.log("Done writing additional components");
 
