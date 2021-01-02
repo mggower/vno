@@ -96,7 +96,6 @@ function run() {
 }
 run();
 
-console.log(`\nWriting root component ${userOptions.root}.vue`);
 
 //template literal strings for HTML/Components/Server/Deps
 const additionalComponent: string = `<template>
@@ -248,15 +247,12 @@ name:
 
 </style>`;
 ensureDirSync("public");
-console.info("Done writing public dir!");
 
 ensureDirSync("components");
-console.log("Done writing component dir!");
 
 ensureFile(`${userOptions.root}.vue`)
   .then(() => {
     Deno.writeTextFileSync(`${userOptions.root}.vue`, rootComp);
-    console.info(`Done writing ${userOptions.root}`);
   });
 
 ensureFile(`components/${userOptions.child}.vue`)
@@ -281,24 +277,21 @@ for (let i = 1; i < newAddedComps.length; i += 1) {
     });
   }
 }
-console.log("Done writing additional components");
 
 ensureFile("public/index.html")
   .then(() => {
     Deno.writeTextFileSync("public/index.html", html);
-    console.info("Done writing html file!");
   });
 
 ensureFile("deps.ts")
   .then(() => {
     Deno.writeTextFileSync("deps.ts", deps);
-    console.info("Done writing deps file!");
   });
 
 ensureFile("server.ts")
   .then(() => {
     Deno.writeTextFileSync("server.ts", server);
-    console.info("Done writing server");
   }).then(() => {
-    console.log("DONE!");
   });
+
+  console.log('DONE')
