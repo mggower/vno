@@ -1,8 +1,15 @@
 <template>
   <div id="app">
     <header class="header">
-      <img class="logo" src="https://svgshare.com/i/SNz.svg" alt="logo" />
+      <img
+        class="logo"
+        src="https://svgshare.com/i/SNz.svg"
+        alt="logo"
+        v-on:click="handelClick('')"
+      />
       <nav class="inner">
+        <button v-on:click="handelClick('')">Home</button>
+        <button v-on:click="handelClick('deno')">Deno</button>
         <button v-on:click="handelClick('travel')">Travel</button>
         <button v-on:click="handelClick('lighthouse')">Lighthouse</button>
         <a
@@ -13,11 +20,14 @@
         </a>
       </nav>
     </header>
-    <body v-else-if="displayedComponent === 'lighthouse'">
+    <body v-if="displayedComponent === 'lighthouse'">
       <Lighthouse />
     </body>
     <body v-else-if="displayedComponent === 'travel'">
       <Travel />
+    </body>
+    <body v-else-if="displayedComponent === 'deno'">
+      <Deno />
     </body>
     <body v-else>
       <h1>Welcome to Your vno Project</h1>
@@ -41,6 +51,7 @@
           >
         </li>
       </ul>
+      <LilOrange />
     </body>
   </div>
 </template>
@@ -48,6 +59,8 @@
 <script>
 import Travel from './components/Travel';
 import Lighthouse from './components/Lighthouse';
+import Deno from './components/Deno';
+import LilOrange from './components/LilOrange';
 export default {
   name: 'app',
   data() {
@@ -62,6 +75,8 @@ export default {
     },
   },
   components: {
+    LilOrange,
+    Deno,
     Travel,
     Lighthouse,
   },
