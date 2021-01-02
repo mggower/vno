@@ -52,7 +52,7 @@ export default {
   letter-spacing: 0.04em;
   text-align: center;
   margin: 60px;
-  width: 800px;
+  max-width: 800px;
   margin: 0 auto;
   display: table;
   padding: 20px;
@@ -61,7 +61,8 @@ export default {
 a {
   color: #57d3af;
 }
-li {
-  text-align: center;
+ul {
+  max-width: 800px;
+  text-align: left;
 }
 </style>

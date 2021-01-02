@@ -38,27 +38,6 @@
     </body>
     <body v-else>
       <h1>Welcome to Your vno Project</h1>
-      <p>
-        For a guide on project customization,<br />
-        check out out GitHub repo at:
-        <a
-          href="https://github.com/oslabs-beta/vno"
-          target="_blank"
-          rel="noopener"
-          >vno documentation</a
-        >
-      </p>
-      <ul>
-        <li>
-          <a
-            href="https://github.com/jgrubb16/vnocli"
-            target="_blank"
-            rel="noopener"
-            >Open Source CLI Tool</a
-          >
-        </li>
-      </ul>
-      <LilOrange />
     </body>
   </div>
 </template>
@@ -68,7 +47,6 @@ import Travel from './components/Travel';
 import Lighthouse from './components/Lighthouse';
 import Deno from './components/Deno';
 import VueJs from './components/VueJs';
-import LilOrange from './components/LilOrange';
 import Home from './components/Home';
 export default {
   name: 'app',
@@ -85,7 +63,6 @@ export default {
   },
   components: {
     Home,
-    LilOrange,
     Deno,
     Travel,
     Lighthouse,

@@ -11,21 +11,12 @@
       was announced by Dahl in 2018 during his talk "10 Things I Regret About
       Node.js
     </p>
-    <LilOrange />
   </div>
 </template>
 
 <script>
-import LilOrange from './components/LilOrange';
-
 export default {
   name: 'deno',
-  data() {
-    return {
-      color: 'deno',
-    };
-  },
-  components: { LilOrange },
 };
 </script>
 
