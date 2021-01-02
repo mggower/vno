@@ -1,6 +1,8 @@
 import ProgressBar from "https://deno.land/x/progress@v1.2.3/mod.ts";
 import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
 import { prompt } from "./utils.ts";
+import path  from "../src/lib/deps.ts";
+
 import {
   ensureDir,
   ensureDirSync,
@@ -21,11 +23,11 @@ const runner: any = async function customize() {
   const msg2: string =
     "\nWhat would you like to name your root Vue component?(recommend App)";
   const msg3: string =
-    "\nWhat would you like to name your additional component?";
-  const msg3b: string =
-    "\nWould you like to create any additional components?(yes/no)";
-  const msg3c: string =
-    "\nList the names (seperated w/ commas *no spaces*) of your additional components";
+    "\nName of additional components?(select 0 for default)";
+  // const msg3b: string =
+  //   "\nWould you like to create any additional components?(yes/no)";
+  // const msg3c: string =
+  //   "\nList the names (seperated w/ commas *no spaces*) of your additional components";
   const msg5: string = "\nPort number for server";
   const msg6: string =
     "\nConfirm these results and create your project?(yes/no)";
@@ -34,26 +36,25 @@ const runner: any = async function customize() {
 
   const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
-  const child: string = await prompt(msg3);
-  const compQuestion: string = await prompt(msg3b);
-  if (compQuestion === "yes") {
-    addedComps = await prompt(msg3c);
-  }
+  // const additional: string = await prompt(msg3);
+  const addedComps: string = await prompt(msg3);
+  // if (compQuestion == "0") {
+  //   addedComps = await prompt(msg3c);
+  // }
   const port: string = await prompt(msg5);
   console.log(
     `\nYour Options: \n \n    Title: ${title ||
       userOptions[0]}, \n    Root: ${root ||
-      userOptions[1]}, \n    Additional Component(s): ${child + "," +
-        addedComps ||
-      child ||
-      userOptions[2]} \n    Port: ${port || userOptions[4]} \n`,
+      userOptions[1]}, \n    Additional Component(s): ${addedComps} \n    Port: ${port || userOptions[4]} \n`,
   );
   const confirm: string = await prompt(msg6);
 
   if (confirm.toLowerCase() === "yes") {
     if (title) userOptions[0] = title;
     if (root) userOptions[1] = root;
-    if (child) userOptions[2] = child;
+    if (addedComps !== '0'){
+      userOptions[2] = addedComps
+    } 
     if (port) userOptions[4] = port;
   } else {
     console.log("\nResetting User Options");
