@@ -15,6 +15,8 @@ const HTML = {
   build: { bundle: "./build.js", style: "./style.css" },
 };
 
+//relative paths for global use
+
 const VNO_PATH = "vno-build";
 const BUILD_PATH = "vno-build/build.js";
 const STYLE_PATH = "vno-build/style.css";
