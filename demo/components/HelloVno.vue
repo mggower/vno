@@ -15,7 +15,7 @@
 </template>
 <script>
 export default {
-  name: 'one',
+  name: 'hello-vno',
   props: {
     msg: String
   },

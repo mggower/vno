@@ -1,15 +1,15 @@
 <template>
 <div id="app">
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-<One msg="You are building: DemoBaby with vno"/>
+<HelloVno msg="You are building: Your vno project with vno"/>
 </div>
 </template>
 <script>
-import 'One' from './components/One.vue'
+import 'HelloVno' from './components/HelloVno.vue'
 export default {
   name: 'app',
   components: {
-    One
+    HelloVno
   }
 }
 </script>

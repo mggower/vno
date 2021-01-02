@@ -2,99 +2,101 @@
 import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
 import Utils from "../lib/utils.ts";
 
-Deno.chdir(Deno.args[0]);
+export default async function creator() {
+  console.log(Deno.cwd());
+  // Deno.chdir(Deno.args[0]);
 
-const userOptions = {
-  title: "Your vno project",
-  root: "App",
-  child: "HelloVno",
-  port: "3000",
-};
+  const userOptions = {
+    title: "Your vno project",
+    root: "App",
+    child: "HelloVno",
+    port: "3000",
+  };
 
-let newAddedComps: string | string[] = "";
+  let newAddedComps: string | string[] = "";
 
-//runner function initializes prompts/stores answers
-const runner: any = async function customize() {
-  const msg1: string = "\nPlease enter a project title";
-  const msg2: string =
-    "\nWhat would you like to name your root Vue component?(recommend App)";
-  const msg3: string =
-    "\nName of additional components?(enter 'none' for default)";
-  const msg4: string = "\nPort number for server";
-  const msg5: string =
-    "\nConfirm these results and create your project?(yes/no)";
+  //runner function initializes prompts/stores answers
+  const runner: any = async function customize() {
+    const msg1: string = "\nPlease enter a project title";
+    const msg2: string =
+      "\nWhat would you like to name your root Vue component?(recommend App)";
+    const msg3: string =
+      "\nName of additional components?(enter 'none' for default)";
+    const msg4: string = "\nPort number for server";
+    const msg5: string =
+      "\nConfirm these results and create your project?(yes/no)";
 
-  console.log(colors.blue("\nInitializing your vno project..."));
+    console.log(colors.blue("\nInitializing your vno project..."));
 
-  const title: string = await Utils.prompt(msg1);
-  const root: string = await Utils.prompt(msg2);
-  /*ask user for additional comps / if user inputs them, by default, their first comp will be the first child
-in CLI demo page */
-  const addedComps: string = await Utils.prompt(msg3);
-  const port: string = await Utils.prompt(msg4);
-  console.log(
-    `\nYour Options: \n \n    Title: ${title ||
-      userOptions.title}, \n    Root: ${root ||
-      userOptions
-        .root}, \n    Additional Component(s): ${addedComps} \n    Port: ${port ||
-      userOptions.port} \n`,
-  );
-  /*re-assign global newAddedComps the value of splitting the addedComps string by 
-  empty spaces into an array of comp names | logic works for any amount of spaces*/
+    const title: string = await Utils.prompt(msg1);
+    const root: string = await Utils.prompt(msg2);
+    /*ask user for additional comps / if user inputs them, by default, their first comp will be the first child
+  in CLI demo page */
+    const addedComps: string = await Utils.prompt(msg3);
+    const port: string = await Utils.prompt(msg4);
+    console.log(
+      `\nYour Options: \n \n    Title: ${title ||
+        userOptions.title}, \n    Root: ${root ||
+        userOptions
+          .root}, \n    Additional Component(s): ${addedComps} \n    Port: ${port ||
+        userOptions.port} \n`,
+    );
+    /*re-assign global newAddedComps the value of splitting the addedComps string by 
+    empty spaces into an array of comp names | logic works for any amount of spaces*/
 
-  newAddedComps = addedComps.split(/\ +/);
-  /*if user enters yes either confirm which entries are empty and need defaults and which can overwrite defaults*/
+    newAddedComps = addedComps.split(/\ +/);
+    /*if user enters yes either confirm which entries are empty and need defaults and which can overwrite defaults*/
 
-  const confirm: string = await Utils.prompt(msg5);
-  if (confirm.toLowerCase() === "yes") {
-    if (title) userOptions.title = title;
-    if (root) userOptions.root = root;
-    //if user enters 'none' or as an edgecases: '0' and a valid entry...
-    if (addedComps !== "none" && addedComps !== "0" && addedComps) {
-      //reassigning the first comp name to the userOptions array
-      userOptions.child = newAddedComps[0];
+    const confirm: string = await Utils.prompt(msg5);
+    if (confirm.toLowerCase() === "yes") {
+      if (title) userOptions.title = title;
+      if (root) userOptions.root = root;
+      //if user enters 'none' or as an edgecases: '0' and a valid entry...
+      if (addedComps !== "none" && addedComps !== "0" && addedComps) {
+        //reassigning the first comp name to the userOptions array
+        userOptions.child = newAddedComps[0];
+      }
+      if (port) userOptions.port = port;
+    } else {
+      //user inputs 'no' and CLI resets to beginning
+      console.log("\nResetting User Options");
+      await runner();
     }
-    if (port) userOptions.port = port;
-  } else {
-    //user inputs 'no' and CLI resets to beginning
-    console.log("\nResetting User Options");
+  };
+  /*First terminal entry. If 'yes' user guided through runner function prompts, 
+  otherwise default file structure is made*/
+  const decide = "\nWould you like to customize your vno project?(yes/no)";
+  const decision: string = await Utils.prompt(decide);
+
+  if (decision.toLowerCase() === "yes") {
     await runner();
+  } else {
+    console.log(colors.green("Creating your vno Project"));
   }
-};
-/*First terminal entry. If 'yes' user guided through runner function prompts, 
-otherwise default file structure is made*/
-const decide = "\nWould you like to customize your vno project?(yes/no)";
-const decision: string = await Utils.prompt(decide);
 
-if (decision.toLowerCase() === "yes") {
-  await runner();
-} else {
-  console.log(colors.green("Creating your vno Project"));
-}
+  //Progress bar logic
+  const total = 100;
+  const progress = new ProgressBar({
+    total,
+    clear: true,
+    complete: colors.bgGreen(" "),
+    incomplete: colors.bgWhite(" "),
+    display: ":completed/:total vno load :time [:bar] :percent",
+  });
+  let completed = 0;
+  function run() {
+    if (completed <= total) {
+      progress.render(completed++);
 
-//Progress bar logic
-const total = 100;
-const progress = new ProgressBar({
-  total,
-  clear: true,
-  complete: colors.bgGreen(" "),
-  incomplete: colors.bgWhite(" "),
-  display: ":completed/:total vno load :time [:bar] :percent",
-});
-let completed = 0;
-function run() {
-  if (completed <= total) {
-    progress.render(completed++);
-
-    setTimeout(function () {
-      run();
-    }, 20);
+      setTimeout(function () {
+        run();
+      }, 20);
+    }
   }
-}
-run();
+  run();
 
-//template literal strings for HTML/Components/Server/Deps
-const additionalComponent: string = `<template>
+  //template literal strings for HTML/Components/Server/Deps
+  const additionalComponent: string = `<template>
 <div class="hello">
   <h1>{{ msg }}</h1>
   <p>
@@ -134,7 +136,7 @@ a {
 }
 </style>`;
 
-const rootComp: string = `<template>
+  const rootComp: string = `<template>
 <div id="${userOptions.root.toLowerCase()}">
 <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
 <${userOptions.child} msg="You are building: ${userOptions.title} with vno"/>
@@ -160,7 +162,7 @@ export default {
 }
 </style>`;
 
-const html = `<!DOCTYPE html>
+  const html = `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -180,8 +182,8 @@ const html = `<!DOCTYPE html>
 </html>
 `;
 
-const server: string =
-  `import { Application, join, log, send } from "./deps.ts";
+  const server: string =
+    `import { Application, join, log, send } from "./deps.ts";
 import vno from "../src/dist/mod.ts";
 const port: number = ${userOptions.port};
 const server: Application = new Application();
@@ -217,8 +219,8 @@ if (import.meta.main) {
 }
 export { server };`;
 
-const deps: string =
-  `export { dirname, join } from "https://deno.land/std@0.74.0/path/mod.ts";
+  const deps: string =
+    `export { dirname, join } from "https://deno.land/std@0.74.0/path/mod.ts";
 export * as log from "https://deno.land/std@0.74.0/log/mod.ts";
 export {
   Application,
@@ -227,9 +229,9 @@ export {
 } from "https://deno.land/x/oak@v6.3.1/mod.ts";
 export { config } from "https://deno.land/x/dotenv/mod.ts";
 `;
-// const appPath: string = "./";
-// const componentPath: string = "./components/";
-const genericComp: string = `<template>
+  // const appPath: string = "./";
+  // const componentPath: string = "./components/";
+  const genericComp: string = `<template>
 
 </template>
 
@@ -242,49 +244,50 @@ name:
 <style>
 
 </style>`;
-fs.ensureDirSync("public");
+  fs.ensureDirSync("public");
 
-fs.ensureDirSync("components");
+  fs.ensureDirSync("components");
 
-fs.ensureFile(`${userOptions.root}.vue`)
-  .then(() => {
-    Deno.writeTextFileSync(`${userOptions.root}.vue`, rootComp);
-  });
+  fs.ensureFile(`${userOptions.root}.vue`)
+    .then(() => {
+      Deno.writeTextFileSync(`${userOptions.root}.vue`, rootComp);
+    });
 
-fs.ensureFile(`components/${userOptions.child}.vue`)
-  .then(() => {
-    Deno.writeTextFileSync(
-      `components/${userOptions.child}.vue`,
-      additionalComponent,
-    );
-  });
-/*If there are additional comps, they are added to file tree here. All of these will have default templating*/
-if (newAddedComps[1]) {
-  for (let i = 1; i < newAddedComps.length; i += 1) {
-    fs.ensureFile(`components/${newAddedComps[i]}.vue`)
-      .then(() => {
-        Deno.writeTextFileSync(
-          `components/${newAddedComps[i]}.vue`,
-          `//created component ${newAddedComps[i]}` + "\n" + genericComp,
-        );
-      })
-      .catch(() => {
-        console.log(`error writing component: ${newAddedComps[i]}.vue`);
-      });
+  fs.ensureFile(`components/${userOptions.child}.vue`)
+    .then(() => {
+      Deno.writeTextFileSync(
+        `components/${userOptions.child}.vue`,
+        additionalComponent,
+      );
+    });
+  /*If there are additional comps, they are added to file tree here. All of these will have default templating*/
+  if (newAddedComps[1]) {
+    for (let i = 1; i < newAddedComps.length; i += 1) {
+      fs.ensureFile(`components/${newAddedComps[i]}.vue`)
+        .then(() => {
+          Deno.writeTextFileSync(
+            `components/${newAddedComps[i]}.vue`,
+            `//created component ${newAddedComps[i]}` + "\n" + genericComp,
+          );
+        })
+        .catch(() => {
+          console.log(`error writing component: ${newAddedComps[i]}.vue`);
+        });
+    }
   }
+
+  fs.ensureFile("public/index.html")
+    .then(() => {
+      Deno.writeTextFileSync("public/index.html", html);
+    });
+
+  fs.ensureFile("deps.ts")
+    .then(() => {
+      Deno.writeTextFileSync("deps.ts", deps);
+    });
+
+  fs.ensureFile("server.ts")
+    .then(() => {
+      Deno.writeTextFileSync("server.ts", server);
+    });
 }
-
-fs.ensureFile("public/index.html")
-  .then(() => {
-    Deno.writeTextFileSync("public/index.html", html);
-  });
-
-fs.ensureFile("deps.ts")
-  .then(() => {
-    Deno.writeTextFileSync("deps.ts", deps);
-  });
-
-fs.ensureFile("server.ts")
-  .then(() => {
-    Deno.writeTextFileSync("server.ts", server);
-  });

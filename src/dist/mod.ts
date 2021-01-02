@@ -1,4 +1,6 @@
 import Initialize from "../strategies/initialize.ts";
+import Creator from "../command-line/creator.ts";
+
 import { fs, path } from "../lib/deps.ts";
 
 const read = { name: "read" } as const;
@@ -10,28 +12,12 @@ const resWrite = await Deno.permissions.request(write);
 const resRun = await Deno.permissions.request(run);
 
 const arg = Deno.args[0];
-const entry = Deno.args[1] || "./";
-
-// Deno.chdir(entry);
+const entry = Deno.args[1] || ".";
 
 if (resRead && resRun && resWrite) {
-  if ((/init/i).test(arg)) {
-    const initSubProcess = Deno.run({
-      cmd: [
-        "deno",
-        "run",
-        "--unstable",
-        "--allow-read",
-        "--allow-write",
-        "../command-line/creator.ts",
-        entry,
-      ],
-    });
-
-    const { code } = await initSubProcess.status();
-
-    Deno.exit(code);
-  }
+  Deno.chdir(entry);
+  
+  if ((/init/i).test(arg)) await Creator();
   if ((/run/i).test(arg)) {
     let config;
 
@@ -43,8 +29,6 @@ if (resRead && resRun && resWrite) {
     }
 
     if (config) {
-      Deno.chdir(entry);
-
       const runSubProcess = Deno.run({
         cmd: [
           "deno",
@@ -53,12 +37,10 @@ if (resRead && resRun && resWrite) {
           "--allow-read",
           "--allow-write",
           "--allow-run",
-          `./${config.base}`,
+          `${config.base}`,
         ],
       });
-
       const { code } = await runSubProcess.status();
-
       Deno.exit(code);
     }
   }
