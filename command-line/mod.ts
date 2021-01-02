@@ -269,16 +269,16 @@ ensureFile(`components/${userOptions[2]}.vue`)
   });
 
 
-for (let i = 0; i < newAddedComps.length; i += 1) {
-  ensureFile(`components/${compsArray[i]}.vue`)
+for (let i = 1; i < newAddedComps.length; i += 1) {
+  ensureFile(`components/${newAddedComps[i]}.vue`)
     .then(() => {
       Deno.writeTextFileSync(
-        `components/${compsArray[i]}.vue`,
-        `//created component ${compsArray[i]}` + "\n" + genericComp,
+        `components/${newAddedComps[i]}.vue`,
+        `//created component ${newAddedComps[i]}` + "\n" + genericComp,
       );
     })
     .catch(() => {
-      console.log(`error writing component: ${compsArray[i]}.vue`);
+      console.log(`error writing component: ${newAddedComps[i]}.vue`);
     });
 }
 console.log("Done writing additional components");
