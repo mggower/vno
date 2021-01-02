@@ -1,9 +1,15 @@
 import { superoak } from "https://deno.land/x/superoak@3.0.0/mod.ts";
 import { server } from "./server.ts";
 import { describe, it } from "https://deno.land/x/superoak@3.0.0/test/utils.ts";
-import { html } from "./ssr.ts";
+
 import { hasCookieRequiredProperties } from "https://deno.land/x/opine@0.27.0/src/utils/cookies.ts";
-import { assertEquals } from "https://deno.land/std@0.80.0/testing/asserts.ts";
+import {
+  bench,
+  runBenchmarks,
+} from "https://deno.land/std@0.83.0/testing/bench.ts";
+import { assertEquals } from "https://deno.land/std@0.83.0/testing/asserts.ts";
+//readfile for HTML file to check
+
 //when connected uncomment line 14 to test for correct html being served
 //set up dummy components
 Deno.test({
