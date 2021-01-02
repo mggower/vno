@@ -57,7 +57,7 @@ export default function parseScript(current: ComponentInterface) {
 
           if (component) {
             if (!component.isParsed) Queue.push(component);
-            Utils.preorderScrub(Storage.root, component.label);
+            Utils.preorderScrub(component.label, current);
             current.child?.add(component);
           }
         }

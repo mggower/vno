@@ -4,6 +4,25 @@ import {
   UtilityInterface,
 } from "../lib/types.ts";
 
+function memoize() {
+  const cache: StorageInterface = {};
+  return (label: string, current: ComponentInterface) => {
+    if (cache[label]) {
+      scrub(cache[label], label);
+    } else {
+      scrub(Storage.root, label);
+    }
+    cache[label] = current;
+    console.log(Object.keys(cache));
+  };
+}
+
+function scrub(component: ComponentInterface, label: string) {
+  if (component.child) component.child.scrub(label);
+  if (component.child?.head) scrub(component.child.head, label);
+  if (component.sibling) scrub(component.sibling, label);
+}
+
 export const Queue: ComponentInterface[] = [];
 
 export const Storage: StorageInterface = {};
@@ -38,11 +57,7 @@ const Utils: UtilityInterface = {
     return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
   },
 
-  preorderScrub(current: ComponentInterface, label: string) {
-    if (current.child) current.child.scrub(label);
-    if (current.child?.head) this.preorderScrub(current.child.head, label);
-    if (current.sibling) this.preorderScrub(current.sibling, label);
-  },
+  preorderScrub: memoize(),
 
   print() {
     console.log(` 

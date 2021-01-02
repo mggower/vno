@@ -97,6 +97,6 @@ export interface UtilityInterface {
     replaced?: string,
   ): string[];
   toKebab(str: string): string;
-  preorderScrub(current: ComponentInterface, label: string): void;
+  preorderScrub: Function;
   print(): true;
 }
