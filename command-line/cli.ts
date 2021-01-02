@@ -55,7 +55,6 @@ in CLI demo page */
     //if user enters 'none' or as an edgecases: '0' and a valid entry...
     if (addedComps !== 'none' && addedComps !== '0' && addedComps){
   //reassigning the first comp name to the userOptions array
-        console.log('NEW COMPS: ', newAddedComps[0])
         userOptions.child = newAddedComps[0]
     }
     if (port) userOptions.port = port;
@@ -111,6 +110,7 @@ const additionalComponent: string = `<template>
   <h3>Installed CLI Plugin</h3>
   <ul>
   <li><a href="https://github.com/oslabs-beta/vno/tree/main/command-line" target="_blank" rel="noopener">Click Here</a></li>
+  <br>
   </ul>
 </div>
 </template>
