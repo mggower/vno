@@ -38,9 +38,9 @@ export default {
           desc: `Rome's history spans more than 2,500 years. While Roman mythology dates the founding of Rome at around 753 BC, the site has been inhabited for much longer, making it one of the oldest continuously occupied sites in Europe.`,
         },
         {
-          name: 'paris',
+          name: 'barcelona',
           img: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/28963/paris2.svg',
-          desc: `By the end of the 12th century, Paris had become the political, economic, religious, and cultural capital of France. Maurice de Sully undertook the construction of the Notre Dame Cathedral at its eastern extremity.`,
+          desc: `The founding of Barcelona is the subject of two different legends. The first attributes the founding of the city to the mythological Hercules. The second legend attributes the foundation of the city to the Carthaginian general, Hamilcar Barca, father of Hannibal, who supposedly named the city Barcino after his family in the 3rd century BC`,
         },
       ],
     };
@@ -62,7 +62,7 @@ h1 {
 
 .location-contain {
   display: flex;
-  flex-flow: column;
+  flex-flow: row;
   align-items: center;
   justify-content: center;
 }

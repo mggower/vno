@@ -23,6 +23,7 @@ export default {
   border: 1px solid #ddd;
   padding: 20px 20px;
   margin: 10px;
+  color: black;
 }
 .place h2 {
   margin: 0;
