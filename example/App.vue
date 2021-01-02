@@ -5,12 +5,12 @@
         class="logo"
         src="https://svgshare.com/i/SNz.svg"
         alt="logo"
-        v-on:click="handelClick('')"
+        v-on:click="handelClick('home')"
       />
       <nav class="inner">
-        <button v-on:click="handelClick('')">Home</button>
-        <button v-on:click="handelClick('vue')">Vue</button>
-        <button v-on:click="handelClick('deno')">Deno</button>
+        <button v-on:click="handelClick('home')">Home</button>
+        <button v-on:click="handelClick('vue')">About Vue</button>
+        <button v-on:click="handelClick('deno')">About Deno</button>
         <button v-on:click="handelClick('travel')">Travel</button>
         <button v-on:click="handelClick('lighthouse')">Lighthouse</button>
         <a
@@ -21,7 +21,10 @@
         </a>
       </nav>
     </header>
-    <body v-if="displayedComponent === 'lighthouse'">
+    <body v-if="displayedComponent === 'home'">
+      <Home />
+    </body>
+    <body v-else-if="displayedComponent === 'lighthouse'">
       <Lighthouse />
     </body>
     <body v-else-if="displayedComponent === 'travel'">
@@ -66,11 +69,12 @@ import Lighthouse from './components/Lighthouse';
 import Deno from './components/Deno';
 import VueJs from './components/VueJs';
 import LilOrange from './components/LilOrange';
+import Home from './components/Home';
 export default {
   name: 'app',
   data() {
     return {
-      displayedComponent: '',
+      displayedComponent: 'home',
     };
   },
   methods: {
@@ -80,6 +84,7 @@ export default {
     },
   },
   components: {
+    Home,
     LilOrange,
     Deno,
     Travel,
