@@ -16,7 +16,7 @@ const userOptions = [
   "HelloVno",
   "3000",
 ];
-let addedComps: string = "";
+let newAddedComps: string | string[] = "";
 const runner: any = async function customize() {
   const msg1: string = "\nPlease enter a project title";
   const msg2: string =
@@ -35,24 +35,31 @@ const runner: any = async function customize() {
 
   const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
-  // const additional: string = await prompt(msg3);
-  const addedComps: string = await prompt(msg3);
-  // if (compQuestion == "0") {
-  //   addedComps = await prompt(msg3c);
-  // }
+/*ask user for additional comps / if user inputs them, by default, their first comp will be the first child
+in CLI demo page and is sliced off array. Remaining comps are created with default template structures*/
+  let addedComps: string = await prompt(msg3);
+ 
   const port: string = await prompt(msg4);
   console.log(
     `\nYour Options: \n \n    Title: ${title ||
       userOptions[0]}, \n    Root: ${root ||
       userOptions[1]}, \n    Additional Component(s): ${addedComps} \n    Port: ${port || userOptions[4]} \n`,
   );
+  /*re-assign newAddedComps the value of splitting the addedComps string by 
+  empty spaces into an array of comp names*/
+
+  newAddedComps = addedComps.split(/\ +/);
+
+  //if user enters yes either 1) use default array settings or 2)overwrite default array settings with user inputs
   const confirm: string = await prompt(msg5);
-//if user enters yes either 1) use default array settings or 2)overwrite default array settings with user inputs
   if (confirm.toLowerCase() === "yes") {
     if (title) userOptions[0] = title;
     if (root) userOptions[1] = root;
     if (addedComps !== 'none' && addedComps !== '0' && !addedComps){
-      userOptions[2] = addedComps
+  //reassigning the first comp name to the userOptions array
+      if(newAddedComps[0]) {
+        userOptions[2] = newAddedComps[0]
+      }
     } 
     if (port) userOptions[4] = port;
   } else {
@@ -261,9 +268,8 @@ ensureFile(`components/${userOptions[2]}.vue`)
     );
   });
 
-let compsArray = addedComps.split(/\ +/);
 
-for (let i = 0; i < compsArray.length; i += 1) {
+for (let i = 0; i < newAddedComps.length; i += 1) {
   ensureFile(`components/${compsArray[i]}.vue`)
     .then(() => {
       Deno.writeTextFileSync(
