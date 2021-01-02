@@ -7,6 +7,8 @@ import { ensureDirSync,ensureFile } from "https://deno.land/std/fs/mod.ts";
 import utils from "../src/lib/utils.ts";
 const { toKebab } = utils;
 
+
+
 const userOptions = {
   title: "Your vno project",
   root: "App",
@@ -33,8 +35,7 @@ const runner: any = async function customize() {
   const root: string = await prompt(msg2);
 /*ask user for additional comps / if user inputs them, by default, their first comp will be the first child
 in CLI demo page */
-  let addedComps: string = await prompt(msg3);
- 
+  const addedComps: string = await prompt(msg3);
   const port: string = await prompt(msg4);
   console.log(
     `\nYour Options: \n \n    Title: ${title ||
@@ -45,7 +46,6 @@ in CLI demo page */
   empty spaces into an array of comp names | logic works for any amount of spaces*/
 
   newAddedComps = addedComps.split(/\ +/);
-
   /*if user enters yes either confirm which entries are empty and need defaults and which can overwrite defaults*/
 
   const confirm: string = await prompt(msg5);
@@ -53,12 +53,11 @@ in CLI demo page */
     if (title) userOptions.title = title;
     if (root) userOptions.root = root;
     //if user enters 'none' or as an edgecases: '0' and a valid entry...
-    if (addedComps !== 'none' && addedComps !== '0' && !addedComps){
+    if (addedComps !== 'none' && addedComps !== '0' && addedComps){
   //reassigning the first comp name to the userOptions array
-      if(newAddedComps) {
+        console.log('NEW COMPS: ', newAddedComps[0])
         userOptions.child = newAddedComps[0]
-      }
-    } 
+    }
     if (port) userOptions.port = port;
   } else {
     //user inputs 'no' and CLI resets to beginning
