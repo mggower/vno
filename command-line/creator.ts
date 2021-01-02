@@ -6,9 +6,7 @@ import { prompt } from "./utils.ts";
 import { ensureDirSync,ensureFile } from "https://deno.land/std/fs/mod.ts";
 import utils from "../src/lib/utils.ts";
 import _ from "https://cdn.skypack.dev/lodash";
-
-
-
+import * as Colors from "https://deno.land/std/fmt/colors.ts"
 const userOptions = {
   title: "Your vno project",
   root: "App",
@@ -72,7 +70,7 @@ const decision: string = await prompt(decide);
 if (decision.toLowerCase() === "yes") {
    await runner();
 } else {
-  console.log("Creating vno Project");
+  console.log(Colors.green('Creating your vno Project'));
 }
 
 //Progress bar logic
