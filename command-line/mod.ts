@@ -1,7 +1,6 @@
 import ProgressBar from "https://deno.land/x/progress@v1.2.3/mod.ts";
 import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
 import { prompt } from "./utils.ts";
-import { path }  from "../src/lib/deps.ts";
 
 import {
   ensureDir,
@@ -48,11 +47,11 @@ const runner: any = async function customize() {
       userOptions[1]}, \n    Additional Component(s): ${addedComps} \n    Port: ${port || userOptions[4]} \n`,
   );
   const confirm: string = await prompt(msg5);
-
+//if user enters yes either 1) use default array settings or 2)overwrite default array settings with user inputs
   if (confirm.toLowerCase() === "yes") {
     if (title) userOptions[0] = title;
     if (root) userOptions[1] = root;
-    if (addedComps !== 'none' && addedComps !== '0' && addedComps){
+    if (addedComps !== 'none' && addedComps !== '0' && !addedComps){
       userOptions[2] = addedComps
     } 
     if (port) userOptions[4] = port;
@@ -262,7 +261,7 @@ ensureFile(`components/${userOptions[2]}.vue`)
     );
   });
 
-let compsArray = addedComps.split(",");
+let compsArray = addedComps.split(" +");
 
 for (let i = 0; i < compsArray.length; i += 1) {
   ensureFile(`components/${compsArray[i]}.vue`)
