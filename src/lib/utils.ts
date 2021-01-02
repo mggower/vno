@@ -4,7 +4,7 @@ import {
   UtilityInterface,
 } from "../lib/types.ts";
 
-function memoize() {
+export function memoize() {
   const cache: StorageInterface = {};
   return (label: string, current: ComponentInterface) => {
     if (cache[label]) {
@@ -13,7 +13,6 @@ function memoize() {
       scrub(Storage.root, label);
     }
     cache[label] = current;
-    console.log(Object.keys(cache));
   };
 }
 
