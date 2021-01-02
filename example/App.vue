@@ -7,6 +7,8 @@
         <button v-on:click="handelClick('orange')">Jordan</button>
         <button v-on:click="handelClick('purple')">Kyle</button>
         <button v-on:click="handelClick('red')">Andrew</button>
+        <button v-on:click="handelClick('travel')">Travel</button>
+        <button v-on:click="handelClick('lighthouse')">Lighthouse</button>
         <a
           class="github"
           href="https://github.com/oslabs-beta/vno"
@@ -26,6 +28,12 @@
     </body>
     <body v-else-if="displayedComponent === 'purple'">
       <Purple />
+    </body>
+    <body v-else-if="displayedComponent === 'lighthouse'">
+      <Lighthouse />
+    </body>
+    <body v-else-if="displayedComponent === 'travel'">
+      <Travel />
     </body>
     <body v-else>
       <h1>Welcome to Your vno Project</h1>
@@ -59,6 +67,8 @@ import Green from './components/Green';
 import Orange from './components/Orange';
 import Purple from './components/Purple';
 import LilOrange from './components/LilOrange';
+import Travel from './components/Travel';
+import Lighthouse from './components/Lighthouse';
 export default {
   name: 'app',
   data() {
@@ -78,6 +88,8 @@ export default {
     Orange,
     Purple,
     LilOrange,
+    Travel,
+    Lighthouse,
   },
 };
 </script>
