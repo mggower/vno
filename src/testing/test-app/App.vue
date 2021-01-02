@@ -19,8 +19,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 body {
   background-color: blue;
+}
+h1 {
+  color: salmon;
 }
 </style>
