@@ -1,7 +1,7 @@
 import ProgressBar from "https://deno.land/x/progress@v1.2.3/mod.ts";
 import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
 import { prompt } from "./utils.ts";
-import path  from "../src/lib/deps.ts";
+import { path }  from "../src/lib/deps.ts";
 
 import {
   ensureDir,
@@ -23,13 +23,13 @@ const runner: any = async function customize() {
   const msg2: string =
     "\nWhat would you like to name your root Vue component?(recommend App)";
   const msg3: string =
-    "\nName of additional components?(select 0 for default)";
+    "\nName of additional components?(enter 'none' for default)";
   // const msg3b: string =
   //   "\nWould you like to create any additional components?(yes/no)";
   // const msg3c: string =
   //   "\nList the names (seperated w/ commas *no spaces*) of your additional components";
-  const msg5: string = "\nPort number for server";
-  const msg6: string =
+  const msg4: string = "\nPort number for server";
+  const msg5: string =
     "\nConfirm these results and create your project?(yes/no)";
 
   console.log("\nInitializing your vno project...");
@@ -41,18 +41,18 @@ const runner: any = async function customize() {
   // if (compQuestion == "0") {
   //   addedComps = await prompt(msg3c);
   // }
-  const port: string = await prompt(msg5);
+  const port: string = await prompt(msg4);
   console.log(
     `\nYour Options: \n \n    Title: ${title ||
       userOptions[0]}, \n    Root: ${root ||
       userOptions[1]}, \n    Additional Component(s): ${addedComps} \n    Port: ${port || userOptions[4]} \n`,
   );
-  const confirm: string = await prompt(msg6);
+  const confirm: string = await prompt(msg5);
 
   if (confirm.toLowerCase() === "yes") {
     if (title) userOptions[0] = title;
     if (root) userOptions[1] = root;
-    if (addedComps !== '0'){
+    if (addedComps !== 'none' && addedComps !== '0' && addedComps){
       userOptions[2] = addedComps
     } 
     if (port) userOptions[4] = port;
@@ -66,7 +66,7 @@ const decide = "\nWould you like to customize your vno project?(yes/no)";
 const decision: string = await prompt(decide);
 
 if (decision.toLowerCase() === "yes") {
-  await runner();
+   await runner();
 } else {
   console.log("Creating vno Project");
 }
