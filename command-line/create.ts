@@ -5,7 +5,7 @@ import { prompt } from "./utils.ts";
 
 import { ensureDirSync,ensureFile } from "https://deno.land/std/fs/mod.ts";
 import utils from "../src/lib/utils.ts";
-const { toKebab } = utils;
+import _ from "https://cdn.skypack.dev/lodash";
 
 
 
@@ -116,7 +116,7 @@ const additionalComponent: string = `<template>
 </template>
 <script>
 export default {
-  name: '${toKebab(userOptions.child)}',
+  name: '${_.kebabCase(userOptions.child)}',
   props: {
     msg: String
   },
@@ -148,7 +148,7 @@ const rootComp: string = `<template>
 <script>
 import '${userOptions.child}' from './components/${userOptions.child}.vue'
 export default {
-  name: '${toKebab(userOptions.root)}',
+  name: '${_.kebabCase(userOptions.root)}',
   components: {
     ${userOptions.child}
   }
