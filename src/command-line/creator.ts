@@ -1,6 +1,6 @@
 // deno-lint-ignore-file
-import { _, colors, fs, ProgressBar } from "../src/lib/deps.ts";
-import Utils from "../src/lib/utils.ts";
+import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
+import Utils from "../lib/utils.ts";
 
 const userOptions = {
   title: "Your vno project",
