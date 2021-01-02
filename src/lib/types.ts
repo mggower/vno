@@ -1,22 +1,18 @@
 export interface InitializeInterface {
-  root: ComponentInterface | null;
+  config(options: OptionsInterface): Function;
+  walk(entry: string, rootLabel: string): true;
 }
 
 export interface ParserInterface {
-  root: any;
-  vue: string;
-  parse(): any;
+  parse(): Function;
 }
 
 export interface CompilerInterface {
-  root: ComponentInterface;
   mount: string;
   vue: string;
-  cache: object;
 }
 
 export interface RendererInterface {
-  defaults: HtmlInterface;
   html: string;
 }
 
@@ -25,13 +21,11 @@ export interface ComponentInterface {
   path: string | URL;
   child: SiblingInterface | null;
   sibling: ComponentInterface | null;
-  isParsed: boolean;
   isRoot: boolean;
+  isParsed: boolean;
+  runData(): boolean;
   vue?: string;
   split?: string[];
-  data?: string;
-  runData(): boolean;
-  imports?: string[];
   name?: string;
   template?: string;
   script?: string;
@@ -49,9 +43,6 @@ export interface StorageInterface {
   [key: string]: ComponentInterface;
 }
 
-/**
- * User Input Options
- */
 export interface OptionsInterface {
   entry: string;
   root: string;
@@ -96,7 +87,6 @@ export interface UtilityInterface {
     regex?: RegExp,
     replaced?: string,
   ): string[];
-  toKebab(str: string): string;
   preorderScrub: Function;
   print(): true;
 }

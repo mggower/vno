@@ -19,14 +19,7 @@ Component.prototype.runData = function data() {
       throw `There was an error identifying the path for ${this.label}`;
     }
 
-    this.data = Deno.readTextFileSync(this.path);
-
-    if (!this.data) {
-      throw `There was an error reading the file for path ${this.path}`;
-    }
-
-    this.split = this.data.split(/\n/);
-
+    this.split = Deno.readTextFileSync(this.path).split(/\n/);
     return true;
   } catch (error) {
     console.error(

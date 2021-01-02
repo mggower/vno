@@ -13,7 +13,6 @@ function memoize() {
       scrub(Storage.root, label);
     }
     cache[label] = current;
-    console.log(Object.keys(cache));
   };
 }
 
@@ -51,10 +50,6 @@ const Utils: UtilityInterface = {
     replaced: string = "",
   ) {
     return str.slice(start, end).replace(regex, replaced).split(split);
-  },
-
-  toKebab(str: string) {
-    return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
   },
 
   preorderScrub: memoize(),

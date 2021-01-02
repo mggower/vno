@@ -6,7 +6,7 @@ import _$ from "../lib/defaults.ts";
 import Parser from "./parser.ts";
 import Component from "./component.ts";
 
-const Initialize = function (this: InitializeInterface) {};
+function Initialize(this: InitializeInterface) {}
 
 Initialize.prototype.config = async function (options: OptionsInterface) {
   try {
