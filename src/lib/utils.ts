@@ -52,10 +52,6 @@ const Utils: UtilityInterface = {
     return str.slice(start, end).replace(regex, replaced).split(split);
   },
 
-  toKebab(str: string) {
-    return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
-  },
-
   preorderScrub: memoize(),
 
   print() {
