@@ -1,6 +1,3 @@
-/**
- * Bundle Cycle Objects
- */
 export interface InitializeInterface {
   root: ComponentInterface | null;
 }
@@ -15,6 +12,7 @@ export interface CompilerInterface {
   root: ComponentInterface;
   mount: string;
   vue: string;
+  cache: object;
 }
 
 export interface RendererInterface {
@@ -22,16 +20,14 @@ export interface RendererInterface {
   html: string;
 }
 
-/**
- * Data Structures
- */
-
 export interface ComponentInterface {
   label: string;
   path: string | URL;
   child: SiblingInterface | null;
   sibling: ComponentInterface | null;
+  isParsed: boolean;
   isRoot: boolean;
+  vue?: string;
   split?: string[];
   data?: string;
   runData(): boolean;
@@ -46,6 +42,7 @@ export interface SiblingInterface {
   head: ComponentInterface | null;
   tail: ComponentInterface | null;
   add(component: ComponentInterface): void;
+  scrub(label: string): boolean;
 }
 
 export interface StorageInterface {
@@ -82,11 +79,6 @@ interface BuildInterface {
   bundle: string;
   style: string;
 }
-
-/**
- * Utils
- */
-
 export interface UtilityInterface {
   indexOfRegExp(regex: RegExp, array: any[]): number;
   sliceAndTrim(
@@ -96,6 +88,15 @@ export interface UtilityInterface {
     regex?: RegExp,
     replaced?: string,
   ): string;
+  trimAndSplit(
+    str: string,
+    start: number,
+    end: number,
+    split?: string,
+    regex?: RegExp,
+    replaced?: string,
+  ): string[];
   toKebab(str: string): string;
+  preorderScrub: Function;
   print(): true;
 }

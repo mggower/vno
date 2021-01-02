@@ -58,6 +58,7 @@ import Red from './components/Red';
 import Green from './components/Green';
 import Orange from './components/Orange';
 import Purple from './components/Purple';
+import LilOrange from './components/LilOrange';
 export default {
   name: 'app',
   data() {
@@ -76,6 +77,7 @@ export default {
     Green,
     Orange,
     Purple,
+    LilOrange,
   },
 };
 </script>

@@ -1,7 +1,6 @@
 import { Application, join, log, send } from "./deps.ts";
 
 import vno from "../../src/dist/mod.ts";
-import { PG_URI } from "../../keys.js";
 
 const port: number = 4040;
 const server: Application = new Application();

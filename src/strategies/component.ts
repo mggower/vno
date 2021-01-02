@@ -9,6 +9,7 @@ function Component(
   this.label = label;
   this.path = path;
   this.isRoot = isRoot;
+  this.isParsed = false;
   this.runData();
 }
 
@@ -28,7 +29,10 @@ Component.prototype.runData = function data() {
 
     return true;
   } catch (error) {
-    console.error("Error inside of Component.runData():", { error });
+    console.error(
+      "Error inside of Component.runData():",
+      { error },
+    );
   }
 };
 
