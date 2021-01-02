@@ -24,7 +24,6 @@ Compiler.prototype.build = function () {
 
 Compiler.prototype.write = function w(current: ComponentInterface) {
   if (!current.instance) throw `${current.label} is missing its instance data`;
-
   Deno.writeTextFileSync(_.BUILD_PATH, current.instance, { append: true });
 
   if (current.style) {
