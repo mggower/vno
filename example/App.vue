@@ -3,10 +3,6 @@
     <header class="header">
       <img class="logo" src="https://svgshare.com/i/SNz.svg" alt="logo" />
       <nav class="inner">
-        <button v-on:click="handelClick('green')">Mikey</button>
-        <button v-on:click="handelClick('orange')">Jordan</button>
-        <button v-on:click="handelClick('purple')">Kyle</button>
-        <button v-on:click="handelClick('red')">Andrew</button>
         <button v-on:click="handelClick('travel')">Travel</button>
         <button v-on:click="handelClick('lighthouse')">Lighthouse</button>
         <a
@@ -17,18 +13,6 @@
         </a>
       </nav>
     </header>
-    <body v-if="displayedComponent === 'red'">
-      <Red />
-    </body>
-    <body v-else-if="displayedComponent === 'green'">
-      <Green />
-    </body>
-    <body v-else-if="displayedComponent === 'orange'">
-      <Orange />
-    </body>
-    <body v-else-if="displayedComponent === 'purple'">
-      <Purple />
-    </body>
     <body v-else-if="displayedComponent === 'lighthouse'">
       <Lighthouse />
     </body>
@@ -62,11 +46,6 @@
 </template>
 
 <script>
-import Red from './components/Red';
-import Green from './components/Green';
-import Orange from './components/Orange';
-import Purple from './components/Purple';
-import LilOrange from './components/LilOrange';
 import Travel from './components/Travel';
 import Lighthouse from './components/Lighthouse';
 export default {
@@ -83,11 +62,6 @@ export default {
     },
   },
   components: {
-    Red,
-    Green,
-    Orange,
-    Purple,
-    LilOrange,
     Travel,
     Lighthouse,
   },
