@@ -2,6 +2,8 @@
 import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
 import Utils from "../lib/utils.ts";
 
+Deno.chdir(Deno.args[0]);
+
 const userOptions = {
   title: "Your vno project",
   root: "App",
