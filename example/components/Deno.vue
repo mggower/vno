@@ -9,7 +9,9 @@
       JavaScript engine and the Rust programming language. It was created by
       Ryan Dahl, original creator of Node.js, and is focused on productivity. It
       was announced by Dahl in 2018 during his talk "10 Things I Regret About
-      Node.js
+      Node.js <br />
+      Learn more about
+      <a class="denoland" href="https://deno.land/" target="_blank">Deno </a>
     </p>
   </div>
 </template>

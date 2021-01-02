@@ -13,6 +13,7 @@
         <button v-on:click="handelClick('deno')">About Deno</button>
         <button v-on:click="handelClick('travel')">Travel</button>
         <button v-on:click="handelClick('lighthouse')">Lighthouse</button>
+        <button v-on:click="handelClick('music')">Music</button>
         <a
           class="github"
           href="https://github.com/oslabs-beta/vno"
@@ -23,6 +24,9 @@
     </header>
     <body v-if="displayedComponent === 'home'">
       <Home />
+    </body>
+    <body v-else-if="displayedComponent === 'music'">
+      <Music />
     </body>
     <body v-else-if="displayedComponent === 'lighthouse'">
       <Lighthouse />
@@ -48,6 +52,7 @@ import Lighthouse from './components/Lighthouse';
 import Deno from './components/Deno';
 import VueJs from './components/VueJs';
 import Home from './components/Home';
+
 export default {
   name: 'app',
   data() {
@@ -64,6 +69,7 @@ export default {
   components: {
     Home,
     Deno,
+
     Travel,
     Lighthouse,
     VueJs,
