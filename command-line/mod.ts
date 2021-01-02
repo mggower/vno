@@ -18,16 +18,14 @@ const userOptions = [
   "3000",
 ];
 let newAddedComps: string | string[] = "";
+
+//runner function initializes prompts/stores answers
 const runner: any = async function customize() {
   const msg1: string = "\nPlease enter a project title";
   const msg2: string =
     "\nWhat would you like to name your root Vue component?(recommend App)";
   const msg3: string =
     "\nName of additional components?(enter 'none' for default)";
-  // const msg3b: string =
-  //   "\nWould you like to create any additional components?(yes/no)";
-  // const msg3c: string =
-  //   "\nList the names (seperated w/ commas *no spaces*) of your additional components";
   const msg4: string = "\nPort number for server";
   const msg5: string =
     "\nConfirm these results and create your project?(yes/no)";
@@ -37,7 +35,7 @@ const runner: any = async function customize() {
   const title: string = await prompt(msg1);
   const root: string = await prompt(msg2);
 /*ask user for additional comps / if user inputs them, by default, their first comp will be the first child
-in CLI demo page and is sliced off array. Remaining comps are created with default template structures*/
+in CLI demo page */
   let addedComps: string = await prompt(msg3);
  
   const port: string = await prompt(msg4);
@@ -46,8 +44,8 @@ in CLI demo page and is sliced off array. Remaining comps are created with defau
       userOptions[0]}, \n    Root: ${root ||
       userOptions[1]}, \n    Additional Component(s): ${addedComps} \n    Port: ${port || userOptions[4]} \n`,
   );
-  /*re-assign newAddedComps the value of splitting the addedComps string by 
-  empty spaces into an array of comp names*/
+  /*re-assign global newAddedComps the value of splitting the addedComps string by 
+  empty spaces into an array of comp names | logic works for any amount of spaces*/
 
   newAddedComps = addedComps.split(/\ +/);
 
@@ -56,6 +54,7 @@ in CLI demo page and is sliced off array. Remaining comps are created with defau
   if (confirm.toLowerCase() === "yes") {
     if (title) userOptions[0] = title;
     if (root) userOptions[1] = root;
+    //if user enters 'none' or as an edgecases: '0' and a valid entry...
     if (addedComps !== 'none' && addedComps !== '0' && !addedComps){
   //reassigning the first comp name to the userOptions array
       if(newAddedComps) {
@@ -64,11 +63,13 @@ in CLI demo page and is sliced off array. Remaining comps are created with defau
     } 
     if (port) userOptions[4] = port;
   } else {
+    //user inputs 'no' and CLI resets to beginning
     console.log("\nResetting User Options");
     await runner();
   }
 };
-
+/*First terminal entry. If 'yes' user guided through runner function prompts, 
+otherwise default file structure is made*/
 const decide = "\nWould you like to customize your vno project?(yes/no)";
 const decision: string = await prompt(decide);
 
@@ -78,6 +79,7 @@ if (decision.toLowerCase() === "yes") {
   console.log("Creating vno Project");
 }
 
+//Progress bar logic
 const total = 100;
 const progress = new ProgressBar({
   total,
@@ -99,6 +101,8 @@ function run() {
 run();
 
 console.log(`\nWriting root component ${userOptions[1]}.vue`);
+
+//template literal strings for HTML/Components/Server/Deps
 const additionalComponent: string = `<template>
 <div class="hello">
   <h1>{{ msg }}</h1>
