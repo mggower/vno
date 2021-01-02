@@ -4,7 +4,7 @@ import {
   RendererInterface,
 } from "../lib/types.ts";
 
-import _ from "../lib/defaults.ts";
+import _$ from "../lib/defaults.ts";
 
 function Renderer(this: RendererInterface) {
   this.html = "";
@@ -14,7 +14,7 @@ Renderer.prototype.createRenderer = function (
   obj: object,
   route?: ComponentInterface,
 ) {
-  this.html = this.htmlStringify({ ..._.HTML, ...obj }, route && route);
+  this.html = this.htmlStringify({ ..._$.HTML, ...obj }, route && route);
   return this.html;
 };
 

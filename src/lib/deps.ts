@@ -1,5 +1,5 @@
 import * as fs from "https://deno.land/std/fs/mod.ts";
 import * as path from "https://deno.land/std/path/mod.ts";
-import { Handlebars } from "https://deno.land/x/handlebars/mod.ts";
+import _ from "https://cdn.skypack.dev/lodash";
 
-export { fs, path, Handlebars };
+export { fs, path, _ };

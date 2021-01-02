@@ -1,5 +1,6 @@
 import { ComponentInterface } from "../../lib/types.ts";
 import Utils, { Queue, Storage } from "../../lib/utils.ts";
+import { _ } from "../../lib/deps.ts";
 
 import SiblingList from "../sibling.ts";
 
@@ -22,7 +23,7 @@ export default function parseScript(current: ComponentInterface) {
       const nameIndex = Utils.indexOfRegExp(/(name)/, script);
 
       if (nameIndex < 0) {
-        current.name = Utils.toKebab(current.label);
+        current.name = _.kebabCase(current.label);
       } else {
         current.name = script[nameIndex].split(/[`'"]/)[1];
       }
@@ -39,15 +40,15 @@ export default function parseScript(current: ComponentInterface) {
         const componentsEnd = children.findIndex((el) => el.includes("}")) + 1;
         const componentsStr = Utils.sliceAndTrim(children, 0, componentsEnd);
 
-        const open = componentsStr.indexOf("{") + 1;
-        const close = componentsStr.indexOf("}");
+        const iter: string[] = _.compact(
+          Utils.trimAndSplit(
+            componentsStr,
+            componentsStr.indexOf("{") + 1,
+            componentsStr.indexOf("}"),
+          ),
+        );
 
-        const childComponents = componentsStr
-          .slice(open, close)
-          .replace(/\s/g, "")
-          .split(",")
-          .filter((child) => child)
-          .map((child) => Storage[child]);
+        const childComponents = iter.map((child: string) => Storage[child]);
 
         current.child = new (SiblingList as any)();
 

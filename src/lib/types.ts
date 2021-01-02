@@ -88,6 +88,14 @@ export interface UtilityInterface {
     regex?: RegExp,
     replaced?: string,
   ): string;
+  trimAndSplit(
+    str: string,
+    start: number,
+    end: number,
+    split?: string,
+    regex?: RegExp,
+    replaced?: string,
+  ): string[];
   toKebab(str: string): string;
   preorderScrub(current: ComponentInterface, label: string): void;
   print(): true;

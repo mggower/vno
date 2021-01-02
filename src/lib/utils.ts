@@ -23,6 +23,17 @@ const Utils: UtilityInterface = {
     return array.slice(start, end).join("").replace(regex, replaced);
   },
 
+  trimAndSplit(
+    str: string,
+    start: number,
+    end: number,
+    split: string = ",",
+    regex: RegExp = /\s/g,
+    replaced: string = "",
+  ) {
+    return str.slice(start, end).replace(regex, replaced).split(split);
+  },
+
   toKebab(str: string) {
     return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
   },
