@@ -294,4 +294,3 @@ ensureFile("server.ts")
   }).then(() => {
   });
 
-  console.log('DONE')
