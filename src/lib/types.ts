@@ -62,6 +62,7 @@ export interface StorageInterface {
 }
 export interface UtilityInterface {
   terminal: boolean;
+  prompt(msg: string): Promise<string>;
   indexOfRegExp(regex: RegExp, array: any[]): number;
   sliceAndTrim(
     array: any[],

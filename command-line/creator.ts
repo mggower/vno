@@ -1,12 +1,7 @@
 // deno-lint-ignore-file
-import ProgressBar from "https://deno.land/x/progress@v1.2.3/mod.ts";
-import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
-import { prompt } from "./utils.ts";
+import { _, colors, fs, ProgressBar } from "../src/lib/deps.ts";
+import Utils from "../src/lib/utils.ts";
 
-import { ensureDirSync, ensureFile } from "https://deno.land/std/fs/mod.ts";
-import utils from "../src/lib/utils.ts";
-import _ from "https://cdn.skypack.dev/lodash";
-import * as Colors from "https://deno.land/std/fmt/colors.ts";
 const userOptions = {
   title: "Your vno project",
   root: "App",
@@ -27,14 +22,14 @@ const runner: any = async function customize() {
   const msg5: string =
     "\nConfirm these results and create your project?(yes/no)";
 
-  console.log(Colors.blue("\nInitializing your vno project..."));
+  console.log(colors.blue("\nInitializing your vno project..."));
 
-  const title: string = await prompt(msg1);
-  const root: string = await prompt(msg2);
+  const title: string = await Utils.prompt(msg1);
+  const root: string = await Utils.prompt(msg2);
   /*ask user for additional comps / if user inputs them, by default, their first comp will be the first child
 in CLI demo page */
-  const addedComps: string = await prompt(msg3);
-  const port: string = await prompt(msg4);
+  const addedComps: string = await Utils.prompt(msg3);
+  const port: string = await Utils.prompt(msg4);
   console.log(
     `\nYour Options: \n \n    Title: ${title ||
       userOptions.title}, \n    Root: ${root ||
@@ -48,7 +43,7 @@ in CLI demo page */
   newAddedComps = addedComps.split(/\ +/);
   /*if user enters yes either confirm which entries are empty and need defaults and which can overwrite defaults*/
 
-  const confirm: string = await prompt(msg5);
+  const confirm: string = await Utils.prompt(msg5);
   if (confirm.toLowerCase() === "yes") {
     if (title) userOptions.title = title;
     if (root) userOptions.root = root;
@@ -67,12 +62,12 @@ in CLI demo page */
 /*First terminal entry. If 'yes' user guided through runner function prompts, 
 otherwise default file structure is made*/
 const decide = "\nWould you like to customize your vno project?(yes/no)";
-const decision: string = await prompt(decide);
+const decision: string = await Utils.prompt(decide);
 
 if (decision.toLowerCase() === "yes") {
   await runner();
 } else {
-  console.log(Colors.green("Creating your vno Project"));
+  console.log(colors.green("Creating your vno Project"));
 }
 
 //Progress bar logic
@@ -80,8 +75,8 @@ const total = 100;
 const progress = new ProgressBar({
   total,
   clear: true,
-  complete: bgGreen(" "),
-  incomplete: bgWhite(" "),
+  complete: colors.bgGreen(" "),
+  incomplete: colors.bgWhite(" "),
   display: ":completed/:total vno load :time [:bar] :percent",
 });
 let completed = 0;
@@ -245,16 +240,16 @@ name:
 <style>
 
 </style>`;
-ensureDirSync("public");
+fs.ensureDirSync("public");
 
-ensureDirSync("components");
+fs.ensureDirSync("components");
 
-ensureFile(`${userOptions.root}.vue`)
+fs.ensureFile(`${userOptions.root}.vue`)
   .then(() => {
     Deno.writeTextFileSync(`${userOptions.root}.vue`, rootComp);
   });
 
-ensureFile(`components/${userOptions.child}.vue`)
+fs.ensureFile(`components/${userOptions.child}.vue`)
   .then(() => {
     Deno.writeTextFileSync(
       `components/${userOptions.child}.vue`,
@@ -264,7 +259,7 @@ ensureFile(`components/${userOptions.child}.vue`)
 /*If there are additional comps, they are added to file tree here. All of these will have default templating*/
 if (newAddedComps[1]) {
   for (let i = 1; i < newAddedComps.length; i += 1) {
-    ensureFile(`components/${newAddedComps[i]}.vue`)
+    fs.ensureFile(`components/${newAddedComps[i]}.vue`)
       .then(() => {
         Deno.writeTextFileSync(
           `components/${newAddedComps[i]}.vue`,
@@ -277,17 +272,17 @@ if (newAddedComps[1]) {
   }
 }
 
-ensureFile("public/index.html")
+fs.ensureFile("public/index.html")
   .then(() => {
     Deno.writeTextFileSync("public/index.html", html);
   });
 
-ensureFile("deps.ts")
+fs.ensureFile("deps.ts")
   .then(() => {
     Deno.writeTextFileSync("deps.ts", deps);
   });
 
-ensureFile("server.ts")
+fs.ensureFile("server.ts")
   .then(() => {
     Deno.writeTextFileSync("server.ts", server);
   });
