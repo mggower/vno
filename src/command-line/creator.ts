@@ -4,16 +4,17 @@ import str from "./templates.ts";
 import { msgs, userOptions } from "./prompts.ts";
 import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
 
-export default async function creator() {
-  console.log(`we made it girl${Deno.cwd()}`);
+export default async function creator(repo: string) {
   let newAddedComps: string | string[] = "";
 
-  // runner function initializes prompts/stores answers
-  const runner: any = async function customize() {
+  // customize function initializes prompts/stores answers
+  async function customize() {
     console.log(colors.blue("\nInitializing your vno project..."));
 
     // project title
-    const title: string = await Utils.prompt(msgs.one);
+    let title;
+    if (repo) title = repo;
+    else title = await Utils.prompt(msgs.one);
     // label of root component
     const root: string = await Utils.prompt(msgs.two);
     // additional components: ask user for additional comps if user inputs them, by default,  their first comp will be the first child in CLI demo page
@@ -47,15 +48,15 @@ export default async function creator() {
     } else {
       // user inputs 'no' and CLI resets to beginning
       console.log("\nResetting User Options");
-      await runner();
+      await customize();
     }
-  };
-  // First terminal entry. If 'yes' user guided through runner function prompts, otherwise default file structure is made
+  }
+  // First terminal entry. If 'yes' user guided through customize function prompts, otherwise default file structure is made
   const decide = "\nWould you like to customize your vno project?(yes/no)";
   const decision: string = await Utils.prompt(decide);
 
   if (decision.toLowerCase() === "yes") {
-    await runner();
+    await customize();
   } else {
     console.log(colors.green("Creating your vno Project"));
   }
@@ -89,7 +90,7 @@ export default async function creator() {
   const server: string = str.serverTemplate(userOptions);
   const deps: string = str.depsTemplate();
   const config: string = str.vnoConfig(userOptions);
-  console.log(`userOptions: ${userOptions}`);
+
   fs.ensureDirSync("public");
 
   fs.ensureDirSync("components");
