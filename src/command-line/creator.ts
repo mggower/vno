@@ -87,16 +87,17 @@ export default async function creator() {
   const html: string = str.htmlTemplate(userOptions);
   const server: string = str.serverTemplate(userOptions);
   const deps: string = str.depsTemplate();
+  const config: string = str.vnoConfig(userOptions);
 
   fs.ensureDirSync("public");
-  
+
   fs.ensureDirSync("components");
 
   fs.ensureFile(`${userOptions.root}.vue`)
     .then(() => {
       Deno.writeTextFileSync(`${userOptions.root}.vue`, rootComp);
     });
-  
+
   fs.ensureFile(`components/${userOptions.child}.vue`)
     .then(() => {
       Deno.writeTextFileSync(
@@ -104,7 +105,7 @@ export default async function creator() {
         additionalComponent,
       );
     });
-  
+
   // If there are additional comps, they are added to file tree here. All of these will have default templating
   if (newAddedComps[1]) {
     for (let i = 1; i < newAddedComps.length; i += 1) {
@@ -134,5 +135,10 @@ export default async function creator() {
   fs.ensureFile("server.ts")
     .then(() => {
       Deno.writeTextFileSync("server.ts", server);
+    });
+
+  fs.ensureFile("vno.config.ts")
+    .then(() => {
+      Deno.writeTextFileSync("vno.config.ts", config);
     });
 }

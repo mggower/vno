@@ -127,11 +127,7 @@ const serverTemplate = (userOptions: terminalOptions) => {
      import vno from "../src/dist/mod.ts";\n
      const port: number = ${userOptions.port};\n
      const server: Application = new Application();\n
-     await vno.config({
-       root: "${userOptions.root}",
-       entry: "./",
-       cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12",
-     });\n
+
      server.use(async (ctx, next) => {
        const filePath = ctx.request.url.pathname;
        if (filePath === "/") {
@@ -170,6 +166,15 @@ const depsTemplate = () => {
   );
 };
 
+const vnoConfig = (userOptions: terminalOptions) => {
+  return (
+    `await vno.config({
+       root: "${userOptions.root}",
+       entry: "./",
+     });\n`
+  );
+};
+
 export default {
   childComponent,
   rootComponent,
@@ -177,4 +182,5 @@ export default {
   htmlTemplate,
   serverTemplate,
   depsTemplate,
+  vnoConfig,
 };
