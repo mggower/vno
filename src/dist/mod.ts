@@ -1,7 +1,7 @@
 import Initialize from "../strategies/initialize.ts";
 import Creator from "../command-line/creator.ts";
 
-import { fs, path } from "../lib/deps.ts";
+import { colors, fs, path } from "../lib/deps.ts";
 
 const read = { name: "read" } as const;
 const write = { name: "write" } as const;
@@ -13,6 +13,7 @@ const resRun = await Deno.permissions.request(run);
 
 const arg = Deno.args[0];
 const entry = Deno.args[1] || ".";
+const bundler = new (Initialize as any)();
 
 if (resRead && resRun && resWrite) {
   if ((/create/i).test(arg)) {
@@ -25,31 +26,34 @@ if (resRead && resRun && resWrite) {
     }
   }
   if ((/build/i).test(arg)) {
-    let config;
+    let configFile;
 
-    for await (const file of fs.walk(entry)) {
+    for await (const file of fs.walk(".")) {
       const currFile = path.parse(file.path);
       if (currFile.name === "vno.config") {
-        config = currFile;
+        configFile = currFile;
       }
     }
 
-    if (config) {
-      const runSubProcess = Deno.run({
-        cmd: [
-          "deno",
-          "run",
-          "--unstable",
-          "--allow-read",
-          "--allow-write",
-          "--allow-run",
-          `${config.base}`,
-        ],
-      });
-      const { code } = await runSubProcess.status();
-      Deno.exit(code);
+    if (configFile) {
+      const config = await Deno.readTextFile(
+        `${Deno.cwd()}/${configFile.base}`,
+      ).then((res) => JSON.parse(res));
+
+      await bundler.config(config);
+    } else {
+      console.warn(
+        colors.yellow(
+          ">> could not locate vno.config.ts \n" +
+            ">> run test in root directory or create vno.config.ts",
+        ),
+      );
     }
   }
+} else {
+  console.warn(
+    colors.yellow(
+      ">> Deno needs read/write/run permissions to run vno",
+    ),
+  );
 }
-
-export default new (Initialize as any)();
