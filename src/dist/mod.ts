@@ -58,3 +58,6 @@ if (resRead && resRun && resWrite) {
     ),
   );
 }
+
+
+export default bundler.config
