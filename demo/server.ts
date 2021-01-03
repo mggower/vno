@@ -3,7 +3,7 @@ import vno from "../src/dist/mod.ts";
 const port: number = 3000;
 const server: Application = new Application();
 await vno.config({
-  root: "App",
+  root: "Hey",
   entry: "./",
   cdn: "https://cdn.jsdelivr.net/npm/vue@2.6.12",
 });

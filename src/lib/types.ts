@@ -113,3 +113,11 @@ interface MetaInterface {
   viewport: string;
 }
 // #endregion
+
+// command-line/
+export interface terminalOptions {
+  title: string;
+  root: string;
+  child: string;
+  port: string;
+}
