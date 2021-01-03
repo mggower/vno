@@ -5,6 +5,7 @@ import { msgs, userOptions } from "./prompts.ts";
 import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
 
 export default async function creator() {
+  console.log(`we made it girl${Deno.cwd()}`);
   let newAddedComps: string | string[] = "";
 
   // runner function initializes prompts/stores answers
@@ -20,13 +21,13 @@ export default async function creator() {
     // preferred server port
     const port: string = await Utils.prompt(msgs.four);
 
-    console.log(
+    console.log(colors.green(
       `\nYour Options:\n\n` +
         `    Title: ${title || userOptions.title}\n` +
         `    Root: ${root || userOptions.root}\n` +
         `    Additional Component(s): ${addedComps}\n` +
         `    Port: ${port || userOptions.port}\n`,
-    );
+    ));
 
     // new added components: re-assign global newAddedComps the value of the addedComps string split by empty spaces into an array of comp names logic works for any amount of spaces
     newAddedComps = addedComps.split(/\ +/);
@@ -88,7 +89,7 @@ export default async function creator() {
   const server: string = str.serverTemplate(userOptions);
   const deps: string = str.depsTemplate();
   const config: string = str.vnoConfig(userOptions);
-
+  console.log(`userOptions: ${userOptions}`);
   fs.ensureDirSync("public");
 
   fs.ensureDirSync("components");

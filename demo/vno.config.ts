@@ -1,6 +1,5 @@
-import vno from "../src/dist/mod.ts";
-
-vno.config({
+export default {
+  entry: './',
   root: "App",
-  entry: "./",
-});
+  port: 3000,
+}

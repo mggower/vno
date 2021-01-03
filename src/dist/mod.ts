@@ -15,10 +15,27 @@ const arg = Deno.args[0];
 const entry = Deno.args[1] || ".";
 
 if (resRead && resRun && resWrite) {
-  Deno.chdir(entry);
-  
-  if ((/init/i).test(arg)) await Creator();
-  if ((/run/i).test(arg)) {
+  // Deno.chdir(entry);
+  if ((/create/i).test(arg)) {
+    const repo = Deno.args[1];
+
+    if (repo) {
+      const mkdir = Deno.run({
+        cmd: [
+          "mkdir",
+          repo,
+        ],
+      });
+      console.log("mom0");
+      var { code } = await mkdir.status();
+      Deno.chdir(`${Deno.cwd()}/${repo}`);
+      await Creator();
+      console.log("mom1");
+    }
+    console.log("mom2");
+    Deno.exit(code);
+  }
+  if ((/build/i).test(arg)) {
     let config;
 
     for await (const file of fs.walk(entry)) {
