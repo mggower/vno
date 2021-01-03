@@ -1,8 +1,8 @@
 // deno-lint-ignore-file
-import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
 import Utils from "../lib/utils.ts";
-import { msgs, userOptions } from "./prompts.ts";
 import str from "./templates.ts";
+import { msgs, userOptions } from "./prompts.ts";
+import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
 
 export default async function creator() {
   let newAddedComps: string | string[] = "";
