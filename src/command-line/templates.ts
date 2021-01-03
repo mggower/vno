@@ -124,7 +124,6 @@ const htmlTemplate = (userOptions: terminalOptions) => {
 const serverTemplate = (userOptions: terminalOptions) => {
   return (
     `import { Application, join, log, send } from "./deps.ts";\n
-     import vno from "../src/dist/mod.ts";\n
      const port: number = ${userOptions.port};\n
      const server: Application = new Application();\n
 
@@ -168,7 +167,8 @@ const depsTemplate = () => {
 
 const vnoConfig = (userOptions: terminalOptions) => {
   return (
-    `await vno.config({
+    `import vno from "../src/dist/mod.ts";\n
+     await vno.config({
        root: "${userOptions.root}",
        entry: "./",
      });\n`
