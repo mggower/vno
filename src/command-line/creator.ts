@@ -4,7 +4,7 @@ import str from "./templates.ts";
 import { msgs, userOptions } from "./prompts.ts";
 import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
 
-export default async function creator(repo: string) {
+export default async function creator(repo?: string) {
   let newAddedComps: string | string[] = "";
 
   // customize function initializes prompts/stores answers
@@ -139,8 +139,8 @@ export default async function creator(repo: string) {
       Deno.writeTextFileSync("server.ts", server);
     });
 
-  fs.ensureFile("vno.config.ts")
+  fs.ensureFile("vno.config.json")
     .then(() => {
-      Deno.writeTextFileSync("vno.config.ts", config);
+      Deno.writeTextFileSync("vno.config.json", config);
     });
 }

@@ -12,7 +12,6 @@ const resWrite = await Deno.permissions.request(write);
 const resRun = await Deno.permissions.request(run);
 
 const arg = Deno.args[0];
-const entry = Deno.args[1] || ".";
 const bundler = new (Initialize as any)();
 
 if (resRead && resRun && resWrite) {
@@ -23,6 +22,8 @@ if (resRead && resRun && resWrite) {
       await fs.ensureDir(`${Deno.cwd()}/${repo}`);
       Deno.chdir(`${Deno.cwd()}/${repo}`);
       await Creator(repo);
+    } else {
+      await Creator();
     }
   }
   if ((/build/i).test(arg)) {

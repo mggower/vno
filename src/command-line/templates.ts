@@ -167,11 +167,10 @@ const depsTemplate = () => {
 
 const vnoConfig = (userOptions: terminalOptions) => {
   return (
-    `import vno from "../src/dist/mod.ts";\n
-     await vno.config({
-       root: "${userOptions.root}",
-       entry: "./",
-     });\n`
+    `{
+      "root": "${userOptions.root}",
+      "entry": "./"
+    }`
   );
 };
 
