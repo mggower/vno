@@ -27,6 +27,16 @@ export const Queue: ComponentInterface[] = [];
 export const Storage: StorageInterface = {};
 
 const Utils: UtilityInterface = {
+  preorderScrub: memoize(),
+  terminal: true,
+
+  async prompt(msg: string = "") {
+    const buf = new Uint8Array(1024);
+    await Deno.stdout.write(new TextEncoder().encode(`${msg}: `));
+    const n = <number> await Deno.stdin.read(buf);
+    return new TextDecoder().decode(buf.subarray(0, n)).trim();
+  },
+
   indexOfRegExp(regex: RegExp, array: any[]) {
     return array.findIndex((element) => regex.test(element));
   },
@@ -51,12 +61,6 @@ const Utils: UtilityInterface = {
   ) {
     return str.slice(start, end).replace(regex, replaced).split(split);
   },
-
-  toKebab(str: string) {
-    return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
-  },
-
-  preorderScrub: memoize(),
 
   print() {
     console.log(` 

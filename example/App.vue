@@ -1,12 +1,18 @@
 <template>
   <div id="app">
     <header class="header">
-      <img class="logo" src="https://svgshare.com/i/SNz.svg" alt="logo" />
+      <img
+        class="logo"
+        src="https://svgshare.com/i/SNz.svg"
+        alt="logo"
+        v-on:click="handelClick('home')"
+      />
       <nav class="inner">
-        <button v-on:click="handelClick('green')">Mikey</button>
-        <button v-on:click="handelClick('orange')">Jordan</button>
-        <button v-on:click="handelClick('purple')">Kyle</button>
-        <button v-on:click="handelClick('red')">Andrew</button>
+        <button v-on:click="handelClick('home')">Home</button>
+        <button v-on:click="handelClick('vue')">About Vue</button>
+        <button v-on:click="handelClick('deno')">About Deno</button>
+        <button v-on:click="handelClick('travel')">Travel</button>
+        <button v-on:click="handelClick('lighthouse')">Lighthouse</button>
         <a
           class="github"
           href="https://github.com/oslabs-beta/vno"
@@ -15,55 +21,39 @@
         </a>
       </nav>
     </header>
-    <body v-if="displayedComponent === 'red'">
-      <Red />
+    <body v-if="displayedComponent === 'home'">
+      <Home />
     </body>
-    <body v-else-if="displayedComponent === 'green'">
-      <Green />
+    <body v-else-if="displayedComponent === 'lighthouse'">
+      <Lighthouse />
     </body>
-    <body v-else-if="displayedComponent === 'orange'">
-      <Orange />
+    <body v-else-if="displayedComponent === 'travel'">
+      <Travel />
     </body>
-    <body v-else-if="displayedComponent === 'purple'">
-      <Purple />
+    <body v-else-if="displayedComponent === 'vue'">
+      <VueJs />
+    </body>
+    <body v-else-if="displayedComponent === 'deno'">
+      <Deno />
     </body>
     <body v-else>
       <h1>Welcome to Your vno Project</h1>
-      <p>
-        For a guide on project customization,<br />
-        check out out GitHub repo at:
-        <a
-          href="https://github.com/oslabs-beta/vno"
-          target="_blank"
-          rel="noopener"
-          >vno documentation</a
-        >
-      </p>
-      <ul>
-        <li>
-          <a
-            href="https://github.com/jgrubb16/vnocli"
-            target="_blank"
-            rel="noopener"
-            >Open Source CLI Tool</a
-          >
-        </li>
-      </ul>
     </body>
   </div>
 </template>
 
 <script>
-import Red from './components/Red';
-import Green from './components/Green';
-import Orange from './components/Orange';
-import Purple from './components/Purple';
-import LilOrange from './components/LilOrange';
+import Travel from './components/Travel';
+import Lighthouse from './components/Lighthouse';
+import Deno from './components/Deno';
+import VueJs from './components/VueJs';
+import Home from './components/Home';
+
 export default {
   name: 'app',
   data() {
     return {
-      displayedComponent: '',
+      displayedComponent: 'home',
     };
   },
   methods: {
@@ -73,11 +63,12 @@ export default {
     },
   },
   components: {
-    Red,
-    Green,
-    Orange,
-    Purple,
-    LilOrange,
+    Home,
+    Deno,
+
+    Travel,
+    Lighthouse,
+    VueJs,
   },
 };
 </script>
@@ -118,29 +109,5 @@ button {
   text-size-adjust: auto;
   border-radius: 15px;
   margin: 10px;
-}
-#green {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-#red {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-#orange {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-#purple {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 </style>
