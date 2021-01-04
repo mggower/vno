@@ -1,6 +1,6 @@
 <template>
   <div id="travel">
-    <h1>Your Upcoming Destinations</h1>
+    <h1>An example Vue Component borrowed from Sarah Drasner</h1>
     <div class="location-contain">
       <div class="locations" v-for="location in locations" :key="location.desc">
         <destinations :location="location">

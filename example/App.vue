@@ -13,7 +13,6 @@
         <button v-on:click="handelClick('deno')">About Deno</button>
         <button v-on:click="handelClick('travel')">Travel</button>
         <button v-on:click="handelClick('lighthouse')">Lighthouse</button>
-        <button v-on:click="handelClick('music')">Music</button>
         <a
           class="github"
           href="https://github.com/oslabs-beta/vno"

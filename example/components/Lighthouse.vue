@@ -1,5 +1,6 @@
 <template>
   <div id="lighthouse">
+    <h3>Another example Vue Component borrowed from Sarah Drasner</h3>
     <img
       src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/28963/vue-post-photo.jpg"
       class="main-photo"

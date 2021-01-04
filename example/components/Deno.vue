@@ -2,7 +2,11 @@
   <div id="deno">
     <h1>Deno</h1>
     <a href="https://imgbb.com/"
-      ><img src="https://i.ibb.co/b6jR0d1/deno-logo.png" alt="deno" border="0"
+      ><img
+        id="deno-logo"
+        src="https://i.ibb.co/b6jR0d1/deno-logo.png"
+        alt="deno"
+        border="0"
     /></a>
     <p>
       Deno is a runtime for JavaScript and TypeScript that is based on the V8
