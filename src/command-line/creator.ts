@@ -45,6 +45,7 @@ export default async function creator(repo?: string) {
         userOptions.child = newAddedComps[0];
       }
       if (port) userOptions.port = port;
+      console.log(colors.green('Creating your vno Project'));
     } else {
       // user inputs 'no' and CLI resets to beginning
       console.log("\nResetting User Options");
