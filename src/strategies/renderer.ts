@@ -5,6 +5,7 @@ import {
 } from "../lib/types.ts";
 
 import _$ from "../lib/defaults.ts";
+import { Storage } from "../lib/utils.ts";
 
 function Renderer(this: RendererInterface) {
   this.html = "";
@@ -12,9 +13,9 @@ function Renderer(this: RendererInterface) {
 
 Renderer.prototype.createRenderer = function (
   obj: object,
-  route?: ComponentInterface,
+  route: ComponentInterface = Storage.root,
 ) {
-  this.html = this.htmlStringify({ ..._$.HTML, ...obj }, route && route);
+  this.html = this.htmlStringify({ ..._$.HTML, ...obj }, route);
   return this.html;
 };
 
