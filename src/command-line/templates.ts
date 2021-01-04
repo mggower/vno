@@ -4,96 +4,34 @@ import { _ } from "../lib/deps.ts";
 // template literal strings for HTML/Components/Server/Deps
 const childComponent = (childName: string) => {
   return (
-    `<template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For github documentation:<br>
-      <a href="https://github.com/oslabs-beta/vno" target="_blank" rel="noopener">&nbsp;vno documentation</a>.
-    </p>
-    <h3>Installed CLI Plugin</h3>
-    <ul>
-      <li><a href="https://github.com/oslabs-beta/vno/tree/main/command-line" target="_blank" rel="noopener">Click Here</a></li>
-      <br>
-    </ul>
-  </div>
-</template>
-      
-<script>
-  export default {
-    name: '${_.kebabCase(childName)}',
-    props: {
-      msg: String
-    },
-  }
-</script>
-<style>
-  h3 {
-    margin: 40px 0 0;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  a {
-    color: #79D0B2;
-  }
-</style>`
+    `<template>\n<div class="hello">\n<h1>{{ msg }}</h1>\n<p>\nFor github documentation:<br>
+<a href="https://github.com/oslabs-beta/vno" target="_blank" rel="noopener">&nbsp;vno documentation</a>.
+</p>\n<h3>Installed CLI Plugin</h3>\n<ul>\n<li><a href="https://github.com/oslabs-beta/vno/tree/main/command-line" target="_blank" rel="noopener">Click Here</a></li>
+<br>\n</ul>\n</div>\n\n</template>\n\n<script>\n\nexport default {\nname: '${
+      _.kebabCase(childName)
+    }',\nprops: {\nmsg: String
+},\n}\n\n</script>\n\n<style>\nh3 {\nmargin: 40px 0 0;\n}\nul {\nlist-style-type: none;\npadding: 0;\n}\nli {\ndisplay: inline-block;\n
+\nmargin: 0 10px;\n}\na {\ncolor: #79D0B2;\n}\n\n</style>`
   );
 };
 
 const rootComponent = (userOptions: terminalOptions) => {
   return (
-    `<template>
-  <div id="${userOptions.root.toLowerCase()}">
-    <a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>
-    <${userOptions.child} msg="You are building: ${userOptions.title} with vno"/>
-  </div>
-</template>
-    
-<script>
-import '${userOptions.child}' from './components/${userOptions.child}.vue';
-export default {
-    name: '${_.kebabCase(userOptions.root)}',
-    components: {
-      ${userOptions.child}
-    }
-  }
-</script>
-    
-<style>
-  #${userOptions.root.toLowerCase()} {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #79D0B2;
-    margin-top: 60px;
-  }
-</style>`
+    `<template>\n<div id="${userOptions.root.toLowerCase()}">\n<a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>\n<${userOptions.child} msg="You are building: ${userOptions.title} with vno"/>
+    \n</div>\n</template>\n\n<script>\nimport '${userOptions.child}' from './components/${userOptions.child}.vue';\n
+\nexport default {\nname: '${
+      _.kebabCase(userOptions.root)
+    }',\ncomponents: {${userOptions.child}}\n}\n
+\n</script>\n\n<style>\n\n#${userOptions.root.toLowerCase()} {
+font-family: Avenir, Helvetica, Arial, sans-serif;\n-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;\ntext-align: center;\ncolor: #79D0B2;\nmargin-top: 60px;
+}\n\n</style>`
   );
 };
 
 const genericComponent = () => {
   return (
-    `<template>
-    
-</template>
-    
-<script>
-export default {
-  name: 
-};
-    
-</script>
-    
-<style>
-    
-</style>`
+    `<template>\n\n</template>\n\n<script>\n\nexport default {\nname: };\n\n</script>\n\n<style>\n\n</style>`
   );
 };
 
