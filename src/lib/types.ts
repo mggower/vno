@@ -62,6 +62,7 @@ export interface StorageInterface {
 }
 export interface UtilityInterface {
   terminal: boolean;
+  prompt(msg: string): Promise<string>;
   indexOfRegExp(regex: RegExp, array: any[]): number;
   sliceAndTrim(
     array: any[],
@@ -80,6 +81,45 @@ export interface UtilityInterface {
   ): string[];
   preorderScrub: Function;
   print(): true;
+}
+// #endregion
+
+// #region renderer.ts
+export interface RendererInterface {
+  html: string;
+  createRenderer(): string;
+  htmlStringify(): string;
+}
+
+export interface HtmlInterface {
+  language: string;
+  title: string;
+  root: string;
+  vue: string;
+  link: any;
+  script: any;
+  meta: MetaInterface;
+  build: BuildInterface;
+}
+
+interface BuildInterface {
+  bundle: string;
+  style: string;
+}
+
+interface MetaInterface {
+  charset: string;
+  httpEquiv: string[];
+  viewport: string;
+}
+// #endregion
+
+// command-line/
+export interface terminalOptions {
+  title: string;
+  root: string;
+  child: string;
+  port: string;
 }
 // #endregion
 
