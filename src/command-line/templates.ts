@@ -6,7 +6,7 @@ const childComponent = (childName: string) => {
   return (
     `<template>\n<div class="hello">\n<h1>{{ msg }}</h1>\n<p>\nFor github documentation:<br>
 <a href="https://github.com/oslabs-beta/vno" target="_blank" rel="noopener">&nbsp;vno documentation</a>.
-</p>\n<h3>Installed CLI Plugin</h3>\n<ul>\n<li><a href="https://github.com/oslabs-beta/vno/tree/main/command-line" target="_blank" rel="noopener">Click Here</a></li>
+</p>\n<h3>Installed CLI Plugin</h3>\n<ul>\n<li><a href="https://deno.land/x/vno" target="_blank" rel="noopener">Click Here</a></li>
 <br>\n</ul>\n</div>\n\n</template>\n\n<script>\n\nexport default {\nname: '${
       _.kebabCase(childName)
     }',\nprops: {\nmsg: String
@@ -88,7 +88,7 @@ server.use(async (ctx, next) => {
  } else await next();
 });
 if (import.meta.main) {
- log.info("Server is up and running on port ${userOptions.port}");
+ console.log("Server is up and running on http://localhost:${userOptions.port}");
  await server.listen({ port });
 }
 export { server };`
