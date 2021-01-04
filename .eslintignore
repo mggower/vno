@@ -1,3 +1,0 @@
-#ignore files with vue extension and build files
-*.vue
-./src/vno-build/build.js
