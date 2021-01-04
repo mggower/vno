@@ -4,7 +4,6 @@ import { bgGreen, bgWhite } from "https://deno.land/std@0.74.0/fmt/colors.ts";
 import { prompt } from "./utils.ts";
 
 import { ensureDirSync,ensureFile } from "https://deno.land/std/fs/mod.ts";
-import utils from "../src/lib/utils.ts";
 import _ from "https://cdn.skypack.dev/lodash";
 import * as Colors from "https://deno.land/std/fmt/colors.ts"
 const userOptions = {
@@ -17,7 +16,7 @@ const userOptions = {
 let newAddedComps: string | string[] = "";
 
 //runner function initializes prompts/stores answers
-const runner: any = async function customize() {
+const runner = async function customize() {
   const msg1: string = "\nPlease enter a project title";
   const msg2: string =
     "\nWhat would you like to name your root Vue component?(recommend App)";
@@ -56,6 +55,8 @@ in CLI demo page */
         userOptions.child = newAddedComps[0]
     }
     if (port) userOptions.port = port;
+    console.log(Colors.green('Creating your vno Project'));
+
   } else {
     //user inputs 'no' and CLI resets to beginning
     console.log("\nResetting User Options");
@@ -162,7 +163,7 @@ export default {
 }
 </style>`;
 
-const html = `<!DOCTYPE html>
+const html: string = `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -229,8 +230,7 @@ export {
 } from "https://deno.land/x/oak@v6.3.1/mod.ts";
 export { config } from "https://deno.land/x/dotenv/mod.ts";
 `;
-// const appPath: string = "./";
-// const componentPath: string = "./components/";
+
 const genericComp: string = `<template>
 
 </template>
@@ -289,6 +289,5 @@ ensureFile("deps.ts")
 ensureFile("server.ts")
   .then(() => {
     Deno.writeTextFileSync("server.ts", server);
-  }).then(() => {
   });
 
