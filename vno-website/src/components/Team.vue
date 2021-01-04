@@ -1,5 +1,7 @@
 <template>
-  <div id="team"></div>
+  <div id="team">
+    <h1>Team Page</h1>
+  </div>
 </template>
 <script>
 import home from './components/Home';
