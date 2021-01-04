@@ -20,7 +20,7 @@ Compiler.prototype.build = function () {
     this.traverse(Storage.root);
     Deno.writeTextFileSync(_.BUILD_PATH, this.mount, { append: true });
 
-    // return Utils.print();
+    return Utils.print();
   } catch (error) {
     return console.error(
       `Error inside of Compiler.build:`,
