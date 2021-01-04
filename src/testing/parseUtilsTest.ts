@@ -17,8 +17,23 @@ const appTest = new (Component as any)("App", "./test-app/App.vue", true);
 fn.componentStringify(appTest);
 
 Deno.test({
-  name: "Component instance exists as string",
+  name: "Component instance string has been created",
   fn(): void {
+    assertNotEquals(appTest.instance, undefined || null);
+  },
+});
+
+Deno.test({
+  name: "Root component has created new Vue instance",
+  fn(): void {
+    assertStringIncludes(appTest.instance, "new Vue");
+  },
+});
+
+Deno.test({
+  name: "Instance contains a template",
+  fn(): void {
+    assertStringIncludes(appTest.instance, "template:");
   },
 });
 
