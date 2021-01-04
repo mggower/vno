@@ -24,9 +24,6 @@
     <body v-if="displayedComponent === 'home'">
       <Home />
     </body>
-    <body v-else-if="displayedComponent === 'music'">
-      <Music />
-    </body>
     <body v-else-if="displayedComponent === 'lighthouse'">
       <Lighthouse />
     </body>
