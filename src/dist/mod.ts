@@ -1,7 +1,7 @@
 import Initialize from "../strategies/initialize.ts";
 import Creator from "../command-line/creator.ts";
 import Utils from "../lib/utils.ts";
-import terminal from "../command-line/print.ts";
+import print from "../command-line/print.ts";
 
 import { colors, fs, path } from "../lib/deps.ts";
 
@@ -53,11 +53,19 @@ if (resRead && resRun && resWrite) {
       );
     }
   }
+  const json = await Deno.readTextFile("../command-line/cmd.json")
+    .then((res) => JSON.parse(res));
+
   if (/--help/i.test(arg)) {
-    const json = await Deno.readTextFile("../command-line/cmd.json")
-      .then((res) => JSON.parse(res));
-    Utils.print();
-    terminal(json);
+    print.ASCII();
+    print.INFO(json);
+    print.CMDS(json);
+  }
+
+  if (/--info/i.test(arg)) {
+    console.log("\n");
+    print.INFO(json);
+    console.log("\n");
   }
 } else {
   console.warn(
