@@ -3,7 +3,7 @@
      style="float: left; margin-right: 10px;" />
 Logo Design by [Mikey's Friend]
 
-## vno is the first build tool for compild and bundling [Vue](https://github.com/vuejs) components in a [Deno](https://github.com/denoland) runtime environement
+### the first build tool for compild and bundling [Vue](https://github.com/vuejs) components in a [Deno](https://github.com/denoland) runtime environment
 
 ## Why we built it
 - Vue is an approachable javascript framework with an exciting ecosystem with remarkable versatility. Deno is a runtime environment intent on improving the shortcomings of node.js. We wanted to be able to leverage the vue framework in a deno runtime environment, but could not find a tool that made this possible. So we decided to make it ourselves. 
