@@ -17,10 +17,10 @@
 - CD into the aforementioned directory
 - Copy the following code into your terminal
 ````
-deno install -A --unstable -n vno https://deno.land/x/vno@v1.0-beta.5/dist/mod.ts
+deno install --allow-read --allow-write --allow-run --allow-net --unstable -f -n vno https://deno.land/x/vno@v1.0-beta.5/dist/mod.ts
 ````
 - Copy the export path your terminal returns and paste it into your terminal
-- add a gif here?
+<iframe src="https://giphy.com/embed/LVokebNuReGJuwU13R" width="480" height="272" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/vue-deno-vno-LVokebNuReGJuwU13R">via GIPHY</a></p>
 
 ### Using the build method
 There are 2 ways to use the build method
