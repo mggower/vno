@@ -40,8 +40,8 @@ deno install --allow-read --allow-write --allow-run --allow-net --unstable -f -n
 ### Using the build method
 There are 2 ways to use the build method
 1. Install vno as above
-![Imgur](https://imgur.com/OEPBGnf)
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/U4HPZUy" data-context="false" ><a href="//imgur.com/a/U4HPZUy"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+![vno create](https://i.ibb.co/Fw5Sp7n/vno-create.gif)
+
 
 ## Parser
 
