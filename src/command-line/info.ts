@@ -1,7 +1,7 @@
 import { infoInterface } from "../lib/types.ts";
 
 const info: infoInterface = {
-  version: "v1.0-beta.6",
+  version: "v1.0-beta.7",
   description:
     "vno is deno's first native build tool for\n  compiling and bunding vue single file components",
   docs: "https://vno.land/docs",

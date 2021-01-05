@@ -5,7 +5,6 @@ export interface OptionsInterface {
   vue?: string;
   terminal?: boolean;
 }
-
 export interface InitializeInterface {
   config(options: OptionsInterface): Function;
   walk(entry: string, rootLabel: string): true;
@@ -61,7 +60,6 @@ export interface StorageInterface {
   [key: string]: ComponentInterface;
 }
 export interface UtilityInterface {
-  terminal: boolean;
   prompt(msg: string): Promise<string>;
   indexOfRegExp(regex: RegExp, array: any[]): number;
   sliceAndTrim(
@@ -80,7 +78,6 @@ export interface UtilityInterface {
     replaced?: string,
   ): string[];
   preorderScrub: Function;
-  print(): true;
 }
 // #endregion
 
@@ -90,7 +87,6 @@ export interface RendererInterface {
   createRenderer(): string;
   htmlStringify(): string;
 }
-
 export interface HtmlInterface {
   language: string;
   title: string;
@@ -101,12 +97,10 @@ export interface HtmlInterface {
   meta: MetaInterface;
   build: BuildInterface;
 }
-
 interface BuildInterface {
   bundle: string;
   style: string;
 }
-
 interface MetaInterface {
   charset: string;
   httpEquiv: string[];
@@ -114,7 +108,7 @@ interface MetaInterface {
 }
 // #endregion
 
-// command-line/
+// #region command-line
 export interface terminalOptions {
   title: string;
   root: string;
@@ -129,7 +123,6 @@ export interface RendererInterface {
   createRenderer(): string;
   htmlStringify(): string;
 }
-
 export interface HtmlInterface {
   language: string;
   title: string;
@@ -140,12 +133,10 @@ export interface HtmlInterface {
   meta: MetaInterface;
   build: BuildInterface;
 }
-
 interface BuildInterface {
   bundle: string;
   style: string;
 }
-
 interface MetaInterface {
   charset: string;
   httpEquiv: string[];
@@ -153,15 +144,13 @@ interface MetaInterface {
 }
 // #endregion
 
-// --help.ts #region
-
+// #region info.ts
 interface terminalActions {
   [key: string]: any;
   action: string;
   cmd: string[];
   about: string;
 }
-
 export interface infoInterface {
   version: string;
   description: string;
