@@ -2,6 +2,7 @@
   <div class="home">
     <img id="vnoLogo" src="/assets/vnoLogo.png" />
     <h1>A Vue / Deno Adapter</h1>
+    <br />
     <h3>
       For github documentation:<br />
 
@@ -13,19 +14,16 @@
         >&nbsp;vno documentation</a
       >.
     </h3>
-    <h3>Installed CLI Plugin</h3>
-    <ul>
-      <li>
-        <a
-          class="docTags"
-          href="https://github.com/oslabs-beta/vno/tree/main/command-line"
-          target="_blank"
-          rel="noopener"
-          >Click Here</a
-        >
-      </li>
-      <br />
-    </ul>
+    <h3 id="cliText">Installed CLI Plugin</h3>
+    <a
+      class="docTags"
+      href="https://github.com/oslabs-beta/vno/tree/main/command-line"
+      target="_blank"
+      rel="noopener"
+      >Click Here</a
+    >
+
+    <br />
   </div>
 </template>
 <script>
@@ -38,8 +36,6 @@ export default {
 };
 </script>
 <style>
-@import url('https://db.onlinewebfonts.com/c/6d253426005e3fdcd9f69455050bd7d7?family=Chalet-NewYorkNineteenSixty');
-
 #vnoLogo {
   max-width: 800px;
 }

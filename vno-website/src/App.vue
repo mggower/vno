@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <header>
-      <img src="/assets/git-logo.png" border="0" width="200" height="200" />
+      <img id="gitLogo" src="/assets/git-logo.png" />
+      <img id="denoLogo" src="/assets/deno-logo.png" />
+
       <ul>
         <a @click="handelClick('Home')"><li>Home</li></a>
         <a @click="handelClick('Team')"><li>Team</li></a>
@@ -108,5 +110,13 @@ html {
   text-align: center;
   color: #79d0b2;
   margin-top: 60px;
+}
+#denoLogo {
+  width: 3.7rem;
+  height: 3.7rem;
+}
+#gitLogo {
+  width: 3rem;
+  height: 3rem;
 }
 </style>
