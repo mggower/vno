@@ -3,7 +3,7 @@
      style="float: left; margin-right: 10px;" />
 <p align='right'> - Logo Design by <a href='https://www.behance.net/bmccabe'>Brendan McCabe</a></p>
 <h1 align="center">
-	<a href='https://www.vno.land'>vno</a>
+	<a href='https://vno.land'>vno</a>
 <h4 align='center'> The first build tool for compiling and bundling <a href='https://github.com/vuejs'>Vue</a> components in a <a href='https://github.com/denoland'>Deno</a> runtime environment</h4>
 
 <p align="center">
