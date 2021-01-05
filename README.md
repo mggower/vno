@@ -1,7 +1,7 @@
 <img src="./assets/vnologo.svg"
      alt="vno logo"
      style="float: left; margin-right: 10px;" />
-<p align='right'> - Logo Design by [Brendan McCabe](https://www.behance.net/bmccabe)</p>
+<p align='right'> - Logo Design by <a href='https://www.behance.net/bmccabe'>Brendan McCabe</a></p>
 <h1 align="center">
 	<a>vno</a>
 <h3 align='center'> The first build tool for compiling and bundling [Vue](https://github.com/vuejs) components in a [Deno](https://github.com/denoland) runtime environment</h3>
