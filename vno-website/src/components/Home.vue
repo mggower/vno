@@ -17,7 +17,7 @@
         href="https://github.com/oslabs-beta/vno"
         target="_blank"
         rel="noopener"
-        >&nbsp;Github docs</a
+        >&nbsp;Docs</a
       >
       <a
         class="docTags"
@@ -49,6 +49,16 @@ export default {
 };
 </script>
 <style>
+.logos {
+  display: flex;
+  justify-content: center;
+}
+#gitLogo {
+  margin-right: 0.2rem;
+}
+#denoLogo {
+  margin-left: 0.2rem;
+}
 #vnoLogo {
   max-width: 800px;
 }

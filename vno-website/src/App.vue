@@ -134,7 +134,7 @@ html {
   margin-top: 60px;
 }
 #denoLogo {
-  width: 3rem;
+  width: 3.1rem;
   height: 3rem;
 }
 #gitLogo {
