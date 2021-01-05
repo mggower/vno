@@ -14,7 +14,7 @@ Compiler.prototype.build = function () {
     fs.ensureDirSync(_def.VNO_PATH);
 
     if (fs.existsSync(_def.STYLE_PATH)) Deno.removeSync(_def.STYLE_PATH);
-    Deno.writeTextFileSync(_def.BUILD_PATH, this.vue);
+    Deno.writeTextFileSync(_def.BUILD_PATH, _def.IGNORE + this.vue);
 
     this.traverse(Storage.root);
     Deno.writeTextFileSync(_def.BUILD_PATH, this.mount, { append: true });

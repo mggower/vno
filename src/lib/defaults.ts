@@ -15,12 +15,11 @@ const HTML = {
   build: { bundle: "./build.js", style: "./style.css" },
 };
 
-//relative paths for global use
-
+// relative paths for global use
 const VNO_PATH = "vno-build";
 const BUILD_PATH = "vno-build/build.js";
 const STYLE_PATH = "vno-build/style.css";
-
-const IGNORE = `/* eslint-disable */\n// prettier-ignore\n`;
+// ignore linting in build
+const IGNORE = `// deno-lint-ignore-file\n`;
 
 export default { CDN, HTML, VNO_PATH, BUILD_PATH, STYLE_PATH, IGNORE };
