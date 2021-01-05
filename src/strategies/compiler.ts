@@ -1,8 +1,7 @@
 import { fs } from "../lib/deps.ts";
 import { CompilerInterface, ComponentInterface } from "../lib/types.ts";
-import Utils, { Storage } from "../lib/utils.ts";
-
-import _ from "../lib/defaults.ts";
+import { Storage } from "../lib/utils.ts";
+import _def from "../lib/defaults.ts";
 
 function Compiler(this: CompilerInterface) {
   this.vue = `import Vue from '${Storage.root.vue}';\n`;
@@ -12,15 +11,13 @@ function Compiler(this: CompilerInterface) {
 
 Compiler.prototype.build = function () {
   try {
-    fs.ensureDirSync(_.VNO_PATH);
+    fs.ensureDirSync(_def.VNO_PATH);
 
-    if (fs.existsSync(_.STYLE_PATH)) Deno.removeSync(_.STYLE_PATH);
-    Deno.writeTextFileSync(_.BUILD_PATH, _.IGNORE + this.vue);
+    if (fs.existsSync(_def.STYLE_PATH)) Deno.removeSync(_def.STYLE_PATH);
+    Deno.writeTextFileSync(_def.BUILD_PATH, _def.IGNORE + this.vue);
 
     this.traverse(Storage.root);
-    Deno.writeTextFileSync(_.BUILD_PATH, this.mount, { append: true });
-
-    if (Utils.terminal) Utils.print();
+    Deno.writeTextFileSync(_def.BUILD_PATH, this.mount, { append: true });
   } catch (error) {
     return console.error(
       `Error inside of Compiler.build:`,
@@ -35,9 +32,9 @@ Compiler.prototype.write = function w(current: ComponentInterface) {
       `${current.label} is missing its instance data`
     );
   }
-  Deno.writeTextFileSync(_.BUILD_PATH, current.instance, { append: true });
+  Deno.writeTextFileSync(_def.BUILD_PATH, current.instance, { append: true });
   if (current.style) {
-    Deno.writeTextFileSync(_.STYLE_PATH, current.style, { append: true });
+    Deno.writeTextFileSync(_def.STYLE_PATH, current.style, { append: true });
   }
 };
 

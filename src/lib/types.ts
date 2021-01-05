@@ -152,3 +152,22 @@ interface MetaInterface {
   viewport: string;
 }
 // #endregion
+
+// --help.ts #region
+
+interface terminalActions {
+  [key: string]: any;
+  action: string;
+  cmd: string[];
+  about: string;
+}
+
+export interface infoInterface {
+  version: string;
+  description: string;
+  docs: string;
+  module: string;
+  commands: terminalActions[];
+  options: terminalActions[];
+}
+// #endregion
