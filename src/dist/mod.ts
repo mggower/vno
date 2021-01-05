@@ -1,5 +1,6 @@
 import Initialize from "../strategies/initialize.ts";
 import Creator from "../command-line/creator.ts";
+import Utils from "../lib/utils.ts";
 
 import { colors, fs, path } from "../lib/deps.ts";
 
@@ -51,6 +52,39 @@ if (resRead && resRun && resWrite) {
       );
     }
   }
+  if (/--help/i.test(arg)) {
+    const json = await Deno.readTextFile("../command-line/cmd.json")
+      .then((res) => JSON.parse(res));
+    Utils.print();
+    console.log(
+      `  ${colors.yellow(colors.italic("version:"))} ${json.version}\n\n\n  ${
+        colors.green(json.description)
+      }`,
+    );
+    console.log(
+      `\n\n  ${colors.yellow(colors.italic("docs:"))} ${json.docs}\n  ${
+        colors.yellow(colors.italic("module:"))
+      }: ${json.module}`,
+    );
+    console.log(
+      `\n  ${colors.yellow(colors.italic("commands:"))}\n\n   ${
+        colors.green(colors.italic(" create: "))
+      }\n\n      ${colors.yellow(">>")}  ${
+        json.commands.create.cmd[0]
+      }\n\n            ${colors.italic("--or--")}\n\n      ${
+        colors.yellow(">>")
+      }  ${json.commands.create.cmd[1]}\n\n      ${json.commands.create.about}`,
+    );
+    console.log(
+      `\n\n    ${colors.green(colors.italic(" build: "))}\n\n      ${
+        colors.yellow(">>")
+      }  ${json.commands.build.cmd[0]}\n\n            ${
+        colors.italic("--or--")
+      }\n\n      ${colors.yellow(">>")}  ${
+        json.commands.build.cmd[1]
+      }\n\n      ${json.commands.build.about}`,
+    );
+  }
 } else {
   console.warn(
     colors.yellow(
@@ -59,5 +93,4 @@ if (resRead && resRun && resWrite) {
   );
 }
 
-
-export default bundler.config
+export default bundler;
