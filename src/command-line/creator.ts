@@ -124,7 +124,6 @@ export default async function creator(repo?: string) {
         });
     }
   }
-  console.log("creator");
   fs.ensureFile("public/index.html")
     .then(() => {
       Deno.writeTextFileSync("public/index.html", html);

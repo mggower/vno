@@ -1,78 +1,87 @@
 import Initialize from "../strategies/initialize.ts";
-import Creator from "../command-line/creator.ts";
-import Utils from "../lib/utils.ts";
-import print from "../command-line/print.ts";
-import str from "../command-line/templates.ts";
+import { creator, print, str } from "../command-line/exports.ts";
 import { colors, fs, oak, path } from "../lib/deps.ts";
+
 const { Application, send } = oak;
 
 const read = { name: "read" } as const;
 const write = { name: "write" } as const;
 const run = { name: "run" } as const;
+const net = { name: "net" } as const;
 
 const resRead = await Deno.permissions.request(read);
 const resWrite = await Deno.permissions.request(write);
 const resRun = await Deno.permissions.request(run);
+const resNet = await Deno.permissions.request(net);
 
-const arg = Deno.args[0];
 const bundler = new (Initialize as any)();
+const { args } = Deno;
 
-if (resRead && resRun && resWrite) {
-  if ((/create/i).test(arg)) {
+if (resRead && resRun && resWrite && resNet) {
+  if ((/create/i).test(args[0])) {
     const repo = Deno.args[1];
 
     if (repo) {
       const dir = `${Deno.cwd()}/${repo}`;
       await fs.ensureDir(dir);
-      console.log(`NEW DIR: -> ${dir}`);
       Deno.chdir(dir);
-      await Creator(repo);
-    } else {
-      await Creator();
     }
+
+    await creator(repo && repo);
   }
-  if ((/build/i).test(arg) || /run/i.test(arg)) {
+
+  if ((/build/i).test(args[0]) || /run/i.test(args[0])) {
     let configFile;
 
     for await (const file of fs.walk(".")) {
       const currFile = path.parse(file.path);
+
       if (currFile.name === "vno.config") {
         configFile = currFile;
       }
     }
 
     if (configFile) {
-      const json = await Deno.readTextFile(
-        `${Deno.cwd()}/${configFile.base}`,
-      ).then((res) => JSON.parse(res));
+      const configPath = `${Deno.cwd()}/${configFile.base}`;
 
-      const config = { entry: json.entry, root: json.root };
+      const json = await Deno.readTextFile(configPath)
+        .then((res) => JSON.parse(res));
+
+      const { entry, root } = json;
       const { options } = json;
-      await bundler.config(config);
 
-      if (/run/i.test(arg)) {
-        const port = 3000;
+      await bundler.config({ entry, root });
+
+      if (/run/i.test(args[0]) && /dev/i.test(args[1])) {
+        const port = Number(options.port) || 3000;
         const hostname = "0.0.0.0";
 
         const server = new Application();
 
-        server.use(async (ctx, next) => {
-          const filePath = ctx.request.url.pathname;
-          if (filePath === "/") {
-            ctx.response.body = str.htmlTemplate(options);
-          } else if (filePath === "/build.js") {
-            ctx.response.type = "application/javascript";
-            await send(ctx, filePath, {
-              root: path.join(Deno.cwd(), "vno-build"),
+        server.use(async (context, next) => {
+          const { pathname } = context.request.url;
+
+          const buildpath = `${Deno.cwd()}/vno-build`;
+
+          if (pathname === "/") {
+            context.response.body = str.htmlTemplate(options);
+          } else if (pathname === "/build.js") {
+            context.response.type = "application/javascript";
+
+            await send(context, pathname, {
+              root: buildpath,
               index: "build.js",
             });
-          } else if (filePath === "/style.css") {
-            ctx.response.type = "text/css";
-            await send(ctx, filePath, {
-              root: path.join(Deno.cwd(), "vno-build"),
+          } else if (pathname === "/style.css") {
+            context.response.type = "text/css";
+
+            await send(context, pathname, {
+              root: buildpath,
               index: "style.css",
             });
-          } else await next();
+          } else {
+            await next();
+          }
         });
 
         if (import.meta.main) {
@@ -88,20 +97,15 @@ if (resRead && resRun && resWrite) {
         ),
       );
     }
-  }
-  const json = await Deno.readTextFile("../command-line/cmd.json")
-    .then((res) => JSON.parse(res));
+  } else if ((/--help/i.test(args[0])) || (/--info/i.test(args[0]))) {
+    const json = await Deno.readTextFile("../command-line/cmd.json")
+      .then((res) => JSON.parse(res));
 
-  if (/--help/i.test(arg)) {
     print.ASCII();
     print.INFO(json);
-    print.CMDS(json);
-  }
 
-  if (/--info/i.test(arg)) {
-    console.log("\n");
-    print.INFO(json);
-    console.log("\n");
+    if (/--help/i.test(args[0])) print.CMDS(json);
+    if (/--info/i.test(args[0])) console.log("\n");
   }
 } else {
   console.warn(
@@ -112,35 +116,3 @@ if (resRead && resRun && resWrite) {
 }
 
 export default new (Initialize as any)();
-
-/**
- * 
- * console.log(
-  `  ${colors.yellow(colors.italic("version:"))} ${json.version}\n\n\n  ${
-    colors.green(json.description)
-  }`,
-);
-console.log(
-  `\n\n  ${colors.yellow(colors.italic("docs:"))} ${json.docs}\n  ${
-    colors.yellow(colors.italic("module:"))
-  }: ${json.module}`,
-);
-console.log(
-  `\n  ${colors.yellow(colors.italic("commands:"))}\n\n   ${
-    colors.green(colors.italic(" create: "))
-  }\n\n      ${colors.yellow(">>")}  ${
-    json.commands.create.cmd[0]
-  }\n\n            ${colors.italic("--or--")}\n\n      ${
-    colors.yellow(">>")
-  }  ${json.commands.create.cmd[1]}\n\n      ${json.commands.create.about}`,
-);
-console.log(
-  `\n\n    ${colors.green(colors.italic(" build: "))}\n\n      ${
-    colors.yellow(">>")
-  }  ${json.commands.build.cmd[0]}\n\n            ${
-    colors.italic("--or--")
-  }\n\n      ${colors.yellow(">>")}  ${
-    json.commands.build.cmd[1]
-  }\n\n      ${json.commands.build.about}`,
-);
- */
