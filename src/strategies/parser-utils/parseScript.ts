@@ -4,11 +4,13 @@ import { _ } from "../../lib/deps.ts";
 
 import SiblingList from "../sibling.ts";
 
+// parseScript is responsible for parsing the data inside a files <script> tag
 export default function parseScript(current: ComponentInterface) {
   try {
     if (current.split) {
       const { split } = current;
 
+      // isolate the content inside of <script>
       const open: number = split.indexOf("<script>");
       const close: number = split.indexOf("</script>");
 
@@ -20,26 +22,31 @@ export default function parseScript(current: ComponentInterface) {
 
       const script = split.slice(open + 1, close);
 
+      // identify if a name property is provided
       const nameIndex = Utils.indexOfRegExp(/(name)/, script);
-
+      // if no name property, save the label in kebab-case as the name
       if (nameIndex < 0) {
         current.name = _.kebabCase(current.label);
       } else {
         current.name = script[nameIndex].split(/[`'"]/)[1];
       }
-
+      // isolate the data inside of an export statement
       const exportStart = Utils.indexOfRegExp(/^(export)/, script);
       const exportEnd = script.lastIndexOf("}");
-
+      // returns a stringifed and trimmed version of our components script
       current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
+      // locate if this component has any children
       const componentsStart = Utils.indexOfRegExp(/(components:)/, script);
       const children = script.slice(componentsStart) || false;
 
+      // if a components property is identified
       if (children) {
         const componentsEnd = children.findIndex((el) => el.includes("}")) + 1;
+        // componentsStr is stringified and trimmed components property
         const componentsStr = Utils.sliceAndTrim(children, 0, componentsEnd);
 
+        // iter becomes an string[] of any child component's label
         const iter: string[] = _.compact(
           Utils.trimAndSplit(
             componentsStr,
@@ -47,17 +54,21 @@ export default function parseScript(current: ComponentInterface) {
             componentsStr.indexOf("}"),
           ),
         );
-
+        // childComponents looks in Storage to retrieve an array of all component objects 
         const childComponents = iter.map((child: string) => Storage[child]);
-
+        // instantiate a new SiblingList on the current components child property
         current.child = new (SiblingList as any)();
 
         while (childComponents.length) {
+          // iterate through childComponents
           const component = childComponents.pop();
 
           if (component) {
+            // add component to the Queue if it has not been parsed
             if (!component.isParsed) Queue.push(component);
+            // iterate through the tree to secure the component dependency tree
             Utils.preorderScrub(component.label, current);
+            // attach the component as a dependency to its parent
             current.child?.add(component);
           }
         }
