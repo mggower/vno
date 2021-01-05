@@ -51,8 +51,16 @@ export default {
   transition: transform 0.8s;
   transform-style: preserve-3d;
 }
-.outerFlip:hover .innerFlip {
+.hoverImg:hover .flip-box-inner {
   transform: rotateY(180deg);
+}
+.flipFront,
+.flipBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
 }
 
 @keyframes mymove {
