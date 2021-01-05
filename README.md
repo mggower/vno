@@ -40,7 +40,7 @@ deno install --allow-read --allow-write --allow-run --allow-net --unstable -f -n
 ### Using the build method
 There are 2 ways to use the build method
 1. Install vno as above
-![vno create](https://media.giphy.com/media/RDcMUKTkqvtFAR4uTB/giphy.gif)
+![vno create](https://imgur.com/OEPBGnf)
 
 ## Parser
 
