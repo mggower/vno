@@ -1,4 +1,4 @@
-<img src="https://svgshare.com/i/SNz.svg"
+<img src=".assets/vnologo.svg"
      alt="vno logo"
      style="float: left; margin-right: 10px;" />
 
