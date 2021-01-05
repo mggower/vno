@@ -1,14 +1,23 @@
 import { Application, join, log, send } from "./deps.ts";
-import vno from "../src/dist/mod.ts";
 const port: number = 8080;
 const server: Application = new Application();
-await vno.config({
-  root: "App",
-  entry: "./",
+
+server.use((ctx, next) => {
+  console.log(ctx.request.url);
+  return next();
 });
+
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
-  if (filePath === "/") {
+  if (filePath.slice(0, 7) === "/assets") {
+    console.log("We got in");
+    console.log(filePath.slice(8));
+    console.log(join(Deno.cwd(), "src/assets"));
+    await send(ctx, ctx.request.url.pathname, {
+      root: join(Deno.cwd(), "src"),
+      // index: filePath.slice(8),
+    });
+  } else if (filePath === "/") {
     await send(ctx, ctx.request.url.pathname, {
       root: join(Deno.cwd(), "public"),
       index: "index.html",
@@ -31,4 +40,5 @@ if (import.meta.main) {
   log.info("Server is up and running on port 8080");
   await server.listen({ port });
 }
+
 export { server };

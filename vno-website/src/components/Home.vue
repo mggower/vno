@@ -1,20 +1,23 @@
 <template>
   <div class="home">
-    <h1>{{ msg }}</h1>
-    <p>
+    <img id="vnoLogo" src="/assets/vnoLogo.png" />
+    <h1>A Vue / Deno Adapter</h1>
+    <h3>
       For github documentation:<br />
 
       <a
+        class="docTags"
         href="https://github.com/oslabs-beta/vno"
         target="_blank"
         rel="noopener"
         >&nbsp;vno documentation</a
       >.
-    </p>
+    </h3>
     <h3>Installed CLI Plugin</h3>
     <ul>
       <li>
         <a
+          class="docTags"
           href="https://github.com/oslabs-beta/vno/tree/main/command-line"
           target="_blank"
           rel="noopener"
@@ -28,10 +31,17 @@
 <script>
 export default {
   name: 'Home',
+
   props: {
     msg: String,
   },
 };
 </script>
 <style>
+#vnoLogo {
+  max-width: 800px;
+}
+.docTags {
+  color: white;
+}
 </style>

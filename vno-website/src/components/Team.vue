@@ -1,13 +1,13 @@
 <template>
   <div id="team">
-    <h1>Team Page</h1>
+    <h2>{{ name }}</h2>
+    <h2>{{ email }}</h2>
+    <img :src="picture" alt="image" border="0" width="450" height="450" />
   </div>
 </template>
 <script>
-import home from './components/Home';
-import navigation from './components/Navigation';
-
 export default {
+  props: ['name', 'email', 'github', 'linkdIn', 'about', 'picture'],
   name: 'Team',
 };
 </script>
