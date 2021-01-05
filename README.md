@@ -3,8 +3,8 @@
      style="float: left; margin-right: 10px;" />
 <p align='right'> - Logo Design by <a href='https://www.behance.net/bmccabe'>Brendan McCabe</a></p>
 <h1 align="center">
-	<a>vno</a>
-<h3 align='center'> The first build tool for compiling and bundling <a href='https://github.com/vuejs'>Vue</a> components in a <a href='https://github.com/denoland'>Deno</a> runtime environment</h3>
+	<a href='https://www.vno.land'>vno</a>
+<h4 align='center'> The first build tool for compiling and bundling <a href='https://github.com/vuejs'>Vue</a> components in a <a href='https://github.com/denoland'>Deno</a> runtime environment</h4>
 
 <p align="center">
   <img alt="license" src="https://img.shields.io/github/license/oslabs-beta/vno?color=%2357d3af">
@@ -13,7 +13,14 @@
   <img alt="Repo stars" src="https://img.shields.io/github/stars/oslabs-beta/vno?logoColor=%2334495e&style=social">  
 </p>
 
-## Why we built it
+## Features
+- Parser
+- Compiler
+- Bundler
+- Adapter
+- Server Side Renderer (coming soon)
+
+## Overview
 - Vue is an approachable javascript framework with an exciting ecosystem with remarkable versatility. Deno is a runtime environment intent on improving the shortcomings of node.js. We wanted to be able to leverage the vue framework in a deno runtime environment, but could not find a tool that made this possible. So we decided to make it ourselves. 
 
 ## How to use vno
