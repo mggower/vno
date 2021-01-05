@@ -2,20 +2,11 @@ import { Application, join, log, send } from "./deps.ts";
 const port: number = 8080;
 const server: Application = new Application();
 
-server.use((ctx, next) => {
-  console.log(ctx.request.url);
-  return next();
-});
-
 server.use(async (ctx, next) => {
   const filePath = ctx.request.url.pathname;
   if (filePath.slice(0, 7) === "/assets") {
-    console.log("We got in");
-    console.log(filePath.slice(8));
-    console.log(join(Deno.cwd(), "src/assets"));
     await send(ctx, ctx.request.url.pathname, {
       root: join(Deno.cwd(), "src"),
-      // index: filePath.slice(8),
     });
   } else if (filePath === "/") {
     await send(ctx, ctx.request.url.pathname, {

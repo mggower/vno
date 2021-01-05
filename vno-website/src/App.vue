@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <ul>
+      <ul class="nav">
         <a @click="handelClick('Home')"><li>Home</li></a>
         <a @click="handelClick('Team')"><li>Team</li></a>
         <a @click="handelClick('Demo')"><li>Demo</li></a>
@@ -51,7 +51,7 @@ export default {
           picture: '/assets/Mikey.jpg',
           about: 'N/A',
           github: 'https://github.com/mggower',
-          linkdIn: 'N/A',
+          linkdIn: 'https://www.linkedin.com/in/mikeygower/',
         },
         {
           name: 'Jordan Grubb',
@@ -100,7 +100,32 @@ export default {
 html {
   background-color: #203a42;
 }
+.nav {
+  list-style-type: none;
+  display: flex;
+  color: white;
+  justify-content: space-around;
+  margin-bottom: 5.5rem;
+}
+.nav li {
+  color: white;
+  cursor: pointer;
+}
+.nav a {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: Chalet-NewYorkNineteenSixty, Avenir, Helvetica, Arial, sans-serif;
+}
+.nav a:active {
+  text-decoration: none;
+}
+.nav li:hover {
+  color: #57d3af;
+  text-decoration: none;
+}
 #app {
+  display: flex;
+  flex-direction: column;
   font-family: Chalet-NewYorkNineteenSixty, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -109,8 +134,8 @@ html {
   margin-top: 60px;
 }
 #denoLogo {
-  width: 3.7rem;
-  height: 3.7rem;
+  width: 3rem;
+  height: 3rem;
 }
 #gitLogo {
   width: 3rem;
