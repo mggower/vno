@@ -18,8 +18,9 @@
       ],
       "about": "The build argument will read your vno.config.json\n      and run the bundler to create a vno-build/ package\n\n"
     },
-    "options": {
-      "help": ["--help", "prints help information"]
+    "--help": {
+      "cmd": ["--help", "deno run --allow-run --allow-write --allow-read --unstable\n          https://deno.land/x/vno/dist/mod.ts --help"],
+      "about": "prints help information"
     }
   }
 }
