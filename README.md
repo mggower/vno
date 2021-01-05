@@ -3,7 +3,7 @@
      style="float: left; margin-right: 10px;" />
 -Logo Design by Brendan McCabe
 
-## the first build tool for compiling and bundling <a href="https://github.com/vuejs" target="_blank">Vue</a> components in a <a href="https://github.com/denoland" target="_blank">Deno</a> runtime environment
+## The first build tool for compiling and bundling [Vue](https://github.com/vuejs) components in a [Deno](https://github.com/denoland) runtime environment
 
 ## Why we built it
 - Vue is an approachable javascript framework with an exciting ecosystem with remarkable versatility. Deno is a runtime environment intent on improving the shortcomings of node.js. We wanted to be able to leverage the vue framework in a deno runtime environment, but could not find a tool that made this possible. So we decided to make it ourselves. 
@@ -12,7 +12,7 @@
 - You can use the vno Command Line Interface to quickly create a new vue project in a deno runtime
 - OR you can use the vno build method to compile an existing vue file structure into a deno-legible .js file 
 
-#### Create a new project with vno CLI
+### Create a new project with vno CLI
 - Create a directory for your project
 - CD into the aforementioned directory
 - Copy the following code into your terminal
@@ -21,6 +21,10 @@ deno install -A --unstable -n vno https://deno.land/x/vno@v1.0-beta.5/dist/mod.t
 ````
 - Copy the export path your terminal returns and paste it into your terminal
 - add a gif here?
+
+### Using the build method
+There are 2 ways to use the build method
+1. Install vno as above
 
 ## Parser
 
