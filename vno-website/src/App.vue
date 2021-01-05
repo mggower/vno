@@ -1,9 +1,6 @@
 <template>
   <div id="app">
     <header>
-      <img id="gitLogo" src="/assets/git-logo.png" />
-      <img id="denoLogo" src="/assets/deno-logo.png" />
-
       <ul>
         <a @click="handelClick('Home')"><li>Home</li></a>
         <a @click="handelClick('Team')"><li>Team</li></a>
