@@ -9,10 +9,11 @@
       </ul>
     </header>
 
-    <body v-if="displayedComponent === 'Home'">
+    <div v-if="displayedComponent === 'Home'">
       <Home />
-    </body>
-    <body v-else-if="displayedComponent === 'Team'">
+    </div>
+    <div v-else-if="displayedComponent === 'Team'">
+      <h1 id="meetTeam">Meet The Team</h1>
       <Team
         v-for="person in team"
         :key="person.id"
@@ -23,13 +24,13 @@
         :github="person.github"
         :linkdIn="person.linkdIn"
       />
-    </body>
-    <body v-else-if="displayedComponent === 'Docs'">
+    </div>
+    <div v-else-if="displayedComponent === 'Docs'">
       <Docs />
-    </body>
-    <body v-else-if="displayedComponent === 'Demo'">
+    </div>
+    <div v-else-if="displayedComponent === 'Demo'">
       <Demo />
-    </body>
+    </div>
   </div>
 </template>
 
@@ -46,10 +47,10 @@ export default {
       displayedComponent: 'Home',
       team: [
         {
-          name: 'Michael Gower',
+          name: 'Mikey Gower',
           email: 'gowermikey@gmail.com',
           picture: '/assets/Mikey.jpg',
-          about: 'N/A',
+          about: 'Mikey loves wine. He also loves to party with said wine.',
           github: 'https://github.com/mggower',
           linkdIn: 'https://www.linkedin.com/in/mikeygower/',
         },
@@ -57,7 +58,7 @@ export default {
           name: 'Jordan Grubb',
           email: 'ImJordanGrubb@gmail.com',
           picture: '/assets/Jordan.jpg',
-          about: 'N/A',
+          about: 'Her drag name is Miss Diagnosed. She loves whiskey',
           github: 'https://github.com/jgrubb16',
           linkdIn: 'https://www.linkedin.com/in/j-grubb',
         },
@@ -65,7 +66,7 @@ export default {
           name: 'Kyle Jurassic',
           email: 'kjuresich@gmail.com',
           picture: '/assets/Kyle.jpg',
-          about: 'N/A',
+          about: 'He made our ReadMe, and he can read you for filth',
           github: 'http://github.com/kjurassic',
           linkdIn: 'http://linkedin.com/in/kyle-juresich/',
         },
@@ -73,7 +74,8 @@ export default {
           name: 'Andrew Rehrig',
           email: 'arehrig@gmail.com',
           picture: '/assets/Andrew.jpg',
-          about: 'N/A',
+          about:
+            "She's beauty. She's grace. She loves a coding test. She can win any sewing challenge",
           github: 'https://github.com/andrew-rehrig',
           linkdIn: 'https://www.linkedin.com/in/andrew-rehrig/',
         },
@@ -97,8 +99,17 @@ export default {
 
 <style>
 @import url('https://db.onlinewebfonts.com/c/6d253426005e3fdcd9f69455050bd7d7?family=Chalet-NewYorkNineteenSixty');
+body {
+  height: fit-content;
+}
 html {
   background-color: #203a42;
+}
+#meetTeam {
+  font-size: 6rem;
+}
+div {
+  height: 100%;
 }
 .nav {
   list-style-type: none;
@@ -133,6 +144,7 @@ html {
   color: #79d0b2;
   margin-top: 60px;
 }
+
 #denoLogo {
   width: 3.1rem;
   height: 3rem;
