@@ -1,5 +1,5 @@
 import { colors } from "../lib/deps.ts";
-import { infoJSON } from "../lib/types.ts";
+import { infoInterface } from "../lib/types.ts";
 
 const logo = (` 
   __   ___ __   ___  
@@ -29,7 +29,7 @@ function WARN(msg: string = "") {
   console.warn(`\n${colors.yellow(msg)}\n`);
 }
 // prints module specific information
-function INFO(doc: infoJSON) {
+function INFO(doc: infoInterface) {
   // version
   console.log(keyY("version", doc.version));
   // description
@@ -46,23 +46,26 @@ function keyG(key: string, val?: string) {
   return `    ${colors.green(colors.italic(key))}:  ${val || ""}`;
 }
 
-function CMDS(doc: infoJSON) {
+function CMDS(doc: infoInterface) {
   // commands
   console.log(`\n${keyY("commands")}`);
-  Object.keys(doc.commands).forEach((action: string) => {
-    const { cmd, about } = doc.commands[action];
+  doc.commands.forEach((obj) => {
+    const { action, cmd, about } = obj;
     console.log(`\n${keyG(action)}`);
-    console.log(`      ${colors.yellow(">>")}  ${cmd[0]}`);
-    console.log(`\n      ${colors.yellow(">>")}  ${cmd[1]}`);
+    cmd.forEach((el) => {
+      console.log(`      ${colors.yellow(">>")}  ${el}`);
+    });
     console.log(`\n      ${about}`);
   });
 }
 
-function OPTIONS(doc: infoJSON) {
+function OPTIONS(doc: infoInterface) {
   console.log(`\n${keyY("options")}`);
-  Object.keys(doc.options).forEach((action: string) => {
-    const { about } = doc.options[action];
-    console.log(`\n${keyG(action)}`);
+  doc.options.forEach((obj) => {
+    const { cmd, about } = obj;
+    cmd.forEach((el) => {
+      console.log(`\n${keyG(el)}`);
+    });
     console.log(`      ${colors.yellow(">>")}  ${about}`);
   });
   console.log(`\n`);

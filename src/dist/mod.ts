@@ -1,6 +1,5 @@
 import Initialize from "../strategies/initialize.ts";
-
-import { creator, print, str } from "../command-line/_exp.ts";
+import { creator, info, print, str } from "../command-line/_exp.ts";
 import { fs, oak, path } from "../lib/deps.ts";
 
 // ensure permissions
@@ -110,15 +109,12 @@ if (resRead && resRun && resWrite && resNet) {
   } else {
     // --flags to help users on the command-line
     if ((/--help/i.test(args[0])) || (/--info/i.test(args[0]))) {
-      const json = await Deno.readTextFile("../command-line/_info.json")
-        .then((res) => JSON.parse(res));
-
       print.ASCII();
-      print.INFO(json);
+      print.INFO(info);
       // vno --help responds with info on all commands
       if (/--help/i.test(args[0])) {
-        print.CMDS(json);
-        print.OPTIONS(json);
+        print.CMDS(info);
+        print.OPTIONS(info);
       } // vno --info responds with module specific information
       if (/--info/i.test(args[0])) console.log("\n");
     }
