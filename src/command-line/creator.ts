@@ -124,19 +124,10 @@ export default async function creator(repo?: string) {
         });
     }
   }
+
   fs.ensureFile("public/index.html")
     .then(() => {
       Deno.writeTextFileSync("public/index.html", html);
-    });
-
-  fs.ensureFile("deps.ts")
-    .then(() => {
-      Deno.writeTextFileSync("deps.ts", deps);
-    });
-
-  fs.ensureFile("server.ts")
-    .then(() => {
-      Deno.writeTextFileSync("server.ts", server);
     });
 
   fs.ensureFile("vno.config.json")
