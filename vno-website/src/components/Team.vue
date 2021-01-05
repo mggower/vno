@@ -112,7 +112,7 @@ h2 {
 }
 .team {
   display: flex;
-  flex: 0 50%;
+  flex: 1 50%;
   height: 100vh;
   flex-direction: row;
   justify-content: center;
