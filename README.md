@@ -1,7 +1,8 @@
 <img src="./assets/vnologo.svg"
      alt="vno logo"
      style="float: left; margin-right: 10px;" />
-<div style="text-align: justify"> Logo Design by [Mikey's Friend] </div>
+{: style="text-align: right" }
+Logo Design by [Mikey's Friend]
 
 ## vno is the first build tool for compild and bundling [Vue](https://github.com/vuejs) components in a [Deno](https://github.com/denoland) runtime environement
 
