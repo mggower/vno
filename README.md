@@ -20,7 +20,7 @@
 deno install --allow-read --allow-write --allow-run --allow-net --unstable -f -n vno https://deno.land/x/vno@v1.0-beta.5/dist/mod.ts
 ````
 - Copy the export path your terminal returns and paste it into your terminal
-![install gif](https://gph.is/g/EGKAp6O)
+![install gif](https://media.giphy.com/media/LVokebNuReGJuwU13R/giphy.gif)
 
 ### Using the build method
 There are 2 ways to use the build method
