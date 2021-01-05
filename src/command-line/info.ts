@@ -1,6 +1,6 @@
-import { infoJSON } from "../lib/types.ts";
+import { infoInterface } from "../lib/types.ts";
 
-const info: infoJSON = {
+const info: infoInterface = {
   version: "v1.0-beta.6",
   description:
     "vno is deno's first native build tool for\n  compiling and bunding vue single file components",

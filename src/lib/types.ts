@@ -162,7 +162,7 @@ interface terminalActions {
   about: string;
 }
 
-export interface infoJSON {
+export interface infoInterface {
   version: string;
   description: string;
   docs: string;
