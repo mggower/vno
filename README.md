@@ -4,7 +4,7 @@
 <p align='right'> - Logo Design by <a href='https://www.behance.net/bmccabe'>Brendan McCabe</a></p>
 <h1 align="center">
 	<a>vno</a>
-<h3 align='center'> The first build tool for compiling and bundling [Vue](https://github.com/vuejs) components in a [Deno](https://github.com/denoland) runtime environment</h3>
+<h3 align='center'> The first build tool for compiling and bundling <a href='https://github.com/vuejs'>Vue</a> components in a <a href='https://github.com/denoland'>Deno</a> runtime environment</h3>
 
 <p align="center">
   <img alt="license" src="https://img.shields.io/github/license/oslabs-beta/vno?color=%2357d3af">
