@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <img src="/assets/git-logo.png" />
+      <img src="/assets/git-logo.png" border="0" width="200" height="200" />
       <ul>
         <a @click="handelClick('Home')"><li>Home</li></a>
         <a @click="handelClick('Team')"><li>Team</li></a>
@@ -49,9 +49,9 @@ export default {
         {
           name: 'Michael Gower',
           email: 'gowermikey@gmail.com',
-          picture: 'N/A',
+          picture: '/assets/Mikey.jpg',
           about: 'N/A',
-          github: 'N/A',
+          github: 'https://github.com/mggower',
           linkdIn: 'N/A',
         },
         {
@@ -59,24 +59,24 @@ export default {
           email: 'ImJordanGrubb@gmail.com',
           picture: '/assets/Jordan.jpg',
           about: 'N/A',
-          github: 'N/A',
-          linkdIn: 'N/A',
+          github: 'https://github.com/jgrubb16',
+          linkdIn: 'https://www.linkedin.com/in/j-grubb',
         },
         {
           name: 'Kyle Jurassic',
           email: 'kjuresich@gmail.com',
-          picture: 'N/A',
+          picture: '/assets/Kyle.jpg',
           about: 'N/A',
-          github: 'N/A',
-          linkdIn: 'N/A',
+          github: 'http://github.com/kjurassic',
+          linkdIn: 'http://linkedin.com/in/kyle-juresich/',
         },
         {
           name: 'Andrew Rehrig',
           email: 'arehrig@gmail.com',
-          picture: 'N/A',
+          picture: '/assets/Andrew.jpg',
           about: 'N/A',
-          github: 'N/A',
-          linkdIn: 'N/A',
+          github: 'https://github.com/andrew-rehrig',
+          linkdIn: 'https://www.linkedin.com/in/andrew-rehrig/',
         },
       ],
     };
@@ -97,11 +97,12 @@ export default {
 </script>
 
 <style>
+@import url('https://db.onlinewebfonts.com/c/6d253426005e3fdcd9f69455050bd7d7?family=Chalet-NewYorkNineteenSixty');
 html {
   background-color: #203a42;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Chalet-NewYorkNineteenSixty, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
