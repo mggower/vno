@@ -1,5 +1,5 @@
 import { colors } from "../lib/deps.ts";
-import { infoJSON } from "../lib/types.ts";
+import { infoInterface } from "../lib/types.ts";
 
 const logo = (` 
   __   ___ __   ___  
@@ -29,7 +29,7 @@ function WARN(msg: string = "") {
   console.warn(`\n${colors.yellow(msg)}\n`);
 }
 // prints module specific information
-function INFO(doc: infoJSON) {
+function INFO(doc: infoInterface) {
   // version
   console.log(keyY("version", doc.version));
   // description
@@ -46,7 +46,7 @@ function keyG(key: string, val?: string) {
   return `    ${colors.green(colors.italic(key))}:  ${val || ""}`;
 }
 
-function CMDS(doc: infoJSON) {
+function CMDS(doc: infoInterface) {
   // commands
   console.log(`\n${keyY("commands")}`);
   doc.commands.forEach((obj) => {
@@ -59,7 +59,7 @@ function CMDS(doc: infoJSON) {
   });
 }
 
-function OPTIONS(doc: infoJSON) {
+function OPTIONS(doc: infoInterface) {
   console.log(`\n${keyY("options")}`);
   doc.options.forEach((obj) => {
     const { cmd, about } = obj;
