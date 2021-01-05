@@ -154,15 +154,11 @@ interface MetaInterface {
 // #endregion
 
 // --help.ts #region
-interface commands {
-  [key: string]: any;
-  cmd: string[];
-  about: string;
-}
 
-interface cliOptions {
+interface terminalActions {
   [key: string]: any;
-  cmd: string;
+  action: string;
+  cmd: string[];
   about: string;
 }
 
@@ -171,7 +167,7 @@ export interface infoJSON {
   description: string;
   docs: string;
   module: string;
-  commands: commands;
-  options: cliOptions;
+  commands: terminalActions[];
+  options: terminalActions[];
 }
 // #endregion

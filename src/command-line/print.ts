@@ -49,20 +49,23 @@ function keyG(key: string, val?: string) {
 function CMDS(doc: infoJSON) {
   // commands
   console.log(`\n${keyY("commands")}`);
-  Object.keys(doc.commands).forEach((action: string) => {
-    const { cmd, about } = doc.commands[action];
+  doc.commands.forEach((obj) => {
+    const { action, cmd, about } = obj;
     console.log(`\n${keyG(action)}`);
-    console.log(`      ${colors.yellow(">>")}  ${cmd[0]}`);
-    console.log(`\n      ${colors.yellow(">>")}  ${cmd[1]}`);
+    cmd.forEach((el) => {
+      console.log(`      ${colors.yellow(">>")}  ${el}`);
+    });
     console.log(`\n      ${about}`);
   });
 }
 
 function OPTIONS(doc: infoJSON) {
   console.log(`\n${keyY("options")}`);
-  Object.keys(doc.options).forEach((action: string) => {
-    const { about } = doc.options[action];
-    console.log(`\n${keyG(action)}`);
+  doc.options.forEach((obj) => {
+    const { cmd, about } = obj;
+    cmd.forEach((el) => {
+      console.log(`\n${keyG(el)}`);
+    });
     console.log(`      ${colors.yellow(">>")}  ${about}`);
   });
   console.log(`\n`);
