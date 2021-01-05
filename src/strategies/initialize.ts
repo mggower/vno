@@ -1,7 +1,7 @@
 import { InitializeInterface, OptionsInterface } from "../lib/types.ts";
 import { fs, path } from "../lib/deps.ts";
 import Utils, { Storage } from "../lib/utils.ts";
-import _$ from "../lib/defaults.ts";
+import _def from "../lib/defaults.ts";
 
 import Parser from "./parser.ts";
 import Component from "./component.ts";
@@ -22,7 +22,7 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
     if (options.terminal === false) Utils.terminal = false;
     await this.walk(entry, root);
 
-    Storage.root.vue = options.vue || _$.CDN;
+    Storage.root.vue = options.vue || _def.CDN;
     return new (Parser as any)().parse();
   } catch (error) {
     return console.error(

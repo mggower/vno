@@ -1,8 +1,7 @@
 import Initialize from "../strategies/initialize.ts";
-import { creator, print, str } from "../command-line/exports.ts";
-import { colors, fs, oak, path } from "../lib/deps.ts";
 
-const { Application, send } = oak;
+import { creator, print, str } from "../command-line/_exp.ts";
+import { fs, oak, path } from "../lib/deps.ts";
 
 const read = { name: "read" } as const;
 const write = { name: "write" } as const;
@@ -13,6 +12,7 @@ const resRead = await Deno.permissions.request(read);
 const resWrite = await Deno.permissions.request(write);
 const resRun = await Deno.permissions.request(run);
 const resNet = await Deno.permissions.request(net);
+
 
 const bundler = new (Initialize as any)();
 const { args } = Deno;
@@ -51,10 +51,14 @@ if (resRead && resRun && resWrite && resNet) {
       const { options } = json;
 
       await bundler.config({ entry, root });
+      if (args[1] === "quiet" || args[2] === "quiet") print.QUIET();
+      else print.ASCII();
 
       if (/run/i.test(args[0]) && /dev/i.test(args[1])) {
+        const { Application, send } = oak;
+
         const port = Number(options.port) || 3000;
-        const hostname = "0.0.0.0";
+        const hostname = options.hostname || "0.0.0.0";
 
         const server = new Application();
 
@@ -85,16 +89,13 @@ if (resRead && resRun && resWrite && resNet) {
         });
 
         if (import.meta.main) {
-          console.log(`dev server is listening on ${hostname}:${port}`);
+          server.addEventListener("listen", () => print.LISTEN(port, hostname));
           await server.listen({ port, hostname });
         }
       }
     } else {
-      console.warn(
-        colors.yellow(
-          ">> could not locate vno.config.ts \n" +
-            ">> run test in root directory or create vno.config.ts",
-        ),
+      print.WARN(
+        ">> could not locate vno.config.json \n>> run cmd again in root directory || create vno.config.json",
       );
     }
   } else if ((/--help/i.test(args[0])) || (/--info/i.test(args[0]))) {
@@ -103,16 +104,11 @@ if (resRead && resRun && resWrite && resNet) {
 
     print.ASCII();
     print.INFO(json);
-
     if (/--help/i.test(args[0])) print.CMDS(json);
     if (/--info/i.test(args[0])) console.log("\n");
   }
 } else {
-  console.warn(
-    colors.yellow(
-      ">> Deno needs read/write/run permissions to run vno",
-    ),
-  );
+  print.WARN(">> Deno needs read/write/run permissions to run vno");
 }
 
 export default new (Initialize as any)();

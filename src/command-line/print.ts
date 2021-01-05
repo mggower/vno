@@ -9,11 +9,27 @@ const logo = (`
 
   `);
 
-export function ASCII() {
+function ASCII() {
   console.log(colors.green(logo));
 }
 
-export function INFO(doc: helpJSON) {
+function QUIET() {
+  console.log(colors.green("\nvno build complete...\n"));
+}
+
+function LISTEN(port: number, hostname?: string) {
+  console.log(
+    colors.green(
+      colors.italic(`dev server is listening on ${hostname}:${port}\n`),
+    ),
+  );
+}
+
+function WARN(msg: string = "") {
+  console.warn(`\n${colors.yellow(msg)}\n`);
+}
+
+function INFO(doc: helpJSON) {
   // version
   console.log(keyY("version", doc.version));
   // description
@@ -29,7 +45,7 @@ function keyG(str1: string, str2?: string) {
   return `    ${colors.green(colors.italic(str1))}:  ${str2 || ""}`;
 }
 
-export function CMDS(doc: helpJSON) {
+function CMDS(doc: helpJSON) {
   // commands
   Object.keys(doc.commands).forEach((action: string) => {
     const { cmd, about } = doc.commands[action];
@@ -42,4 +58,4 @@ export function CMDS(doc: helpJSON) {
   console.log(`\n`);
 }
 
-export default { ASCII, INFO, CMDS };
+export default { ASCII, INFO, CMDS, QUIET, LISTEN, WARN };
