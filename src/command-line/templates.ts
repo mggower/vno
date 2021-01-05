@@ -105,7 +105,10 @@ const depsTemplate = () => {
 };
 
 const vnoConfig = (userOptions: terminalOptions) => {
-  return (JSON.stringify({ root: userOptions.root, entry: "./" }));
+  const { child, root, port, title } = userOptions;
+  return (JSON.stringify(
+    { root, entry: "./", options: { root, child, port, title } },
+  ));
 };
 
 export default {

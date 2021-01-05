@@ -1,7 +1,7 @@
 import { fs } from "../lib/deps.ts";
 import { CompilerInterface, ComponentInterface } from "../lib/types.ts";
 import Utils, { Storage } from "../lib/utils.ts";
-
+import renderer from "./renderer.ts";
 import _ from "../lib/defaults.ts";
 
 function Compiler(this: CompilerInterface) {

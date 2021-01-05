@@ -152,3 +152,19 @@ interface MetaInterface {
   viewport: string;
 }
 // #endregion
+
+// --help.ts #region
+interface action {
+  [key: string]: any;
+  cmd: string[];
+  about: string;
+}
+
+export interface helpJSON {
+  version: string;
+  description: string;
+  docs: string;
+  module: string;
+  commands: action;
+}
+// #endregion

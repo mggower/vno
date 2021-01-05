@@ -1,4 +1,26 @@
 import { colors } from "../lib/deps.ts";
+import { helpJSON } from "../lib/types.ts";
+
+const logo = (` 
+  __   ___ __   ___  
+  \\ \\ / / '_ \\ / _ \\ 
+   \\ V /| | | | (_) |
+    \\_/ |_| |_|\\___/         
+
+  `);
+
+export function ASCII() {
+  console.log(colors.green(logo));
+}
+
+export function INFO(doc: helpJSON) {
+  // version
+  console.log(keyY("version", doc.version));
+  // description
+  console.log(`\n  ${colors.green(doc.description)}`);
+  console.log(`\n${keyY("docs", doc.docs)}`);
+  console.log(`${keyY("module", doc.module)}`);
+}
 
 function keyY(str1: string, str2?: string) {
   return `  ${colors.yellow(colors.italic(str1))}:  ${str2 || ""}`;
@@ -7,27 +29,7 @@ function keyG(str1: string, str2?: string) {
   return `    ${colors.green(colors.italic(str1))}:  ${str2 || ""}`;
 }
 
-interface cmd {
-  [key: string]: any;
-  cmd: string[];
-  about: string;
-}
-
-interface cmdJson {
-  version: string;
-  description: string;
-  docs: string;
-  module: string;
-  commands: cmd;
-}
-function docs(doc: cmdJson) {
-  // version
-  console.log(keyY("version", doc.version));
-  // description
-  console.log(`\n  ${colors.green(doc.description)}`);
-  console.log(`\n${keyY("docs", doc.docs)}`);
-  console.log(`${keyY("module", doc.module)}`);
-  console.log(`\n${keyY("commands")}`);
+export function CMDS(doc: helpJSON) {
   // commands
   Object.keys(doc.commands).forEach((action: string) => {
     const { cmd, about } = doc.commands[action];
@@ -40,4 +42,4 @@ function docs(doc: cmdJson) {
   console.log(`\n`);
 }
 
-export default docs;
+export default { ASCII, INFO, CMDS };
