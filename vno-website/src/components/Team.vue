@@ -1,8 +1,8 @@
 <template>
   <div id="team">
     <div class="flip">
-      <div class="outterFlip">
-        <div class="hoverContainer">
+      <div class="flip-box-inner">
+        <div class="flipFront">
           <img
             class="hoverImg"
             :src="picture"
@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div class="innerFlip">
+      <div class="flipBack">
         <h2>{{ name }}</h2>
         <h2>{{ email }}</h2>
         <h2>
@@ -34,9 +34,25 @@ export default {
 };
 </script>
 <style>
+/* .flip {
+  background-color: transparent;
+} */
 .hoverImg {
+  background-color: transparent;
+  perspective: 1000px;
   border-radius: 50%;
   animation: mymove 5s infinite;
+}
+.flip-box-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+.outerFlip:hover .innerFlip {
+  transform: rotateY(180deg);
 }
 
 @keyframes mymove {
