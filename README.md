@@ -1,3 +1,7 @@
+<img src="https://svgshare.com/i/SNz.svg"
+     alt="vno logo"
+     style="float: left; margin-right: 10px;" />
+
 # vno
 
 _once upon a time in a land far far away..._
