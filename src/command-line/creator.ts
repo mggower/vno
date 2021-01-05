@@ -1,4 +1,3 @@
-// deno-lint-ignore-file
 import Utils from "../lib/utils.ts";
 import str from "./templates.ts";
 import { msgs, userOptions } from "./prompts.ts";
@@ -9,7 +8,7 @@ export default async function creator(repo?: string) {
 
   // customize function initializes prompts/stores answers
   async function customize() {
-    console.log(colors.blue("\nInitializing your vno project..."));
+    console.log(colors.green("\ninitializing your vno project..."));
 
     // project title
     let title;
@@ -45,10 +44,10 @@ export default async function creator(repo?: string) {
         userOptions.child = newAddedComps[0];
       }
       if (port) userOptions.port = port;
-      console.log(colors.green('Creating your vno Project'));
+      console.log(colors.green("creating your vno project..."));
     } else {
       // user inputs 'no' and CLI resets to beginning
-      console.log("\nResetting User Options");
+      console.log("\nresetting user options");
       await customize();
     }
   }
@@ -59,7 +58,7 @@ export default async function creator(repo?: string) {
   if (decision.toLowerCase() === "yes") {
     await customize();
   } else {
-    console.log(colors.green("Creating your vno Project"));
+    console.log(colors.green("creating your vno project..."));
   }
 
   // progress bar logic
@@ -88,8 +87,6 @@ export default async function creator(repo?: string) {
   const rootComp: string = str.rootComponent(userOptions);
   const genericComp: string = str.genericComponent();
   const html: string = str.htmlTemplate(userOptions);
-  const server: string = str.serverTemplate(userOptions);
-  const deps: string = str.depsTemplate();
   const config: string = str.vnoConfig(userOptions);
 
   fs.ensureDirSync("public");
@@ -116,7 +113,7 @@ export default async function creator(repo?: string) {
         .then(() => {
           Deno.writeTextFileSync(
             `components/${newAddedComps[i]}.vue`,
-            `//created component ${newAddedComps[i]}` + "\n" + genericComp,
+            `// created component ${newAddedComps[i]}` + "\n" + genericComp,
           );
         })
         .catch(() => {
@@ -128,16 +125,6 @@ export default async function creator(repo?: string) {
   fs.ensureFile("public/index.html")
     .then(() => {
       Deno.writeTextFileSync("public/index.html", html);
-    });
-
-  fs.ensureFile("deps.ts")
-    .then(() => {
-      Deno.writeTextFileSync("deps.ts", deps);
-    });
-
-  fs.ensureFile("server.ts")
-    .then(() => {
-      Deno.writeTextFileSync("server.ts", server);
     });
 
   fs.ensureFile("vno.config.json")

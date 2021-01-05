@@ -152,3 +152,26 @@ interface MetaInterface {
   viewport: string;
 }
 // #endregion
+
+// --help.ts #region
+interface commands {
+  [key: string]: any;
+  cmd: string[];
+  about: string;
+}
+
+interface cliOptions {
+  [key: string]: any;
+  cmd: string;
+  about: string;
+}
+
+export interface infoJSON {
+  version: string;
+  description: string;
+  docs: string;
+  module: string;
+  commands: commands;
+  options: cliOptions;
+}
+// #endregion
