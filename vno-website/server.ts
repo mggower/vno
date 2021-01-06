@@ -1,4 +1,4 @@
-import { Application, join, log, send } from "./deps.ts";
+import { Application, join, send } from "./deps.ts";
 
 const port = Number(Deno.env.get("PORT")) || 8080;
 const hostname = "0.0.0.0";

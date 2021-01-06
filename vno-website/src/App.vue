@@ -134,7 +134,8 @@ body {
   padding: 5px;
 }
 .nav a {
-  font-size: 2rem;
+  letter-spacing: 1.6px;
+  font-size: 2.4rem;
   font-weight: bold;
   font-family: Chalet-NewYorkNineteenSixty, Avenir, Helvetica, Arial, sans-serif;
 }

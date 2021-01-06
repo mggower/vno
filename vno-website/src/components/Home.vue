@@ -11,16 +11,6 @@
         <img id="denoLogo" src="/assets/deno-logo.png"
       /></a>
     </div>
-    <!-- <h3 id="cliText">CLI Plugin</h3>
-    <a
-      class="docTags"
-      href="https://github.com/oslabs-beta/vno/tree/main/command-line"
-      target="_blank"
-      rel="noopener"
-      >Click Here</a
-    >
-
-    <br /> -->
   </div>
 </template>
 <script>
@@ -43,6 +33,7 @@ a:link {
 }
 .home h1 {
   padding-top: 16px;
+  letter-spacing: 2px;
 }
 #gitLogo {
   margin-right: 0.4rem;
