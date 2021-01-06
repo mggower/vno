@@ -4,7 +4,6 @@
       <ul class="nav">
         <a @click="handelClick('Home')"><li>Home</li></a>
         <a @click="handelClick('Team')"><li>Team</li></a>
-        <a @click="handelClick('Demo')"><li>Demo</li></a>
         <a @click="handelClick('Docs')"><li>Docs</li></a>
       </ul>
     </header>
