@@ -86,6 +86,8 @@ export default {
 }
 #meetTeam {
   font-size: 6rem;
+  text-align: left;
+  margin-left: 20px;
 }
 h2 {
   font-size: 1rem;
