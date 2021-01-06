@@ -38,7 +38,7 @@
 - Copy the following code into your terminal
 
 ```
-deno install --allow-read --allow-write --allow-run --allow-net --unstable -f -n vno https://deno.land/x/vno@v1.0-beta.6.1/dist/mod.ts
+deno install --allow-read --allow-write --allow-run --allow-net --unstable -f -n vno https://deno.land/x/vno/dist/mod.ts
 ```
 
 - Copy the export path your terminal returns and paste it into your terminal
@@ -55,14 +55,14 @@ vno create [project name]
 - _OR_ If you'd rather not install:
 
 ```
-deno run --allow-read --allow-write --allow-run --allow-net --unstable https://deno.land/x/vno@v1.0-beta.6.1/dist/mod.ts create [project name]
+deno run --allow-read --allow-write --allow-run --allow-net --unstable https://deno.land/x/vno/dist/mod.ts create [project name]
 ```
 
 - **note: If you would like to avoid writing out all the permissions, you can also use the '-A' tag**
 - Like so:
 
 ```
-deno run --A --unstable https://deno.land/x/vno@v1.0-beta.6.1/dist/mod.ts create [project name]
+deno run --A --unstable https://deno.land/x/vno/dist/mod.ts create [project name]
 ```
 
 ### Using the build method
@@ -76,7 +76,7 @@ vno build
 _OR_
 
 ```
-deno run --allow-read --allow-write --allow-run --allow-net --unstable https://deno.land/x/vno@v1.0-beta.6.1/dist/mod.ts build
+deno run --allow-read --allow-write --allow-run --allow-net --unstable https://deno.land/x/vno/dist/mod.ts build
 ```
 
 ![vno build](https://i.ibb.co/jgRFXvc/vno-build.gif)
@@ -93,7 +93,7 @@ vno run dev
 _OR_
 
 ```
-deno run --allow-read --allow-write --allow-run --allow-net --unstable https://deno.land/x/vno@v1.0-beta.6.1/dist/mod.ts run dev
+deno run --allow-read --allow-write --allow-run --allow-net --unstable https://deno.land/x/vno/dist/mod.ts run dev
 ```
 
 ![vno run dev](https://i.ibb.co/RckD0Tm/vno-run-dev.gif)
