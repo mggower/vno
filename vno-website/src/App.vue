@@ -30,7 +30,7 @@
     <div v-else-if="displayedComponent === 'Demo'">
       <Demo />
     </div>
-    <p id="built">Built with vno</p>
+    <p id="built">built with vno</p>
   </div>
 </template>
 
@@ -104,10 +104,8 @@ export default {
 }
 
 body {
-  height: fit-content;
-}
-html {
   background-color: #203a42;
+  height: fit-content;
 }
 #meetTeam {
   font-size: 6rem;
@@ -116,6 +114,9 @@ div {
   height: 100%;
 }
 .nav {
+  box-shadow: 0px 0px 10px 0px #132429;
+  padding: 20px;
+  background-color: #1a3037;
   list-style-type: none;
   display: flex;
   color: white;
@@ -158,7 +159,9 @@ div {
   height: 3rem;
 }
 #built {
-  font-size: 4px
+  font-size: 15px;
+  font-style:italic;
+  margin-top:10px;
 }
   @media only screen 
   and (min-device-width: 320px) 
