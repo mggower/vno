@@ -1,10 +1,10 @@
 import { Application, join, log, send } from "./deps.ts";
 import vno from "../src/dist/mod.ts";
 
-vno.config({
-  root: "App",
-  entry: "./",
-});
+// vno.config({
+//   root: "App",
+//   entry: "./",
+// });
 
 const port: number = 3000;
 const server: Application = new Application();
