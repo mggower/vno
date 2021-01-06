@@ -30,10 +30,11 @@ export default {
   components: {DocItem, DocNav},
   data () {
     return {
-       methods: {
+      top: '',
+      methods: {
         scrollMeTo(refName) {
           var element = this.$refs[refName];
-          var top = element.offsetTop;
+          this.top = element.offsetTop;
 
           window.scrollTo(0, top);
         }
