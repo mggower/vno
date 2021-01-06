@@ -4,9 +4,8 @@ import { _ } from "../lib/deps.ts";
 // template literal strings for HTML/Components/Server/Deps
 const childComponent = (childName: string) => {
   return (
-    `<template>\n<div class="hello">\n<h1>{{ msg }}</h1>\n<p>\nFor github documentation:<br>
-<a href="https://github.com/oslabs-beta/vno" target="_blank" rel="noopener">&nbsp;vno documentation</a>.
-</p>\n<h3>Installed CLI Plugin</h3>\n<ul>\n<li><a href="https://github.com/oslabs-beta/vno/tree/main/command-line" target="_blank" rel="noopener">Click Here</a></li>
+    `<template>\n<div class="hello">\n<h1>{{ msg }}</h1>\n<p>\n<br>
+</p>\n<h3><a href="https://vno.land" target="_blank" rel="noopener">vno.land</a> & <a href="https://github.com/oslabs-beta/vno" target="_blank" rel="noopener">github</a></h3>\n<ul>
 <br>\n</ul>\n</div>\n\n</template>\n\n<script>\n\nexport default {\nname: '${
       _.kebabCase(childName)
     }',\nprops: {\nmsg: String
@@ -17,12 +16,12 @@ const childComponent = (childName: string) => {
 
 const rootComponent = (userOptions: terminalOptions) => {
   return (
-    `<template>\n<div id="${userOptions.root.toLowerCase()}">\n<a href="https://ibb.co/mHwdLSK"><img src="https://i.ibb.co/4jGC6JL/image.png" alt="image" border="0" width="450" height="450"></a>\n<${userOptions.child} msg="You are building: ${userOptions.title} with vno"/>
+    `<template>\n<div id="${userOptions.root.toLowerCase()}">\n<img src="https://svgshare.com/i/SNz.svg" alt="image" border="0" width="450" height="450">\n<${userOptions.child} msg="you are building: ${userOptions.title} with vno"/>
     \n</div>\n</template>\n\n<script>\nimport '${userOptions.child}' from './components/${userOptions.child}.vue';\n
 \nexport default {\nname: '${
       _.kebabCase(userOptions.root)
     }',\ncomponents: {${userOptions.child}}\n}\n
-\n</script>\n\n<style>\n\n#${userOptions.root.toLowerCase()} {
+\n</script>\n\n<style>\n\nhtml {background-color:#203A42}\n#${userOptions.root.toLowerCase()} {
 font-family: Avenir, Helvetica, Arial, sans-serif;\n-webkit-font-smoothing: antialiased;
 -moz-osx-font-smoothing: grayscale;\ntext-align: center;\ncolor: #79D0B2;\nmargin-top: 60px;
 }\n\n</style>`
