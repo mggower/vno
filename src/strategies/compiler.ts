@@ -20,11 +20,7 @@ Compiler.prototype.build = function () {
     this.traverse(Storage.root);
     Deno.writeTextFileSync(_.BUILD_PATH, this.mount, { append: true });
 
-<<<<<<< HEAD
-    return Utils.print();
-=======
     if (Utils.terminal) Utils.print();
->>>>>>> 3aab425a8a7e9614acf6ca79065361f569dbcb9e
   } catch (error) {
     return console.error(
       `Error inside of Compiler.build:`,
