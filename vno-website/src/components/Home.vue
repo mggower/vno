@@ -66,7 +66,7 @@ a:link {
   margin-left: 0.4rem;
 }
 #vnoLogo {
-  max-width: 800px;
+  max-width: 80%;
 }
 #logoText {
   justify-content: center;

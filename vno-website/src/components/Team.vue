@@ -1,58 +1,64 @@
 <template>
-  <div class="team">
-    <div class="flip-box">
-      <div class="flip-box-inner">
-        <div class="flip-box-front">
-          <img
-            class="hoverImg"
-            :src="picture"
-            alt="image"
-            border="0"
-            width="250"
-            height="250"
-          />
-        </div>
-
-        <div class="flip-box-back">
-          <h2>{{ name }}</h2>
-          <h2>{{ email }}</h2>
-
-          <h2>{{ linkedIn }}</h2>
-          <h2>{{ github }}</h2>
+  <div class="flip-box">
+    <div class="flip-box-inner">
+      <img
+        class="flip-box-front"
+        :src="picture"
+        alt="image"
+        border="0"
+        width="250"
+        height="250"
+      />
+      <!--  -->
+      <div class="flip-box-back">
+        <h2>{{ name }}</h2>
+        <div class="links">
+          <a class="email" :href="email"
+            ><i class="fas fa-envelope fa-3x"></i
+          ></a>
+          <a :href="github" target="_blank">
+            <i class="fab fa-github fa-3x"></i
+          ></a>
+          <a :href="linkedIn" target="_blank">
+            <i class="fab fa-linkedin-in fa-3x"></i>
+          </a>
         </div>
       </div>
     </div>
-    <!-- <h2 id="about">
-      About: <br />
-      {{ about }}
-    </h2> -->
   </div>
 </template>
 <script>
 export default {
-  props: ['name', 'email', 'github', 'linkdIn', 'about', 'picture'],
+  props: ['name', 'email', 'github', 'linkedIn', 'about', 'picture'],
   name: 'Team',
 };
 </script>
+
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap');
+
+a {
+  color: #ffffff;
+}
+
+.links {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
 .flip-box {
-  flex-direction: row;
   background-color: transparent;
   width: 100%;
-  height: 100%;
+  margin: 16px;
+  padding: 16px;
+  height: 300px;
+  width: 300px;
   perspective: 1000px;
-  border-radius: 50%;
-}
-.hoverImg {
-  background-color: transparent;
-  border-radius: 50%;
-  animation: mymove 5s infinite;
 }
 
 .flip-box-inner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
   width: 100%;
   height: 100%;
@@ -63,39 +69,29 @@ export default {
 .flip-box:hover .flip-box-inner {
   transform: rotateY(180deg);
 }
-.flip-box-front {
+.flip-box-front,
+.flip-box-back {
   border-radius: 50%;
   position: absolute;
   width: 100%;
-  height: 80%;
+  height: 100%;
   -webkit-backface-visibility: hidden; /* Safari */
   backface-visibility: hidden;
 }
+
 .flip-box-back {
-  margin-bottom: 4.5rem;
-  flex-direction: column;
-  position: absolute;
-  width: 20rem;
-  height: 6rem;
-  -webkit-backface-visibility: hidden; /* Safari */
-  backface-visibility: hidden;
-  border-radius: 50%;
-  background-color: #30322f;
-  color: #57d3af;
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -5px 5px 20px 3px #57d3b082;
+  color: white;
   transform: rotateY(180deg);
 }
-#meetTeam {
-  font-size: 6rem;
-  text-align: left;
-  margin-left: 20px;
-}
-h2 {
-  font-size: 1rem;
-  margin-top: 0.2rem;
-}
-#about {
-  position: absolute;
-  margin-bottom: 2rem;
+
+.flip-box-front {
+  background-color: transparent;
+  animation: mymove 5s infinite;
 }
 
 @keyframes mymove {
@@ -112,12 +108,15 @@ h2 {
     transform: translatey(0px);
   }
 }
-.team {
-  display: flex;
-  flex: 1 50%;
-  height: 100vh;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-end;
+#meetTeam {
+  font-size: 6rem;
+  text-align: left;
+  margin-left: 20px;
+}
+
+h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 200;
 }
 </style>
