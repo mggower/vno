@@ -28,12 +28,32 @@ function LISTEN(port: number, hostname?: string) {
 function WARN(msg: string = "") {
   console.warn(`\n${colors.yellow(msg)}\n`);
 }
+function lineLength(string: string, length: number, tab: number) {
+  let mutable = string.slice();
+  let output = "";
+
+  function dice(str: string) {
+    let index = length;
+    if (!str[index]) {
+      output += `${(" ").repeat(tab)}${str || ""}\n`;
+      return;
+    }
+    while (str[index] !== " ") {
+      index -= 1;
+    }
+    output += `${(" ").repeat(tab)}${str.slice(0, index + 1)}\n`;
+    dice(str.slice(index + 1));
+    return;
+  }
+  dice(mutable);
+  return output;
+}
 // prints module specific information
 function INFO(doc: infoInterface) {
   // version
   console.log(keyY("version", doc.version));
   // description
-  console.log(`\n  ${colors.green(doc.description)}`);
+  console.log(`\n${colors.green(lineLength(doc.description, 52, 4))}`);
   console.log(`\n${keyY("docs", doc.docs)}`);
   console.log(`${keyY("module", doc.module)}`);
 }
@@ -46,31 +66,6 @@ function keyG(key: string, val?: string) {
   return `    ${colors.green(colors.italic(key))}:  ${val || ""}`;
 }
 
-function lineLength(string: string) {
-  let mutable = string.slice();
-  let output = "";
-
-  function dice(str: string) {
-    let index = 60;
-    if (!str[index]) {
-      output += str + "\n";
-      return;
-    }
-    while (str[index] !== " ") {
-      index -= 1;
-    }
-    output += str.slice(0, index + 1) + "\n";
-    dice(str.slice(index + 1));
-    return;
-  }
-  dice(mutable);
-  console.log(`${output}`);
-}
-
-lineLength(
-  "deno run --allow-run --allow-write --allow-read --unstable https://deno.land/x/vno/dist/mod.ts create [project-name]",
-);
-
 function CMDS(doc: infoInterface) {
   // commands
   console.log(`\n${keyY("commands")}`);
@@ -78,9 +73,9 @@ function CMDS(doc: infoInterface) {
     const { action, cmd, about } = obj;
     console.log(`\n${keyG(action)}`);
     cmd.forEach((el) => {
-      console.log(`      ${colors.yellow(">>")}  ${el}`);
+      console.log(`${lineLength(`${colors.yellow(">>")}  ${el}`, 61, 6)}`);
     });
-    console.log(`\n      ${about}`);
+    console.log(`${lineLength(about, 60, 6)}`);
   });
 }
 
@@ -94,7 +89,7 @@ function OPTIONS(doc: infoInterface) {
     });
     console.log(`      ${colors.yellow(">>")}  ${about}`);
   });
-  console.log(`\n`);
+  console.log("\n");
 }
 
 export default { ASCII, INFO, CMDS, QUIET, LISTEN, WARN, OPTIONS, keyY, keyG };
