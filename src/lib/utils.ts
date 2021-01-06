@@ -11,7 +11,7 @@ import {
 export function memoize() {
   // #region memoize cache
   // cache stores the label of the component that was "scrubbed"
-  // and it's value is the "current" or parent component that
+  // and its value is the "current" or parent component that
   // it was last attached to.
   // #endregion
   const cache: StorageInterface = {};
