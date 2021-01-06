@@ -28,6 +28,7 @@ function LISTEN(port: number, hostname?: string) {
 function WARN(msg: string = "") {
   console.warn(`\n${colors.yellow(msg)}\n`);
 }
+// function breaks up long strings to new lines at max length
 function lineLength(string: string, length: number, tab: number) {
   let mutable = string.slice();
   let output = "";
