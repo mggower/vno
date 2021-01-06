@@ -45,6 +45,7 @@ There are 2 ways to use the build method
 
 ![vno build](https://i.ibb.co/jgRFXvc/vno-build.gif)
 
+![vno run dev](https://i.ibb.co/RckD0Tm/vno-run-dev.gif)
 
 ## Parser
 
