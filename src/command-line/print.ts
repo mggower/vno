@@ -25,7 +25,7 @@ function LISTEN(port: number, hostname?: string) {
   );
 }
 // print warning
-function WARN(msg: string = "") {
+function WARN(msg: string | any = "") {
   console.warn(`\n${colors.yellow(msg)}\n`);
 }
 // function breaks up long strings to new lines at max length

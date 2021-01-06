@@ -95,6 +95,8 @@ if (resRead && resRun && resWrite && resNet) {
             await next();
           }
         });
+        // server error handling
+        server.addEventListener("error", (err) => print.WARN(err));
         // listen for active server
         if (import.meta.main) {
           server.addEventListener("listen", () => print.LISTEN(port, hostname));
