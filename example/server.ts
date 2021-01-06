@@ -1,11 +1,6 @@
 import { Application, join, log, send } from "./deps.ts";
 import vno from "../src/dist/mod.ts";
 
-vno.config({
-  root: "App",
-  entry: "./",
-});
-
 const port: number = 3000;
 const server: Application = new Application();
 
@@ -32,6 +27,6 @@ server.use(async (ctx, next) => {
 });
 
 if (import.meta.main) {
-  log.info("Server is up and running on port" + port);
+  log.info("Server is up and running on http://localhost:" + port);
   await server.listen({ port });
 }
