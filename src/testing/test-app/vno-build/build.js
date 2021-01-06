@@ -1,5 +1,4 @@
-/* eslint-disable */
-// prettier-ignore
+// deno-lint-ignore-file
 import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
 
 const ChildTest = Vue.component("child-test", {template: ` <div class="place"> <img :src="location.img" width="235" height="300" /> <slot></slot> <p>{{ location.desc }}</p> </div>`, props: ['location'],});

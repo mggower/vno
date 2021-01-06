@@ -71,4 +71,4 @@ function OPTIONS(doc: infoInterface) {
   console.log(`\n`);
 }
 
-export default { ASCII, INFO, CMDS, QUIET, LISTEN, WARN, OPTIONS };
+export default { ASCII, INFO, CMDS, QUIET, LISTEN, WARN, OPTIONS, keyY, keyG };

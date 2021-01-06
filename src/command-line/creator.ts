@@ -1,6 +1,5 @@
 import Utils from "../lib/utils.ts";
-import str from "./templates.ts";
-import { msgs, userOptions } from "./prompts.ts";
+import { msgs, str, userOptions } from "./_exp.ts";
 import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
 
 export default async function creator(repo?: string) {
@@ -8,7 +7,7 @@ export default async function creator(repo?: string) {
 
   // customize function initializes prompts/stores answers
   async function customize() {
-    console.log(colors.green("\ninitializing your vno project..."));
+    console.log(colors.green("\n\ninitializing your vno project...\n"));
 
     // project title
     let title;
@@ -44,10 +43,10 @@ export default async function creator(repo?: string) {
         userOptions.child = newAddedComps[0];
       }
       if (port) userOptions.port = port;
-      console.log(colors.green("creating your vno project..."));
+      console.log(colors.green("\ncreating your vno project...\n"));
     } else {
       // user inputs 'no' and CLI resets to beginning
-      console.log("\nresetting user options");
+      console.log("\nresetting user options\n");
       await customize();
     }
   }
@@ -58,7 +57,7 @@ export default async function creator(repo?: string) {
   if (decision.toLowerCase() === "yes") {
     await customize();
   } else {
-    console.log(colors.green("creating your vno project..."));
+    console.log(colors.green("\ncreating your vno project...\n"));
   }
 
   // progress bar logic
@@ -81,7 +80,6 @@ export default async function creator(repo?: string) {
     }
   }
   run();
-
   // template strings for HTML/Components/Server/Deps
   const additionalComponent: string = str.childComponent(userOptions.child);
   const rootComp: string = str.rootComponent(userOptions);
