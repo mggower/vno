@@ -40,13 +40,13 @@ export default function parseScript(current: ComponentInterface) {
       const componentsStart = Utils.indexOfRegExp(/(components:)/, script);
       const children = script.slice(componentsStart) || false;
 
-      // if a components property is identified
+      // if a component's property is identified
       if (children) {
         const componentsEnd = children.findIndex((el) => el.includes("}")) + 1;
         // componentsStr is stringified and trimmed components property
         const componentsStr = Utils.sliceAndTrim(children, 0, componentsEnd);
 
-        // iter becomes an string[] of any child component's label
+        // iter becomes a string[] of any child component's label
         const iter: string[] = _.compact(
           Utils.trimAndSplit(
             componentsStr,
