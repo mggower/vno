@@ -43,4 +43,11 @@ export default {
   margin-bottom: 25px;
   width: fit-content;
 }
+.gif {
+  width: 98%;
+  max-width: fit-content;
+}
+p {
+  max-width: 800px;
+}
 </style>

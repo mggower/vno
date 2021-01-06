@@ -11,10 +11,6 @@ export default {
 
 <style>
 .docnav-element {
-  padding: 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
+  margin: 5px;
 }
 </style>

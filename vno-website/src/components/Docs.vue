@@ -17,6 +17,8 @@
       :code='item.code'
       :gif='item.gif'
     />
+    <div id="moreinfo">
+      <p></p>
   </div>
 </template>
 <script>
@@ -78,7 +80,9 @@ export default {
 </script>
 <style>
 #doc-nav {
+  background: #1a1a1a;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-around;
 }
