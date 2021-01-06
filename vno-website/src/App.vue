@@ -12,7 +12,7 @@
     <div v-if="displayedComponent === 'Home'">
       <Home />
     </div>
-    <div v-else-if="displayedComponent === 'Team'">
+    <div class="teamTest" v-else-if="displayedComponent === 'Team'">
       <h1 id="meetTeam">Meet The Team</h1>
       <Team
         v-for="person in team"
@@ -99,6 +99,12 @@ export default {
 
 <style>
 @import url('https://db.onlinewebfonts.com/c/6d253426005e3fdcd9f69455050bd7d7?family=Chalet-NewYorkNineteenSixty');
+
+.teamTest {
+  display: flex;
+  flex: 0 50%;
+}
+
 body {
   height: fit-content;
 }

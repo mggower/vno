@@ -8,8 +8,8 @@
             :src="picture"
             alt="image"
             border="0"
-            width="450"
-            height="450"
+            width="250"
+            height="250"
           />
         </div>
 
@@ -22,10 +22,10 @@
         </div>
       </div>
     </div>
-    <h2 id="about">
+    <!-- <h2 id="about">
       About: <br />
       {{ about }}
-    </h2>
+    </h2> -->
   </div>
 </template>
 <script>
@@ -72,12 +72,11 @@ export default {
   backface-visibility: hidden;
 }
 .flip-box-back {
-  margin-top: 14rem;
+  margin-bottom: 4.5rem;
   flex-direction: column;
   position: absolute;
-  width: 31rem;
-  height: 8rem;
-  margin-right: 20rem;
+  width: 20rem;
+  height: 6rem;
   -webkit-backface-visibility: hidden; /* Safari */
   backface-visibility: hidden;
   border-radius: 50%;
@@ -89,6 +88,7 @@ export default {
   font-size: 6rem;
 }
 h2 {
+  font-size: 1rem;
   margin-top: 0.2rem;
 }
 #about {
