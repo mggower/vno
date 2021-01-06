@@ -30,6 +30,7 @@
     <div v-else-if="displayedComponent === 'Demo'">
       <Demo />
     </div>
+    <p id="built">Built with vno</p>
   </div>
 </template>
 
@@ -37,7 +38,6 @@
 import home from './components/Home';
 import team from './components/Team';
 import docs from './components/Docs';
-import demo from './components/Demo';
 
 export default {
   name: 'app',
@@ -91,7 +91,6 @@ export default {
     Home,
     Team,
     Docs,
-    Demo,
   },
 };
 </script>
@@ -157,6 +156,9 @@ div {
 #gitLogo {
   width: 3rem;
   height: 3rem;
+}
+#built {
+  font-size: 4px
 }
   @media only screen 
   and (min-device-width: 320px) 
