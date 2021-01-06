@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-ENV PORT=8000
+ENV PORT=3030
 
 CMD ["deno", "run", "-A", "--unstable", "server.ts"]
 
