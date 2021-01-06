@@ -2,7 +2,7 @@ import { ComponentInterface, SiblingInterface } from "../lib/types.ts";
 
 // #region SiblingList
 // is a data structure that mimics a linked list
-// it is attached to a parent components "child"
+// it is attached to a parent component's "child"
 // property & attaches all siblings to eachother
 // #endregion
 function SiblingList(this: SiblingInterface) {
