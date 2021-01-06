@@ -1,4 +1,4 @@
-import { terminalOptions } from '../lib/types.ts';
+import { terminalOptions } from "../lib/types.ts";
 import { _ } from "../lib/deps.ts";
 
 export const msgs = {
@@ -9,9 +9,8 @@ export const msgs = {
   five: "\nConfirm these results and create your project?(yes/no)",
 };
 
-
 export const userOptions: terminalOptions = {
-  title: "Your vno project",
+  title: "your project",
   root: "App",
   child: "HelloVno",
   port: "3000",
