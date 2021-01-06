@@ -19,8 +19,6 @@ export default function parseTemplate(current: ComponentInterface) {
       current.template = Utils.sliceAndTrim(split, open + 1, close);
       // slice the split property to minimize the length of data
       current.split = split.slice(close + 1);
-
-      return "parseTemplate()=> successful";
     }
   } catch (error) {
     console.error(

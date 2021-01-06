@@ -17,8 +17,6 @@ export default function componentStringify(current: ComponentInterface) {
       current.instance =
         `\nconst ${label} = Vue.component("${name}", {template: \`${template}\`,${script}});`;
     }
-
-    return "componentStringify()=> successful";
   } catch (error) {
     console.error(
       "Error inside of componentStringify()=>:",

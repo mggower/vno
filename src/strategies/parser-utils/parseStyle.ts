@@ -15,8 +15,6 @@ export default function parseStyle(current: ComponentInterface) {
       }
       // stringify, trim, and save style to component object
       current.style = Utils.sliceAndTrim(current.split, open + 1, close);
-
-      return "parseStyle()=> succesful";
     }
   } catch (error) {
     console.error(

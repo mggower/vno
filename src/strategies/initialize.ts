@@ -53,7 +53,6 @@ Initialize.prototype.walk = async function (entry: string, rootLabel: string) {
       Storage[label] = new (Component as any)(label, file.path);
     }
   }
-  return true;
 };
 
 export default Initialize;

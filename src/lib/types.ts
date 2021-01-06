@@ -7,7 +7,7 @@ export interface OptionsInterface {
 }
 export interface InitializeInterface {
   config(options: OptionsInterface): Function;
-  walk(entry: string, rootLabel: string): true;
+  walk(entry: string, rootLabel: string): void;
 }
 // #endregion
 
@@ -35,7 +35,7 @@ export interface ComponentInterface {
   isParsed: boolean;
   child: SiblingInterface | null;
   sibling: ComponentInterface | null;
-  runData(): true;
+  runData(): void;
   vue?: string;
   split?: string[];
   name?: string;

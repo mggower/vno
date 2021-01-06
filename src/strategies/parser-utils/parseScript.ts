@@ -54,7 +54,7 @@ export default function parseScript(current: ComponentInterface) {
             componentsStr.indexOf("}"),
           ),
         );
-        // childComponents looks in Storage to retrieve an array of all component objects 
+        // childComponents looks in Storage to retrieve an array of all component objects
         const childComponents = iter.map((child: string) => Storage[child]);
         // instantiate a new SiblingList on the current components child property
         current.child = new (SiblingList as any)();
@@ -74,7 +74,6 @@ export default function parseScript(current: ComponentInterface) {
         }
       }
     }
-    return "parseScript()=> successful";
   } catch (error) {
     console.error(
       "Error inside of Parser.script:",
