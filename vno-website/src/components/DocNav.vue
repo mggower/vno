@@ -1,18 +1,20 @@
 <template>
-  <div id='doc-nav'>
-    <nav class='inner'>
-      <a>{{element}}</a>
-    </nav>
-  </div>
+      <a class='docnav-element' @click="scrollMeTo('element')">{{element}}</a>
 </template>
 
 <script>
 export default {
   name: 'doc-item',
-  props: ['element'],  
+  props: ['element', 'methods'],  
 }
 </script>
 
 <style>
-
+.docnav-element {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
 </style>
