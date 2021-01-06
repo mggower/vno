@@ -48,6 +48,7 @@ if (resRead && resRun && resWrite && resNet) {
       const json = await Deno.readTextFile(configPath)
         .then((res) => JSON.parse(res));
       // {entry, root} will be used to run the vno bundler
+
       const { entry, root } = json;
       // { options } stores user data that will populate an html file
       const { options } = json;
