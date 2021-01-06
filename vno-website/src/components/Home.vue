@@ -11,25 +11,6 @@
         <img id="denoLogo" src="/assets/deno-logo.png"
       /></a>
     </div>
-    <div class="logoText">
-      <a
-        class="docTags"
-        id="gitText"
-        href="https://github.com/oslabs-beta/vno"
-        target="_blank"
-        rel="noopener"
-        >Git</a
-      >
-      <a
-        class="docTags"
-        id="denoText"
-        href="https://deno.land/x/vno@v1.0-beta.5"
-        target="_blank"
-        rel="noopener"
-        >Deno</a
-      >
-    </div>
-    <br />
     <!-- <h3 id="cliText">CLI Plugin</h3>
     <a
       class="docTags"
@@ -58,6 +39,10 @@ a:link {
 .logos {
   display: flex;
   justify-content: center;
+  padding: 24px;
+}
+.home h1 {
+  padding-top: 16px;
 }
 #gitLogo {
   margin-right: 0.4rem;

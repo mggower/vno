@@ -1,18 +1,15 @@
 <template>
   <div class="flip-box">
     <div class="flip-box-inner">
-      <img
-        class="flip-box-front"
-        :src="picture"
-        alt="image"
-        border="0"
-        width="250"
-        height="250"
-      />
+      <div class="flip-box-front">
+        <img :src="picture" alt="image" border="0" width="250" height="250" />
+      </div>
       <!--  -->
       <div class="flip-box-back">
-        <h2>{{ name }}</h2>
-        <div class="links">
+        <div class="bio">
+          <h2>{{ name }}</h2>
+        </div>
+        <div class="bio">
           <a class="email" :href="email"
             ><i class="fas fa-envelope fa-3x"></i
           ></a>
@@ -41,16 +38,20 @@ a {
   color: #ffffff;
 }
 
-.links {
+.bio {
+  width: 100%;
+  height: 20%;
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
+}
+.bio a {
+  padding: 8px;
 }
 
 .flip-box {
   background-color: transparent;
-  width: 100%;
   margin: 16px;
   padding: 16px;
   height: 300px;
@@ -78,10 +79,14 @@ a {
   -webkit-backface-visibility: hidden; /* Safari */
   backface-visibility: hidden;
 }
-
+.flip-box-front img {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}
 .flip-box-back {
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column;
   align-items: center;
   justify-content: center;
   box-shadow: -5px 5px 20px 3px #57d3b082;
@@ -101,7 +106,7 @@ a {
   }
   50% {
     box-shadow: 0 25px 15px 0px rgba(0, 0, 0, 0.2);
-    transform: translatey(-20px);
+    transform: translatey(20px);
   }
   100% {
     box-shadow: 0 5px 15px 0px rgba(0, 0, 0, 0.6);
@@ -109,14 +114,14 @@ a {
   }
 }
 #meetTeam {
+  display: inline-block;
+  text-align: center;
   font-size: 6rem;
-  text-align: left;
-  margin-left: 20px;
 }
 
 h2 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 18px;
-  font-weight: 200;
+  font-family: Chalet-NewYorkNineteenSixty, 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 24px;
 }
 </style>

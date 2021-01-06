@@ -32,7 +32,6 @@
     <div v-else-if="displayedComponent === 'Demo'">
       <Demo />
     </div>
-    <p id="built">built with vno</p>
   </div>
 </template>
 
@@ -100,36 +99,39 @@ export default {
 <style>
 @import url('https://db.onlinewebfonts.com/c/6d253426005e3fdcd9f69455050bd7d7?family=Chalet-NewYorkNineteenSixty');
 
+body {
+  background-color: #203a42;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
 .teamWrapper {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-evenly;
-  align-items: flex-end;
+  align-items: center;
 }
 
-body {
-  background-color: #203a42;
-  height: fit-content;
-}
 #meetTeam {
   font-size: 6rem;
 }
-div {
-  height: 100%;
-}
+
 .nav {
   box-shadow: 0px 0px 10px 0px #132429;
   padding: 20px;
+  margin: 0;
   background-color: #1a3037;
   list-style-type: none;
   display: flex;
   color: white;
   justify-content: space-around;
-  margin-bottom: 5.5rem;
+  margin-bottom: 4.5rem;
 }
 .nav li {
   color: white;
   cursor: pointer;
+  padding: 5px;
 }
 .nav a {
   font-size: 2rem;
@@ -151,7 +153,7 @@ div {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #79d0b2;
-  margin-top: 60px;
+  margin: 0;
 }
 
 #denoLogo {
@@ -163,9 +165,13 @@ div {
   height: 3rem;
 }
 #built {
-  font-size: 15px;
+  font-size: 16px;
   font-style: italic;
   margin-top: 10px;
+  position: fixed;
+  left: 15px;
+  bottom: 15px;
+  z-index: -5;
 }
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
 }
