@@ -46,6 +46,31 @@ function keyG(key: string, val?: string) {
   return `    ${colors.green(colors.italic(key))}:  ${val || ""}`;
 }
 
+function lineLength(string: string) {
+  let mutable = string.slice();
+  let output = "";
+
+  function dice(str: string) {
+    let index = 60;
+    if (!str[index]) {
+      output += str + "\n";
+      return;
+    }
+    while (str[index] !== " ") {
+      index -= 1;
+    }
+    output += str.slice(0, index + 1) + "\n";
+    dice(str.slice(index + 1));
+    return;
+  }
+  dice(mutable);
+  console.log(`${output}`);
+}
+
+lineLength(
+  "deno run --allow-run --allow-write --allow-read --unstable https://deno.land/x/vno/dist/mod.ts create [project-name]",
+);
+
 function CMDS(doc: infoInterface) {
   // commands
   console.log(`\n${keyY("commands")}`);
@@ -60,6 +85,7 @@ function CMDS(doc: infoInterface) {
 }
 
 function OPTIONS(doc: infoInterface) {
+  // options flags
   console.log(`\n${keyY("options")}`);
   doc.options.forEach((obj) => {
     const { cmd, about } = obj;
