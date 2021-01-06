@@ -29,7 +29,7 @@ const info: infoInterface = {
       action: "run",
       cmd: [
         "vno run dev",
-        "deno run --allow-run --allow-write --allow-read --unstable\n          https://deno.land/x/vno/dist/mod.ts run dev",
+        "deno run --allow-run --allow-write --allow-read --allow-net --unstable\n          https://deno.land/x/vno/dist/mod.ts run dev",
       ],
       about:
         "the run dev argument will run the bundler and host\n      a development server",
