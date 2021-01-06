@@ -1,4 +1,4 @@
-import { superoak } from "https://deno.land/x/superoak@3.0.0/mod.ts";
+import { superoak } from "../../lib/deps.ts";
 import { server } from "./server.ts";
 
 const decoder = new TextDecoder("utf-8");
