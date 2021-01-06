@@ -1,10 +1,10 @@
-FROM hayd/alpine-deno:1.6.1
+FROM hayd/alpine-deno
 
 WORKDIR /app
 
-COPY . .
+ENV PORT=8080
 
-ENV PORT=3030
+COPY . .
 
 CMD ["deno", "run", "-A", "--unstable", "server.ts"]
 
