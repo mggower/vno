@@ -65,17 +65,6 @@ const vnoConfig = (userOptions: terminalOptions) => {
   ));
 };
 
-/**
- {
- root
- entry
- options {
-  child
-  port
-  title
- }
- }
- */
 export default {
   childComponent,
   rootComponent,
