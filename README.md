@@ -99,3 +99,23 @@ deno run --allow-read --allow-write --allow-run --allow-net --unstable https://d
 ```
 
 ![vno run dev](https://i.ibb.co/RckD0Tm/vno-run-dev.gif)
+
+### Vno run server
+
+- Add a server property in your vno.config.json file
+```
+{
+  "root": "App",
+  "entry": "./path/to/rootcomponent",
+  "options": {
+    "title": "an example application"
+  },
+  "server": "./path/to/server.ts"
+}
+```
+- And execute this command in the terminal
+```
+vno run server
+```
+
+![vno run server](https://i.ibb.co/xFZPM1L/vno-run-server.gif)
