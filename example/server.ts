@@ -1,5 +1,4 @@
 import { Application, join, log, send } from "./deps.ts";
-import vno from "../src/dist/mod.ts";
 
 const port: number = 3000;
 const server: Application = new Application();
