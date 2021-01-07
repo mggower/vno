@@ -117,6 +117,7 @@ a {
   display: inline-block;
   text-align: center;
   font-size: 6rem;
+  letter-spacing: 2px;
 }
 
 h2 {

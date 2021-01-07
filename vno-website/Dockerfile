@@ -9,5 +9,3 @@ COPY . .
 CMD ["deno", "run", "-A", "--unstable", "server.ts"]
 
 EXPOSE ${PORT}
-
-

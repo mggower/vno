@@ -25,15 +25,36 @@ function LISTEN(port: number, hostname?: string) {
   );
 }
 // print warning
-function WARN(msg: string = "") {
+function WARN(msg: string | any = "") {
   console.warn(`\n${colors.yellow(msg)}\n`);
+}
+// function breaks up long strings to new lines at max length
+function lineLength(string: string, length: number, tab: number) {
+  let mutable = string.slice();
+  let output = "";
+
+  function dice(str: string) {
+    let index = length;
+    if (!str[index]) {
+      output += `${(" ").repeat(tab)}${str || ""}\n`;
+      return;
+    }
+    while (str[index] !== " ") {
+      index -= 1;
+    }
+    output += `${(" ").repeat(tab)}${str.slice(0, index + 1)}\n`;
+    dice(str.slice(index + 1));
+    return;
+  }
+  dice(mutable);
+  return output;
 }
 // prints module specific information
 function INFO(doc: infoInterface) {
   // version
   console.log(keyY("version", doc.version));
   // description
-  console.log(`\n  ${colors.green(doc.description)}`);
+  console.log(`\n${colors.green(lineLength(doc.description, 52, 4))}`);
   console.log(`\n${keyY("docs", doc.docs)}`);
   console.log(`${keyY("module", doc.module)}`);
 }
@@ -53,13 +74,14 @@ function CMDS(doc: infoInterface) {
     const { action, cmd, about } = obj;
     console.log(`\n${keyG(action)}`);
     cmd.forEach((el) => {
-      console.log(`      ${colors.yellow(">>")}  ${el}`);
+      console.log(`${lineLength(`${colors.yellow(">>")}  ${el}`, 61, 6)}`);
     });
-    console.log(`\n      ${about}`);
+    console.log(`${lineLength(about, 60, 6)}`);
   });
 }
 
 function OPTIONS(doc: infoInterface) {
+  // options flags
   console.log(`\n${keyY("options")}`);
   doc.options.forEach((obj) => {
     const { cmd, about } = obj;
@@ -68,7 +90,7 @@ function OPTIONS(doc: infoInterface) {
     });
     console.log(`      ${colors.yellow(">>")}  ${about}`);
   });
-  console.log(`\n`);
+  console.log("\n");
 }
 
 export default { ASCII, INFO, CMDS, QUIET, LISTEN, WARN, OPTIONS, keyY, keyG };

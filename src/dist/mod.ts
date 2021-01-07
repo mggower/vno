@@ -59,46 +59,73 @@ if (resRead && resRun && resWrite && resNet) {
       else print.ASCII();
 
       // vno run dev
-      if (/run/i.test(args[0]) && /dev/i.test(args[1])) {
-        const { Application, send } = oak;
-        // establish port and hostname
-        const port = Number(options.port) || 3000;
-        const hostname = options.hostname || "0.0.0.0";
+      if (/run/i.test(args[0])) {
+        if (/dev/i.test(args[1])) {
+          const { Application, send } = oak;
+          // establish port and hostname
+          const port = Number(options.port) || 3000;
+          const hostname = options.hostname || "0.0.0.0";
 
-        const server = new Application();
-        // respond to requests with appropriate content
-        server.use(async (context, next) => {
-          // locate the request url
-          const { pathname } = context.request.url;
-          // save the path to vno-build dir
-          const buildpath = `${Deno.cwd()}/vno-build`;
+          const server = new Application();
+          // respond to requests with appropriate content
+          server.use(async (context, next) => {
+            // locate the request url
+            const { pathname } = context.request.url;
+            // save the path to vno-build dir
+            const buildpath = `${Deno.cwd()}/vno-build`;
 
-          // http response
-          if (pathname === "/") {
-            // render template to the server
-            context.response.body = str.htmlTemplate({ root, ...options });
-          } else if (pathname === "/build.js") {
-            context.response.type = "application/javascript";
-            // bundled javascript
-            await send(context, pathname, {
-              root: buildpath,
-              index: "build.js",
-            });
-          } else if (pathname === "/style.css") {
-            context.response.type = "text/css";
-            // component styles
-            await send(context, pathname, {
-              root: buildpath,
-              index: "style.css",
-            });
-          } else {
-            await next();
+            // http response
+            if (pathname === "/") {
+              // render template to the server
+              context.response.body = str.htmlTemplate({ root, ...options });
+            } else if (pathname === "/build.js") {
+              context.response.type = "application/javascript";
+              // bundled javascript
+              await send(context, pathname, {
+                root: buildpath,
+                index: "build.js",
+              });
+            } else if (pathname === "/style.css") {
+              context.response.type = "text/css";
+              // component styles
+              await send(context, pathname, {
+                root: buildpath,
+                index: "style.css",
+              });
+            } else {
+              await next();
+            }
+          });
+          // server error handling
+          server.addEventListener("error", (err) => print.WARN(err));
+          // listen for active server
+          if (import.meta.main) {
+            server.addEventListener(
+              "listen",
+              () => print.LISTEN(port, hostname),
+            );
+            await server.listen({ port, hostname });
           }
-        });
-        // listen for active server
-        if (import.meta.main) {
-          server.addEventListener("listen", () => print.LISTEN(port, hostname));
-          await server.listen({ port, hostname });
+        } else if (/server/i.test(args[1])) {
+          // retrieve the path to server from vno.config.json and run process
+          const server = path.parse(json.server);
+          Deno.chdir(server.dir);
+
+          const process = Deno.run({
+            cmd: [
+              "deno",
+              "run",
+              "--allow-net",
+              "--allow-run",
+              "--allow-write",
+              "--allow-read",
+              "--unstable",
+              server.base,
+            ],
+          });
+
+          const { code } = await process.status();
+          Deno.exit(code);
         }
       }
     } else {
