@@ -58,53 +58,11 @@ const htmlTemplate = (userOptions: terminalOptions) => {
   );
 };
 
-const serverTemplate = (userOptions: terminalOptions) => {
-  return (
-    `
-import { Application, join, log, send } from "./deps.ts";
-const port: number = ${userOptions.port};
-const server: Application = new Application();
-
-server.use(async (ctx, next) => {
- const filePath = ctx.request.url.pathname;
- if (filePath === "/") {
-   await send(ctx, ctx.request.url.pathname, {
-     root: join(Deno.cwd(), "public"),
-     index: "index.html",
-   });
- } else if (filePath === "/build.js") {
-   ctx.response.type = "application/javascript";
-   await send(ctx, filePath, {
-     root: join(Deno.cwd(), "vno-build"),
-     index: "build.js",
-   });
- } else if (filePath === "/style.css") {
-   ctx.response.type = "text/css";
-   await send(ctx, filePath, {
-     root: join(Deno.cwd(), "vno-build"),
-     index: "style.css",
-   });
- } else await next();
-});
-if (import.meta.main) {
- log.info("Server is up and running on port  ${userOptions.port}");
- await server.listen({ port });
-}
-export { server };`
-  );
-};
-
-const depsTemplate = () => {
-  return (
-    `export { dirname, join } from "https://deno.land/std/path/mod.ts";
-     export * as log from "https://deno.land/std/log/mod.ts";
-     export { Application, Router, send } from "https://deno.land/x/oak@v6.3.1/mod.ts";
-     export { config } from "https://deno.land/x/dotenv/mod.ts";`
-  );
-};
-
 const vnoConfig = (userOptions: terminalOptions) => {
-  return (JSON.stringify({ root: userOptions.root, entry: "./" }));
+  const { child, root, port, title } = userOptions;
+  return (JSON.stringify(
+    { root, entry: "./", options: { child, port, title } },
+  ));
 };
 
 export default {
@@ -112,7 +70,5 @@ export default {
   rootComponent,
   genericComponent,
   htmlTemplate,
-  serverTemplate,
-  depsTemplate,
   vnoConfig,
 };
