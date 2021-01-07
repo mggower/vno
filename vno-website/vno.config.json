@@ -1,4 +1,7 @@
 {
   "root": "App",
-  "entry": "./src"
+  "entry": "./src",
+  "options": {
+    "port": 3000
+  }
 }
