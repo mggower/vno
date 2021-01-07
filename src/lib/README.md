@@ -2,7 +2,7 @@
 
 ## Defaults
 
-- Here lives our default values
+- [ ] Here lives our default values
 - [ ] A default CDN for vue
 - [ ] A default HTML setting for Server Side Rendering
 - [ ] A default VNO_PATH, BUILD_PATH, and STYLE_PATH for the build tool
@@ -10,11 +10,11 @@
 
 ## Deps
 
-- Needs no explanation  
+- [ ] Needs no explanation  
 
 ## Types
 
-- Interface Definitions
+- [ ] Interface Definitions
 
 ## Utils
 
@@ -25,8 +25,3 @@
 
 - [ ] indexOfRegExp - Takes an array and a regular expression as arguments and returns the first element that passes the regex test.
 - [ ] sliceAndTrim - Takes and array and 2 indexes (a start and and end) It then slices the array from the start (inclusive) to the end (exclusive). It then joins them together as a string. And replaces whitespaces greater than one as the default.
-- [ ] toKebab - Takes a PascalCase (or UpperCamelCase) string and returns the same string converted to kebab-case.
-
-#### Print - (Artwork by Mikey Gower)
-
-- [ ] Returns a VERY sexy ASCII printout when the parsing is complete
