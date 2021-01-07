@@ -115,7 +115,10 @@ if (resRead && resRun && resWrite && resNet) {
             cmd: [
               "deno",
               "run",
-              "-A",
+              "--allow-net",
+              "--allow-run",
+              "--allow-write",
+              "--allow-read",
               "--unstable",
               server.base,
             ],
