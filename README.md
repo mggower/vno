@@ -11,8 +11,10 @@
   <img alt="license" src="https://img.shields.io/github/license/oslabs-beta/vno?color=%2357d3af">
   <img alt="issues" src="https://img.shields.io/github/issues-raw/oslabs-beta/vno?color=yellow">
   <img alt="last commit" src="https://img.shields.io/github/last-commit/oslabs-beta/vno?color=%2357d3af">
-  <img alt="Repo stars" src="https://img.shields.io/github/stars/oslabs-beta/vno?logoColor=%2334495e&style=social">  
+  <img alt="Repo stars" src="https://img.shields.io/github/stars/oslabs-beta/vno?logoColor=%2334495e&style=social"> 
+  <img alt="twitter" src="https://img.shields.io/twitter/follow/vno_land?style=social">
 </p>
+
 
 ## Features
 
