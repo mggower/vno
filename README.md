@@ -4,7 +4,7 @@
 
 <p align='right'> - Logo Design by <a href='https://www.behance.net/bmccabe'>Brendan McCabe</a></p>
 <h1 align="center">
-	<a href='https://vno.land'>vno</a><img alt="twitter" src="https://img.shields.io/twitter/follow/vno_land?style=social"></h1>
+	<a href='https://vno.land'>vno</a> <img alt="twitter" src="https://img.shields.io/twitter/follow/vno_land?label=%40vno_land&logoColor=%2357d3af&style=social"></h1>
 	<h4 align='center'> The first <a href='https://deno.land/x/vno'>build tool</a> for compiling and bundling <a href='https://github.com/vuejs'>Vue</a> components in a <a href='https://github.com/denoland'>Deno</a> runtime environment</h4>
 
 <p align="center">
