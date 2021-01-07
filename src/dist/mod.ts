@@ -109,7 +109,7 @@ if (resRead && resRun && resWrite && resNet) {
         } else if (/server/i.test(args[1])) {
           // retrieve the path to server from vno.config.json and run process
           const server = path.parse(json.server);
-          Deno.chdir(server.dir);
+          if (server.dir) Deno.chdir(server.dir);
 
           const process = Deno.run({
             cmd: [
@@ -119,6 +119,7 @@ if (resRead && resRun && resWrite && resNet) {
               "--allow-run",
               "--allow-write",
               "--allow-read",
+              "--allow-env",
               "--unstable",
               server.base,
             ],

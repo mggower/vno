@@ -48,7 +48,7 @@ const htmlTemplate = (userOptions: terminalOptions) => {
     <title>${userOptions.title}</title>
   </head>
   <body>
-    <div id="${userOptions.root.toLowerCase()}">
+    <div id="${_.kebabCase(userOptions.root)}">
       <!-- built files will be auto injected -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
