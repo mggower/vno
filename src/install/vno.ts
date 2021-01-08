@@ -107,6 +107,7 @@ if (resRead && resWrite) {
             await server.listen({ port, hostname });
           }
         } else if (/server/i.test(args[1])) {
+          // request permissions in a subprocess
           const run = { name: "run" } as const;
           const resRun = await Deno.permissions.request(run);
           // retrieve the path to server from vno.config.json and run process
@@ -142,11 +143,12 @@ if (resRead && resWrite) {
       );
     }
   } else if (/upgrade/i.test(args[0])) {
+    // request permissions in a subprocess
     const run = { name: "run" } as const;
     const resRun = await Deno.permissions.request(run);
 
     if (resRun) {
-      const module = await fetch("http://deno.land/x/vno/dist/mod.ts");
+      const module = await fetch("http://deno.land/x/vno/install/vno.ts");
       const regex = /\/x\/vno@(.*)\/dist/gi;
       const lastestVersion = regex.exec(module.url)?.[1];
       if (info.version !== lastestVersion) {
