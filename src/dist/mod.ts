@@ -5,12 +5,10 @@ import { fs, oak, path } from "../lib/deps.ts";
 // ensure permissions
 const read = { name: "read" } as const;
 const write = { name: "write" } as const;
-const run = { name: "run" } as const;
 const net = { name: "net" } as const;
 // permission requests
 const resRead = await Deno.permissions.request(read);
 const resWrite = await Deno.permissions.request(write);
-const resRun = await Deno.permissions.request(run);
 const resNet = await Deno.permissions.request(net);
 
 // vno module
@@ -18,7 +16,7 @@ const bundler = new (Initialize as any)();
 // command line arguments
 const { args } = Deno;
 
-if (resRead && resRun && resWrite && resNet) {
+if (resRead && resWrite && resNet) {
   // vno create [project-name]
   if ((/create/i).test(args[0])) {
     const repo = args[1];
@@ -47,13 +45,17 @@ if (resRead && resRun && resWrite && resNet) {
       // read the vno.config.json file and parse it into js
       const json = await Deno.readTextFile(configPath)
         .then((res) => JSON.parse(res));
-      // {entry, root} will be used to run the vno bundler
 
+      let vue;
+      // { vue } if the user provided a vue cdn
+      json.vue ? { vue } = json : null;
+      // {entry, root} will be used to run the vno bundler
       const { entry, root } = json;
       // { options } stores user data that will populate an html file
       const { options } = json;
+
       // invoke the bundler
-      await bundler.config({ entry, root });
+      await bundler.config({ entry, root, vue } || { entry, root });
       // if 'quiet' is run as an argument, do not print ASCII
       if (args[1] === "quiet" || args[2] === "quiet") print.QUIET();
       else print.ASCII();
@@ -107,6 +109,8 @@ if (resRead && resRun && resWrite && resNet) {
             await server.listen({ port, hostname });
           }
         } else if (/server/i.test(args[1])) {
+          const run = { name: "run" } as const;
+          const resRun = await Deno.permissions.request(run);
           // retrieve the path to server from vno.config.json and run process
           const server = path.parse(json.server);
           if (server.dir) Deno.chdir(server.dir);
@@ -134,7 +138,37 @@ if (resRead && resRun && resWrite && resNet) {
         ">> could not locate vno.config.json \n>> run cmd again in root directory || create vno.config.json",
       );
     }
-    //
+  } else if (/upgrade/i.test(args[0])) {
+    const module = await fetch("http://deno.land/x/vno/dist/mod.ts");
+    const regex = /\/x\/vno@(.*)\/dist/gi;
+    const lastestVersion = regex.exec(module.url)?.[1];
+
+    if (info.version !== lastestVersion) {
+      print.msgG(`\n    ...updating to ${lastestVersion}\n`);
+
+      const process = Deno.run({
+        cmd: [
+          "deno",
+          "install",
+          "--allow-net",
+          "--allow-run",
+          "--allow-write",
+          "--allow-read",
+          "--allow-env",
+          "--unstable",
+          "-f",
+          "-n",
+          "vno",
+          module.url,
+        ],
+      });
+
+      const { code } = await process.status();
+
+      Deno.exit(code);
+    } else {
+      print.msgG(`\n    up to date with latest version: ${lastestVersion}\n`);
+    }
   } else {
     // --flags to help users on the command-line
     if ((/--help/i.test(args[0])) || (/--info/i.test(args[0]))) {
