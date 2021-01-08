@@ -145,11 +145,10 @@ if (resRead && resWrite) {
     const run = { name: "run" } as const;
     const resRun = await Deno.permissions.request(run);
 
-    if (resRun) {}
-    const module = await fetch("http://deno.land/x/vno/dist/mod.ts");
-    const regex = /\/x\/vno@(.*)\/dist/gi;
-    const lastestVersion = regex.exec(module.url)?.[1];
     if (resRun) {
+      const module = await fetch("http://deno.land/x/vno/dist/mod.ts");
+      const regex = /\/x\/vno@(.*)\/dist/gi;
+      const lastestVersion = regex.exec(module.url)?.[1];
       if (info.version !== lastestVersion) {
         print.msgG(`\n    ...updating to ${lastestVersion}\n`);
 
@@ -173,6 +172,8 @@ if (resRead && resWrite) {
         const { code } = await process.status();
 
         Deno.exit(code);
+      } else {
+        print.msgG(`\n    vno ${lastestVersion} is the latest version`);
       }
     } else {
       print.WARN(
