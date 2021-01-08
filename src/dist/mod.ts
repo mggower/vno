@@ -108,31 +108,14 @@ if (resRead && resWrite) {
           }
         } else if (/server/i.test(args[1])) {
           const run = { name: "run" } as const;
-          const resRun = await Deno.permissions.request(run);
           // retrieve the path to server from vno.config.json and run process
-          const server = path.parse(json.server);
-          if (server.dir) Deno.chdir(server.dir);
-
-          if (resRun) {
-            const process = Deno.run({
-              cmd: [
-                "deno",
-                "run",
-                "--allow-net",
-                "--allow-run",
-                "--allow-read",
-                "--allow-env",
-                "--unstable",
-                server.base,
-              ],
-            });
-
-            const { code } = await process.status();
-            Deno.exit(code);
-          } else {
-            print.WARN(
-              "\n Deno requires explicit permissions to run a subprocess",
-            );
+          try {
+            const handler = (await import(path.resolve(json.server)))?.default;
+            await handler();
+            Deno.exit(0);
+          } catch(err) {
+            console.error(err);
+            Deno.exit(1);
           }
         }
       }
