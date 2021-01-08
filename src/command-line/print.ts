@@ -24,6 +24,15 @@ function LISTEN(port: number, hostname?: string) {
     ),
   );
 }
+
+function msgG(str: string) {
+  console.log(colors.green(str));
+}
+
+function msgY(str: string) {
+  console.log(colors.yellow(str));
+}
+
 // print warning
 function WARN(msg: string | any = "") {
   console.warn(`\n${colors.yellow(msg)}\n`);
@@ -93,4 +102,16 @@ function OPTIONS(doc: infoInterface) {
   console.log("\n");
 }
 
-export default { ASCII, INFO, CMDS, QUIET, LISTEN, WARN, OPTIONS, keyY, keyG };
+export default {
+  ASCII,
+  INFO,
+  CMDS,
+  QUIET,
+  LISTEN,
+  WARN,
+  OPTIONS,
+  keyY,
+  keyG,
+  msgG,
+  msgY,
+};

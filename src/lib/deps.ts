@@ -1,8 +1,8 @@
 // deno std library
-import * as fs from "https://deno.land/std/fs/mod.ts";
-import * as path from "https://deno.land/std/path/mod.ts";
-import * as colors from "https://deno.land/std/fmt/colors.ts";
-import * as http from "https://deno.land/std/http/mod.ts";
+import * as fs from "https://deno.land/std@0.83.0/fs/mod.ts";
+import * as path from "https://deno.land/std@0.83.0/path/mod.ts";
+import * as colors from "https://deno.land/std@0.83.0/fmt/colors.ts";
+import * as http from "https://deno.land/std@0.83.0/http/mod.ts";
 import * as asrt from "https://deno.land/std@0.83.0/testing/asserts.ts";
 
 // third-party
