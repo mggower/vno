@@ -5,7 +5,7 @@ import {
 } from "../lib/types.ts";
 
 // #region memoize
-// memoize is used to cache child components that 
+// memoize is used to cache child components that
 // have already been "scrubbed" in preorderScrub
 // #endregion
 export function memoize() {
@@ -16,8 +16,8 @@ export function memoize() {
   // #endregion
   const cache: StorageInterface = {};
   // #region "scrubbed" conditions
-  // if the 'label' argument is located in the cache, invoke  
-  // scrub with the last parent component, and the label as 
+  // if the 'label' argument is located in the cache, invoke
+  // scrub with the last parent component, and the label as
   // arguments; otherwise, invoke scrub from the root
   // #endregion
   return (label: string, current: ComponentInterface) => {
@@ -42,8 +42,8 @@ export const Storage: StorageInterface = {};
 
 // global utility functions
 const utils: UtilityInterface = {
-  // #region preorderScrub 
-  // traverses the component tree, and repositions components to a 
+  // #region preorderScrub
+  // traverses the component tree, and repositions components to a
   // higher place in the tree to secure the component hierarchy
   // #endregion
   preorderScrub: memoize(),
@@ -55,7 +55,7 @@ const utils: UtilityInterface = {
     const n = <number> await Deno.stdin.read(buf);
     return new TextDecoder().decode(buf.subarray(0, n)).trim();
   },
-  
+
   // indexOfRegExp accepts a regex and an array and returns a number;
   indexOfRegExp(regex: RegExp, array: any[]) {
     return array.findIndex((element) => regex.test(element));
@@ -76,7 +76,7 @@ const utils: UtilityInterface = {
   ) {
     return array.slice(start, end).join("").replace(regex, replaced);
   },
-  
+
   // #region trimAndSplit
   // accepts a string, a start index(inclusive), an end index(exclusive)
   // optional: char to split at, regex char and string

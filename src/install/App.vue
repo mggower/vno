@@ -18,8 +18,15 @@ import 'HelloVno' from './components/HelloVno.vue';
 export default {
   name: 'app',
   // this is a comment
-  components: {HelloVno} // this is a comment on a line with other things
+  components: {HelloVno}, // this is a comment on a line with other things
   /* another comment */
+  data: () => ({
+    code: `#!/bin/sh
+hostname
+uptime
+uname -a
+`,
+  }),
 }
 
 

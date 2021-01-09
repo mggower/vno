@@ -40,7 +40,12 @@ export default function parseScript(current: ComponentInterface) {
       const exportStart = Utils.indexOfRegExp(/^(export)/, script);
       const exportEnd = script.lastIndexOf("}");
       // returns a stringifed and trimmed version of our components script
+
       current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
+      // script.slice(exportStart + 1, exportEnd).join("\n")
+      // .replace(/(\s{2,})/g, " ");
+
+      // Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
       // locate if this component has any children
       const componentsStart = Utils.indexOfRegExp(/(components:)/, script);
