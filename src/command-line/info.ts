@@ -46,11 +46,6 @@ const info: infoInterface = {
   ],
   options: [
     {
-      action: "upgrade",
-      cmd: ["upgrade"],
-      about: "installs the latest version of vno",
-    },
-    {
       action: "help",
       cmd: ["--help"],
       about: "prints helpful information on all commands",

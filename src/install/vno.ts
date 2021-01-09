@@ -107,79 +107,20 @@ if (resRead && resWrite) {
             await server.listen({ port, hostname });
           }
         } else if (/server/i.test(args[1])) {
-          // request permissions in a subprocess
-          const run = { name: "run" } as const;
-          const resRun = await Deno.permissions.request(run);
           // retrieve the path to server from vno.config.json and run process
-          const server = path.parse(json.server);
-          if (server.dir) Deno.chdir(server.dir);
-
-          if (resRun) {
-            const process = Deno.run({
-              cmd: [
-                "deno",
-                "run",
-                "--allow-net",
-                "--allow-run",
-                "--allow-read",
-                "--allow-env",
-                "--unstable",
-                server.base,
-              ],
-            });
-
-            const { code } = await process.status();
-            Deno.exit(code);
-          } else {
-            print.WARN(
-              "\n Deno requires explicit permissions to run a subprocess",
-            );
+          try {
+            const handler = (await import(path.resolve(json.server)))?.default;
+            await handler();
+            Deno.exit(0);
+          } catch(err) {
+            console.error(err);
+            Deno.exit(1);
           }
         }
       }
     } else {
       print.WARN(
         ">> could not locate vno.config.json \n>> run cmd again in root directory || create vno.config.json",
-      );
-    }
-  } else if (/upgrade/i.test(args[0])) {
-    // request permissions in a subprocess
-    const run = { name: "run" } as const;
-    const resRun = await Deno.permissions.request(run);
-
-    if (resRun) {
-      const module = await fetch("http://deno.land/x/vno/install/vno.ts");
-      const regex = /\/x\/vno@(.*)\/dist/gi;
-      const lastestVersion = regex.exec(module.url)?.[1];
-      if (info.version !== lastestVersion) {
-        print.msgG(`\n    ...updating to ${lastestVersion}\n`);
-
-        const process = Deno.run({
-          cmd: [
-            "deno",
-            "install",
-            "--allow-net",
-            "--allow-run",
-            "--allow-write",
-            "--allow-read",
-            "--allow-env",
-            "--unstable",
-            "-f",
-            "-n",
-            "vno",
-            module.url,
-          ],
-        });
-
-        const { code } = await process.status();
-
-        Deno.exit(code);
-      } else {
-        print.msgG(`\n    vno ${lastestVersion} is the latest version`);
-      }
-    } else {
-      print.WARN(
-        ">> Deno requires explicit permissions to run a subprocess",
       );
     }
   } else {
