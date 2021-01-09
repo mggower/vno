@@ -39,11 +39,9 @@ export default function parseScript(current: ComponentInterface) {
       // isolate the data inside of an export statement
       const exportStart = Utils.indexOfRegExp(/^(export)/, script);
       const exportEnd = script.lastIndexOf("}");
-      // returns a stringifed and trimmed version of our components script
 
+      // returns a stringifed and trimmed version of our components script
       current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
-      // script.slice(exportStart + 1, exportEnd).join("\n")
-      // .replace(/(\s{2,})/g, " ");
 
       // Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
