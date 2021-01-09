@@ -93,6 +93,8 @@ const utils: UtilityInterface = {
   ) {
     return str.slice(start, end).replace(regex, replaced).split(split);
   },
+  multilineCommentPattern: /\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\//gm,
+  htmlCommentPattern: /<!--([\s\S]*?)-->/gm
 };
 
 export default utils;
