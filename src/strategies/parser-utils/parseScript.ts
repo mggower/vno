@@ -20,9 +20,13 @@ export default function parseScript(current: ComponentInterface) {
         );
       }
 
-      const script = split.slice(open + 1, close).filter((cmnt) =>
-        !(/^(\s*)\/\//gm).test(cmnt)
-      );
+      const script = split.slice(open + 1, close).map((line) => {
+        if ((/\/\//gm).test(line)) {
+          const comment = line.indexOf("//");
+          return line.slice(0, comment);
+        }
+        return line;
+      });
 
       console.log(`script: (parseScriptln27) ${script}`);
 
