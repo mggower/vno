@@ -15,6 +15,7 @@ export default function parseStyle(current: ComponentInterface) {
       }
       // stringify, trim, and save style to component object
       current.style = Utils.sliceAndTrim(current.split, open + 1, close);
+      current.style = current.style.replace(Utils.multilineCommentPattern, "");
     }
   } catch (error) {
     console.error(

@@ -40,9 +40,14 @@ export default function parseScript(current: ComponentInterface) {
       const exportStart = Utils.indexOfRegExp(/^(export)/, script);
       const exportEnd = script.lastIndexOf("}");
 
-      // returns a stringifed and trimmed version of our components script
+      // returns a stringified and trimmed version of our components script
       current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
+      // remove comments /* */ in script and style tag's
+      if (current.path.toString().includes(".vue")) {
+        current.split = current.split.join("\n").replace(Utils.multilineCommentPattern, "").split("\n");
+        current.script = current.script.replace(Utils.multilineCommentPattern, "");
+      }
       // Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
       // locate if this component has any children

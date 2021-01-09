@@ -78,6 +78,8 @@ export interface UtilityInterface {
     replaced?: string,
   ): string[];
   preorderScrub: Function;
+  multilineCommentPattern: string | RegExp;
+  htmlCommentPattern: string | RegExp;
 }
 // #endregion
 

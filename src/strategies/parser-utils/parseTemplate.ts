@@ -15,8 +15,9 @@ export default function parseTemplate(current: ComponentInterface) {
           `There was an error isolating content inside of <template> tags for ${current.label}.vue`
         );
       }
-      // stringify, trim, and save on template property
-      current.template = Utils.sliceAndTrim(split, open + 1, close);
+      // stringify, trim, remove comments, and save on template property
+      current.template = Utils.sliceAndTrim(split, open + 1, close)
+                              .replace(Utils.htmlCommentPattern, "");
       // slice the split property to minimize the length of data
       current.split = split.slice(close + 1);
     }
