@@ -4,7 +4,7 @@
 
 <p align='right'> - Logo Design by <a href='https://www.behance.net/bmccabe'>Brendan McCabe</a></p>
 <h1 align="center">
-	<a href='https://vno.land'>vno</a> <br/>
+	<a href='https://www.vno.land'>vno</a> <br/>
 	<img alt="twitter" src="https://img.shields.io/twitter/follow/vno_land?label=%40vno_land&logoColor=%2357d3af&style=social"></h1>
 	<h4 align='center'> The first <a href='https://deno.land/x/vno'>build tool</a> for compiling and bundling <a href='https://github.com/vuejs'>Vue</a> components in a <a href='https://github.com/denoland'>Deno</a> runtime environment</h4>
 
@@ -37,7 +37,7 @@
 - run the following command in your terminal to install vno on your machine.
 
 ```
-deno install --allow-net --unstable -f -n vno https://deno.land/x/vno/dist/mod.ts
+deno install --allow-net --unstable https://deno.land/x/vno/install/vno.ts
 ```
 
 - Deno requires the `--allow-net` permissions to run an installation
@@ -73,7 +73,7 @@ vno create [project name]
 - _OR_ If you'd rather not install:
 
 ```
-deno run --allow-read --allow-write --allow-net --unstable https://deno.land/x/vno/dist/mod.ts create [project name]
+deno run --allow-read --allow-write --allow-net --unstable https://deno.land/x/vno/install/vno.ts create [project name]
 ```
 
 ### run a build on a project
@@ -87,7 +87,7 @@ vno build
 _OR_
 
 ```
-deno run --allow-read --allow-write --allow-net --unstable https://deno.land/x/vno/dist/mod.ts build
+deno run --allow-read --allow-write --allow-net --unstable https://deno.land/x/vno/install/vno.ts build
 ```
 
 ![vno build](https://i.ibb.co/jgRFXvc/vno-build.gif)
@@ -106,7 +106,7 @@ vno run dev
 _OR_
 
 ```
-deno run --allow-read --allow-write --allow-net --unstable https://deno.land/x/vno/dist/mod.ts run dev
+deno run --allow-read --allow-write --allow-net --unstable https://deno.land/x/vno/install/vno.ts run dev
 ```
 
 ![vno run dev](https://i.ibb.co/RckD0Tm/vno-run-dev.gif)
@@ -121,6 +121,7 @@ deno run --allow-read --allow-write --allow-net --unstable https://deno.land/x/v
   "entry": "./path/to/rootcomponent",
   "options": {
     "title": "an example application"
+    "port": 4040
   },
   "server": "./path/to/server.ts"
 }

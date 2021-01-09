@@ -107,7 +107,6 @@ if (resRead && resWrite) {
             await server.listen({ port, hostname });
           }
         } else if (/server/i.test(args[1])) {
-          const run = { name: "run" } as const;
           // retrieve the path to server from vno.config.json and run process
           try {
             const handler = (await import(path.resolve(json.server)))?.default;
@@ -122,45 +121,6 @@ if (resRead && resWrite) {
     } else {
       print.WARN(
         ">> could not locate vno.config.json \n>> run cmd again in root directory || create vno.config.json",
-      );
-    }
-  } else if (/upgrade/i.test(args[0])) {
-    const run = { name: "run" } as const;
-    const resRun = await Deno.permissions.request(run);
-
-    if (resRun) {
-      const module = await fetch("http://deno.land/x/vno/dist/mod.ts");
-      const regex = /\/x\/vno@(.*)\/dist/gi;
-      const lastestVersion = regex.exec(module.url)?.[1];
-      if (info.version !== lastestVersion) {
-        print.msgG(`\n    ...updating to ${lastestVersion}\n`);
-
-        const process = Deno.run({
-          cmd: [
-            "deno",
-            "install",
-            "--allow-net",
-            "--allow-run",
-            "--allow-write",
-            "--allow-read",
-            "--allow-env",
-            "--unstable",
-            "-f",
-            "-n",
-            "vno",
-            module.url,
-          ],
-        });
-
-        const { code } = await process.status();
-
-        Deno.exit(code);
-      } else {
-        print.msgG(`\n    vno ${lastestVersion} is the latest version`);
-      }
-    } else {
-      print.WARN(
-        ">> Deno requires explicit permissions to run a subprocess",
       );
     }
   } else {
