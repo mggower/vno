@@ -20,7 +20,11 @@ export default function parseScript(current: ComponentInterface) {
         );
       }
 
-      const script = split.slice(open + 1, close);
+      const script = split.slice(open + 1, close).filter((cmnt) =>
+        !(/^(\s*)\/\//gm).test(cmnt)
+      );
+
+      console.log(`script: (parseScriptln27) ${script}`);
 
       // identify if a name property is provided
       const nameIndex = Utils.indexOfRegExp(/(name)/, script);
