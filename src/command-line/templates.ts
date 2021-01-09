@@ -16,7 +16,7 @@ const childComponent = (childName: string) => {
         href="https://github.com/oslabs-beta/vno"
         target="_blank"
         rel="noopener">
-      github
+        github
       </a>
     </h3>
     <ul>
@@ -63,7 +63,7 @@ const rootComponent = (userOptions: terminalOptions) => {
       width="450"
       height="450"
     />
-    <HelloVno msg="you are building: ${userOptions.title} with vno" />
+    <${userOptions.child} msg="you are building: ${userOptions.title} with vno" />
   </div>
 </template>
 
