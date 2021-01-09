@@ -21,10 +21,8 @@ export default function parseScript(current: ComponentInterface) {
       }
 
       const script = split.slice(open + 1, close).map((line) => {
-        if ((/\/\//gm).test(line)) {
-          const comment = line.indexOf("//");
-          return line.slice(0, comment);
-        }
+        const comment = line.indexOf("//");
+        if (comment > 0) return line.slice(0, comment);
         return line;
       });
 
