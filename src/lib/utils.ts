@@ -3,6 +3,7 @@ import {
   StorageInterface,
   UtilityInterface,
 } from "../lib/types.ts";
+import { colors } from "../lib/deps.ts";
 
 // #region memoize
 // memoize is used to cache child components that
@@ -96,5 +97,40 @@ const utils: UtilityInterface = {
   multilineCommentPattern: /\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\//gm,
   htmlCommentPattern: /<!--([\s\S]*?)-->/gm
 };
+
+// compile typescript code to string javascrit code
+export async function TsCompile(source: string, path: string) {
+  const temp = `./${Math.random().toString().replace(".", "")}.ts`;
+  try {
+    const file = await Deno.create(temp);
+    const encoder = new TextEncoder();
+
+    await file.write(encoder.encode(source));
+
+    const [, outPut] = await Deno.compile(
+      temp,
+      undefined,
+      { strict: false },
+    );
+
+    // filter javascript output
+    const [script] = Object.entries(outPut).flat().filter((chunk) =>
+      !chunk.includes("file:///")
+    );
+
+    await Deno.remove(temp);
+
+    return script.substring(3, script.length - 4);
+  } catch (error: any) {
+    await Deno.remove(temp);
+    throw new Error(
+      colors.red(
+        `Typescript compilation Error in ${
+          colors.yellow(path)
+        }`,
+      ),
+    );
+  }
+}
 
 export default utils;

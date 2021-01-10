@@ -14,14 +14,14 @@ function Parser(this: ParserInterface) {
 
 // parse is responsible for invoking all the parser-utils
 // functions for each component in the Queue.
-Parser.prototype.parse = function () {
+Parser.prototype.parse = async function () {
   // iterate through the Queue while it is populated
   while (Queue.length) {
     const current = Queue.shift();
 
     if (current) {
       fn.parseTemplate(current);
-      fn.parseScript(current);
+      await fn.parseScript(current);
       fn.parseStyle(current);
       fn.componentStringify(current);
       current.isParsed = true;

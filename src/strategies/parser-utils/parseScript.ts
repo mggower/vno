@@ -1,17 +1,21 @@
 import { ComponentInterface } from "../../lib/types.ts";
-import Utils, { Queue, Storage } from "../../lib/utils.ts";
+import Utils, { Queue, Storage, TsCompile } from "../../lib/utils.ts";
 import { _ } from "../../lib/deps.ts";
 
 import SiblingList from "../sibling.ts";
 
 // parseScript is responsible for parsing the data inside a files <script> tag
-export default function parseScript(current: ComponentInterface) {
+export default async function parseScript(current: ComponentInterface) {
   try {
+    let useTypescript = false;
     if (current.split) {
       const { split } = current;
 
       // isolate the content inside of <script>
-      const open: number = split.indexOf("<script>");
+      const open: number = split.includes('<script lang="ts">')
+                            ? split.indexOf('<script lang="ts">')
+                            : split.indexOf('<script>');
+
       const close: number = split.indexOf("</script>");
 
       if (open < 0 || close < 0) {
@@ -25,8 +29,6 @@ export default function parseScript(current: ComponentInterface) {
         if (comment > 0) return line.slice(0, comment);
         return line;
       });
-
-      console.log(`script: (parseScriptln27) ${script}`);
 
       // identify if a name property is provided
       const nameIndex = Utils.indexOfRegExp(/(name)/, script);
@@ -42,6 +44,18 @@ export default function parseScript(current: ComponentInterface) {
 
       // returns a stringified and trimmed version of our components script
       current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
+
+      for (const chunk of split) {
+        if (chunk.includes('lang="ts"')) {
+          useTypescript = true;
+        }
+      }
+
+      // transform typescript to javascript
+      if (useTypescript) {
+        const source = await TsCompile(`({ ${current.script} })`, current.path as string) as string;
+        current.script =  source;
+      }
 
       // remove comments /* */ in script and style tag's
       if (current.path.toString().includes(".vue")) {
