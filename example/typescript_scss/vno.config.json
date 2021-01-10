@@ -1,0 +1,9 @@
+{
+  "root": "App",
+  "entry": "./",
+  "options": {
+    "child": "Home",
+    "port": "3000",
+    "title": "typescript_scss"
+  }
+}
