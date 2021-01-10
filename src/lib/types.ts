@@ -43,6 +43,7 @@ export interface ComponentInterface {
   script?: string;
   style?: string;
   instance?: string;
+  middlecode?: string;
 }
 // #endregion
 
@@ -80,6 +81,7 @@ export interface UtilityInterface {
   preorderScrub: Function;
   multilineCommentPattern: string | RegExp;
   htmlCommentPattern: string | RegExp;
+  importPattern: RegExp;
 }
 // #endregion
 

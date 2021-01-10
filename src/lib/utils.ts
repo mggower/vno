@@ -95,11 +95,12 @@ const utils: UtilityInterface = {
     return str.slice(start, end).replace(regex, replaced).split(split);
   },
   multilineCommentPattern: /\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\//gm,
-  htmlCommentPattern: /<!--([\s\S]*?)-->/gm
+  htmlCommentPattern: /<!--([\s\S]*?)-->/gm,
+  importPattern: /import(?:["'\s]*([\w*${}\n\r\t, ]+)from\s*)?["'\s]["'\s](.*[@\w_-]+)["'\s].*$/gm,
 };
 
 // compile typescript code to string javascrit code
-export async function TsCompile(source: string, path: string) {
+export async function TsCompile(source: string, path: string, cut = true) {
   const temp = `./${Math.random().toString().replace(".", "")}.ts`;
   try {
     const file = await Deno.create(temp);
@@ -118,19 +119,98 @@ export async function TsCompile(source: string, path: string) {
       !chunk.includes("file:///")
     );
 
-    await Deno.remove(temp);
+    await Deno.remove(temp, { recursive: true });
 
-    return script.substring(3, script.length - 4);
+    return cut ? script.substring(3, script.length - 4) : script;
   } catch (error: any) {
-    await Deno.remove(temp);
+    await Deno.remove(temp, { recursive: true });
     throw new Error(
       colors.red(
-        `Typescript compilation Error in ${
-          colors.yellow(path)
-        }`,
+        `Typescript compilation Error in ${colors.yellow(path)} => ${error}`,
       ),
     );
   }
+}
+
+export async function importResolver(
+  source: string,
+  path: string,
+  script: string,
+) {
+  const temp = `./${Math.random().toString().replace(".", "")}.ts`;
+  try {
+    // pack if it is an external call
+    if (source.trim() !== "" && utils.importPattern.test(source.trim())) {
+      const file = await Deno.create(temp);
+      const encoder = new TextEncoder();
+
+      // add component code to bundler detect resource call's
+      await file.write(encoder.encode(`${source} ({ ${script} })`));
+
+      const [, output] = await Deno.bundle(temp, undefined, { strict: false });
+      // remove temp file
+      await Deno.remove(temp, { recursive: true });
+
+      // remove component object
+      return output.replace(/\(\{((?:.|\r?\n)+?)\}\);/gm, "");
+    }
+
+    // ignore if not is a external call 'import ....'
+    return source;
+  } catch (error: any) {
+    await Deno.remove(temp, { recursive: true });
+    throw new Error(
+      colors.red(
+        `Resolve bundler Error in ${colors.yellow(path)} => ${error}`,
+      ),
+    );
+  }
+}
+
+// takes all the intermediate code in a component and injects it on top of the components bundle
+export async function middleCodeResolver(
+  { split, path, script }: ComponentInterface,
+) {
+  const tagPattern = /<script.*>/gim;
+
+  let endLine = false;
+  const chunks: string[] = [];
+  const imports: string[] = [];
+  for (const chunk of (split as string[])) {
+    if ((/export default/gm).test(chunk)) {
+      endLine = true;
+    }
+
+    // ignore imports like .vue
+    if (
+      !endLine &&
+      !tagPattern.test(chunk) &&
+      !chunk.includes(".vue")
+    ) {
+      if (utils.importPattern.test(chunk)) {
+        // TODO: resolve and inject all imports that not is a component .vue or is a import_map.json call
+        imports.push(chunk);
+      } else {
+        chunks.push(chunk);
+      }
+    }
+  }
+
+  const compilerOutPut = await TsCompile(
+    chunks.join("\n"),
+    path as string,
+    false,
+  );
+
+  // merge componet code with external and component middlecode
+  const output = await importResolver(
+    `${imports.join("\n")}\n${compilerOutPut}`,
+    path as string,
+    script as string,
+  );
+
+  // bundler + compiler output
+  return output;
 }
 
 export default utils;

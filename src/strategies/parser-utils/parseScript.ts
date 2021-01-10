@@ -1,5 +1,5 @@
+import Utils, { Queue, Storage, TsCompile, middleCodeResolver } from "../../lib/utils.ts";
 import { ComponentInterface } from "../../lib/types.ts";
-import Utils, { Queue, Storage, TsCompile } from "../../lib/utils.ts";
 import { _ } from "../../lib/deps.ts";
 
 import SiblingList from "../sibling.ts";
@@ -51,6 +51,8 @@ export default async function parseScript(current: ComponentInterface) {
         }
       }
 
+      // load all middle code inside a component
+      current.middlecode = await middleCodeResolver(current);
       // transform typescript to javascript
       if (useTypescript) {
         const source = await TsCompile(`({ ${current.script} })`, current.path as string) as string;
