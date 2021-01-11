@@ -126,7 +126,7 @@ export async function TsCompile(source: string, path: string, cut = true) {
     await Deno.remove(temp, { recursive: true });
     throw new Error(
       colors.red(
-        `Typescript compilation Error in ${colors.yellow(path)} => ${error}`,
+        `Typescript compilation Error in ${colors.yellow(path)}`,
       ),
     );
   }
@@ -147,7 +147,15 @@ export async function importResolver(
       // add component code to bundler detect resource call's
       await file.write(encoder.encode(`${source} ({ ${script} })`));
 
-      const [, output] = await Deno.bundle(temp, undefined, { strict: false });
+      const [diagnostic, output] = await Deno.bundle(temp, undefined, { strict: false });
+
+      // show bundler diagnostic
+      if (diagnostic?.length) {
+        diagnostic.forEach((file) => {
+          console.log(colors.yellow("[vno-warn]: "), colors.green(file.messageText ?? ""));
+        });
+      }
+
       // remove temp file
       await Deno.remove(temp, { recursive: true });
 
@@ -161,7 +169,7 @@ export async function importResolver(
     await Deno.remove(temp, { recursive: true });
     throw new Error(
       colors.red(
-        `Resolve bundler Error in ${colors.yellow(path)} => ${error}`,
+        `Resolve bundler Error in ${colors.yellow(path)}`,
       ),
     );
   }

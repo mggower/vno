@@ -4,6 +4,8 @@ import Utils from "../../lib/utils.ts";
 // parseTemplate is responsible for parsing template tags
 export default function parseTemplate(current: ComponentInterface) {
   try {
+    // remove '\r' to prevent isolation error
+    current.split = current.split?.map((piece: string) => piece.replace("\r", ""));
     if (current.split) {
       const { split } = current;
       // isolate the content inside <template>
