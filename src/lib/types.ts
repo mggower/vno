@@ -35,6 +35,7 @@ export interface ComponentInterface {
   isParsed: boolean;
   child: SiblingInterface | null;
   sibling: ComponentInterface | null;
+  data: any;
   runData(): void;
   vue?: string;
   split?: string[];

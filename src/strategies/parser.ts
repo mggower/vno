@@ -20,9 +20,9 @@ Parser.prototype.parse = function () {
     const current = Queue.shift();
 
     if (current) {
-      fn.parseTemplate(current);
-      fn.parseScript(current);
-      fn.parseStyle(current);
+      // fn.parseTemplate(current);
+      // fn.parseScript(current);
+      // fn.parseStyle(current);
       fn.componentStringify(current);
       current.isParsed = true;
     }
