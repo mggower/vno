@@ -2,6 +2,7 @@ import Compiler from "./compiler.ts";
 
 import { ParserInterface } from "../lib/types.ts";
 import { Queue, Storage } from "../lib/utils.ts";
+import { colors, parse } from "../lib/deps.ts";
 
 import fn from "./parser-utils/_fn.ts";
 
@@ -18,11 +19,24 @@ Parser.prototype.parse = async function () {
   // iterate through the Queue while it is populated
   while (Queue.length) {
     const current = Queue.shift();
+    // normalize source
+    const sourceRaw = current?.split
+      ?.join("");
+
+    const astSource =
+      parse(sourceRaw, { filename: `${current?.label}.vue`, sourceMap: false })
+        .descriptor;
 
     if (current) {
-      fn.parseTemplate(current);
-      await fn.parseScript(current);
-      fn.parseStyle(current);
+      console.log(
+        colors.green(
+          `[vno: compiling] => ${colors.yellow(current.path as string)}`,
+        ),
+      );
+
+      fn.parseTemplate(astSource.template, current);
+      await fn.parseScript(current, astSource.script);
+      fn.parseStyle(current, astSource.styles);
       fn.componentStringify(current);
       current.isParsed = true;
     }

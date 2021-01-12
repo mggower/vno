@@ -4,7 +4,7 @@ import { Storage } from "../lib/utils.ts";
 import _def from "../lib/defaults.ts";
 
 // #region Compiler
-// (3/3) in bundling cycle 
+// (3/3) in bundling cycle
 // Compiler writes component instances to build file
 // and writes styling to style css file
 // #endregion
@@ -13,7 +13,7 @@ function Compiler(this: CompilerInterface) {
   this.vue = `import Vue from '${Storage.root.vue}';\n`;
   // mounts the root component to the dom
   this.mount =
-    `\n${Storage.root.label}.$mount("#${Storage.root.name}");\nexport default ${Storage.root.label};\n`;
+    `\n${Storage.root.label}.$mount("#${Storage.root.name}");`;
 }
 
 // build establishes the build path and overwrites any previous builds

@@ -26,3 +26,5 @@ export {
   scssCompiler,
   superoak,
 };
+
+export * from "https://deno.land/x/vue_sfc_compiler@v1.0.0/mod.ts";

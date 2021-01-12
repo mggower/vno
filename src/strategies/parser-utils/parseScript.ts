@@ -5,9 +5,8 @@ import { _ } from "../../lib/deps.ts";
 import SiblingList from "../sibling.ts";
 
 // parseScript is responsible for parsing the data inside a files <script> tag
-export default async function parseScript(current: ComponentInterface) {
+export default async function parseScript(current: ComponentInterface, analysis: any) {
   try {
-    let useTypescript = false;
     if (current.split) {
       const { split } = current;
 
@@ -24,7 +23,7 @@ export default async function parseScript(current: ComponentInterface) {
         );
       }
 
-      const script = split.slice(open + 1, close).map((line) => {
+      const script = /* a.content; */ split.slice(open + 1, close).map((line) => {
         const comment = line.indexOf("//");
         if (comment > 0) return line.slice(0, comment);
         return line;
@@ -45,16 +44,10 @@ export default async function parseScript(current: ComponentInterface) {
       // returns a stringified and trimmed version of our components script
       current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
-      for (const chunk of split) {
-        if (chunk.includes('lang="ts"')) {
-          useTypescript = true;
-        }
-      }
-
       // load all middle code inside a component
       current.middlecode = await middleCodeResolver(current);
       // transform typescript to javascript
-      if (useTypescript) {
+      if (analysis.lang === "ts") {
         const source = await TsCompile(`({ ${current.script} })`, current.path as string) as string;
         current.script =  source;
       }
@@ -72,7 +65,7 @@ export default async function parseScript(current: ComponentInterface) {
 
       // if a component's property is identified
       if (children) {
-        const componentsEnd = children.findIndex((el) => el.includes("}")) + 1;
+        const componentsEnd = children.findIndex((el: any) => el.includes("}")) + 1;
         // componentsStr is stringified and trimmed components property
         const componentsStr = Utils.sliceAndTrim(children, 0, componentsEnd);
 
