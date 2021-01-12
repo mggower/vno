@@ -26,7 +26,6 @@ export default function parseScript(current: ComponentInterface) {
         return line;
       });
 
-      console.log(`script: (parseScriptln27) ${script}`);
 
       // identify if a name property is provided
       const nameIndex = Utils.indexOfRegExp(/(name)/, script);
