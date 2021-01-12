@@ -1,5 +1,4 @@
 import { ComponentInterface } from "../lib/types.ts";
-import * as c from "./borrowed_compiler.js";
 
 // #region Component
 // the component defines the architecture for parsing data
@@ -26,10 +25,8 @@ Component.prototype.runData = function data() {
     if (!this.path) {
       throw `There was an error identifying the path for ${this.label}`;
     }
-    const data = Deno.readTextFileSync(this.path);
-    // console.log(c.parse(data));
-    this.data = c.parse(data);
-    // this.split = data.split(/\n/);
+    
+    this.split = Deno.readTextFileSync(this.path).split(/\n/);
   } catch (error) {
     console.error(
       "Error inside of Component.runData():",
