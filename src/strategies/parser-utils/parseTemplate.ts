@@ -3,7 +3,7 @@ import Utils from "../../lib/utils.ts";
 import { compileTemplate } from "../../lib/deps.ts";
 
 // parseTemplate is responsible for parsing template tags
-export default function parseTemplate(ast: any, current: ComponentInterface) {
+export default function parseTemplate(current: ComponentInterface, ast: any) {
   try {
     current.split = current.split?.map((text) => text.replace("\r", ""));
 

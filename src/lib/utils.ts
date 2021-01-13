@@ -97,6 +97,7 @@ const utils: UtilityInterface = {
   multilineCommentPattern: /\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\//gm,
   htmlCommentPattern: /<!--([\s\S]*?)-->/gm,
   importPattern: /import(?:["'\s]*([\w*${}\n\r\t, ]+)from\s*)?["'\s]["'\s](.*[@\w_-]+)["'\s].*$/gm,
+  urlPattern: /(ftp|http|https|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gm
 };
 
 // compile typescript code to string javascrit code
@@ -152,7 +153,7 @@ export async function importResolver(
       // show bundler diagnostic
       if (diagnostic?.length) {
         diagnostic.forEach((file) => {
-          console.log(colors.yellow("[vno-warn]: "), colors.green(file.messageText ?? ""));
+          console.log(colors.yellow("[vno warn] => "), colors.green(file.messageText ?? ""));
         });
       }
 

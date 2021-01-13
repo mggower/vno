@@ -11,11 +11,11 @@ export default function componentStringify(current: ComponentInterface) {
     // application root is written as a new Vue instance
     if (current.isRoot) {
       current.instance =
-        `${middlecode}\nconst ${label} = new Vue({template: /*html*/\n\`${template}\`, ${script}});\n`;
+        `${middlecode ?? ""}\nconst ${label} = new Vue({template: /*html*/\n\`${template}\`, ${script}});\n`;
     } else {
       // all children components are registered to the instance
       current.instance =
-        `${middlecode}\nconst ${label} = Vue.component("${name}", {template: /*html*/\n\`${template}\`, ${script}});\n`;
+        `${middlecode ?? ""}\nconst ${label} = Vue.component("${name}", {template: /*html*/\n\`${template}\`, ${script}});\n`;
     }
   } catch (error) {
     console.error(

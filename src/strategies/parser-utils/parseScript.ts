@@ -1,21 +1,27 @@
-import Utils, { Queue, Storage, TsCompile, middleCodeResolver } from "../../lib/utils.ts";
+import Utils, {
+  middleCodeResolver,
+  Queue,
+  Storage,
+  TsCompile,
+} from "../../lib/utils.ts";
 import { ComponentInterface } from "../../lib/types.ts";
 import { _ } from "../../lib/deps.ts";
 
 import SiblingList from "../sibling.ts";
 
 // parseScript is responsible for parsing the data inside a files <script> tag
-export default async function parseScript(current: ComponentInterface, analysis: any) {
+export default async function parseScript(
+  current: ComponentInterface,
+  analysis: any,
+) {
   try {
     if (current.split) {
       const { split } = current;
 
       // isolate the content inside of <script>
-      const open: number = split.includes('<script lang="ts">')
-                            ? split.indexOf('<script lang="ts">')
-                            : split.indexOf('<script>');
+      const open: number = Utils.indexOfRegExp(/<script.*>/gi, current.split);
 
-      const close: number = split.indexOf("</script>");
+      const close: number = Utils.indexOfRegExp(/<\/script>/gi, current.split);
 
       if (open < 0 || close < 0) {
         console.warn(
@@ -23,9 +29,12 @@ export default async function parseScript(current: ComponentInterface, analysis:
         );
       }
 
-      const script = /* a.content; */ split.slice(open + 1, close).map((line) => {
-        const comment = line.indexOf("//");
-        if (comment > 0) return line.slice(0, comment);
+      const script = split.slice(open + 1, close).map((line) => {
+        // prevent to cut urls like http://, https://, ftp:// or file://
+        if (!Utils.urlPattern.test(line)) {
+          const comment = line.indexOf("//");
+          if (comment > 0) return line.slice(0, comment);
+        }
         return line;
       });
 
@@ -45,19 +54,25 @@ export default async function parseScript(current: ComponentInterface, analysis:
       current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
       // load all middle code inside a component
-      current.middlecode = await middleCodeResolver(current);
+      if (analysis.attrs?.load) {
+        current.middlecode = await middleCodeResolver(current);
+      }
       // transform typescript to javascript
       if (analysis.lang === "ts") {
-        const source = await TsCompile(`({ ${current.script} })`, current.path as string) as string;
-        current.script =  source;
+        const source = await TsCompile(
+          `({ ${current.script} })`,
+          current.path as string,
+        ) as string;
+        current.script = source;
       }
 
       // remove comments /* */ in script and style tag's
       if (current.path.toString().includes(".vue")) {
-        current.split = current.split.join("\n").replace(Utils.multilineCommentPattern, "").split("\n");
-        current.script = current.script.replace(Utils.multilineCommentPattern, "");
+        current.script = current.script.replace(
+          Utils.multilineCommentPattern,
+          "",
+        );
       }
-      // Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
       // locate if this component has any children
       const componentsStart = Utils.indexOfRegExp(/(components:)/, script);
@@ -65,7 +80,9 @@ export default async function parseScript(current: ComponentInterface, analysis:
 
       // if a component's property is identified
       if (children) {
-        const componentsEnd = children.findIndex((el: any) => el.includes("}")) + 1;
+        const componentsEnd = children.findIndex((el: any) =>
+          el.includes("}")
+        ) + 1;
         // componentsStr is stringified and trimmed components property
         const componentsStr = Utils.sliceAndTrim(children, 0, componentsEnd);
 

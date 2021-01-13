@@ -23,9 +23,10 @@ Parser.prototype.parse = async function () {
     const sourceRaw = current?.split
       ?.join("");
 
-    const astSource =
-      parse(sourceRaw, { filename: `${current?.label}.vue`, sourceMap: false })
-        .descriptor;
+    const astSource = parse(
+      sourceRaw,
+      { filename: `${current?.label}.vue`, sourceMap: false },
+    );
 
     if (current) {
       console.log(
@@ -34,11 +35,21 @@ Parser.prototype.parse = async function () {
         ),
       );
 
-      fn.parseTemplate(astSource.template, current);
-      await fn.parseScript(current, astSource.script);
-      fn.parseStyle(current, astSource.styles);
-      fn.componentStringify(current);
-      current.isParsed = true;
+      // show static analysis errors
+      if (astSource.errors.length) {
+        console.log(colors.red("\nstatic analysis Error:"));
+        astSource.errors.forEach((error: string) => {
+          console.error(error);
+        });
+      }
+
+      else {
+        fn.parseTemplate(current, astSource.descriptor.template);
+        await fn.parseScript(current, astSource.descriptor.script);
+        fn.parseStyle(current, astSource.descriptor.styles);
+        fn.componentStringify(current);
+        current.isParsed = true;
+      }
     }
   }
   // return a new instance of Compiler and run the build method

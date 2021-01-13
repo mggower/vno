@@ -82,6 +82,7 @@ export interface UtilityInterface {
   multilineCommentPattern: string | RegExp;
   htmlCommentPattern: string | RegExp;
   importPattern: RegExp;
+  urlPattern: RegExp;
 }
 // #endregion
 
