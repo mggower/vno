@@ -31,7 +31,7 @@ Initialize.prototype.config = async function (options: OptionsInterface) {
     // the applications cdn is then saved on the root component object
     Storage.root.vue = options.vue || _def.CDN;
     // instantiate the Parser object and invoke the parse method
-    return new (Parser as any)().parse();
+    return await new (Parser as any)().parse();
   } catch (error) {
     return console.error(
       "Error inside of Initialize.config",
