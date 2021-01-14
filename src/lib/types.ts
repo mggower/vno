@@ -36,6 +36,7 @@ export interface ComponentInterface {
   child: SiblingInterface | null;
   sibling: ComponentInterface | null;
   data: any;
+  sourceRaw: string;
   runData(): void;
   vue?: string;
   split?: string[];
