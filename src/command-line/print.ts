@@ -1,13 +1,13 @@
 import { colors } from "../lib/deps.ts";
 import { infoInterface } from "../lib/types.ts";
 
-const logo = (` 
-  __   ___ __   ___  
-  \\ \\ / / '_ \\ / _ \\ 
+const logo = (colors.bold(`
+  __   ___ __   ___
+  \\ \\ / / '_ \\ /   \\
    \\ V /| | | | (_) |
-    \\_/ |_| |_|\\___/         
+    \\_/ |_| |_|\\___/
+`));
 
-  `);
 // prints after build
 function ASCII() {
   console.log(colors.green(logo));
@@ -20,7 +20,9 @@ function QUIET() {
 function LISTEN(port: number, hostname?: string) {
   console.log(
     colors.green(
-      colors.italic(`dev server is listening on ${hostname}:${port}\n`),
+      colors.bold(
+        `dev server is listening on ${colors.blue(`http://localhost:${port}`)}\n`,
+      ),
     ),
   );
 }
