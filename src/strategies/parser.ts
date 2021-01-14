@@ -25,7 +25,7 @@ Parser.prototype.parse = async function () {
         current.sourceRaw,
         { filename: `${current?.label}.vue`, sourceMap: false },
       );
-      
+
       console.log(
         colors.green(
           `[vno: compiling] => ${colors.yellow(current.path as string)}`,
