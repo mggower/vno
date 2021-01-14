@@ -1,4 +1,4 @@
-import Utils, {
+import utils, {
   middleCodeResolver,
   Queue,
   Storage,
@@ -19,9 +19,9 @@ export default async function parseScript(
       const { split } = current;
 
       // isolate the content inside of <script>
-      const open: number = Utils.indexOfRegExp(/<script.*>/gi, current.split);
+      const open: number = utils.indexOfRegExp(/<script.*>/gi, current.split);
 
-      const close: number = Utils.indexOfRegExp(/<\/script>/gi, current.split);
+      const close: number = utils.indexOfRegExp(/<\/script>/gi, current.split);
 
       if (open < 0 || close < 0) {
         console.warn(
@@ -31,7 +31,7 @@ export default async function parseScript(
 
       const script = split.slice(open + 1, close).map((line) => {
         // prevent to cut urls like http://, https://, ftp:// or file://
-        if (!Utils.urlPattern.test(line)) {
+        if (!utils.urlPattern.test(line)) {
           const comment = line.indexOf("//");
           if (comment > 0) return line.slice(0, comment);
         }
@@ -39,7 +39,7 @@ export default async function parseScript(
       });
 
       // identify if a name property is provided
-      const nameIndex = Utils.indexOfRegExp(/(name)/, script);
+      const nameIndex = utils.indexOfRegExp(/(name)/, script);
       // if no name property, save the label in kebab-case as the name
       if (nameIndex < 0) {
         current.name = _.kebabCase(current.label);
@@ -47,11 +47,11 @@ export default async function parseScript(
         current.name = script[nameIndex].split(/[`'"]/)[1];
       }
       // isolate the data inside of an export statement
-      const exportStart = Utils.indexOfRegExp(/^(export)/, script);
+      const exportStart = utils.indexOfRegExp(/^(export)/, script);
       const exportEnd = script.lastIndexOf("}");
 
       // returns a stringified and trimmed version of our components script
-      current.script = Utils.sliceAndTrim(script, exportStart + 1, exportEnd);
+      current.script = utils.sliceAndTrim(script, exportStart + 1, exportEnd);
 
       // load all middle code inside a component
       if (analysis.attrs?.load) {
@@ -69,13 +69,13 @@ export default async function parseScript(
       // remove comments /* */ in script and style tag's
       if (current.path.toString().includes(".vue")) {
         current.script = current.script.replace(
-          Utils.multilineCommentPattern,
+          utils.multilineCommentPattern,
           "",
         );
       }
 
       // locate if this component has any children
-      const componentsStart = Utils.indexOfRegExp(/(components:)/, script);
+      const componentsStart = utils.indexOfRegExp(/(components:)/, script);
       const children = script.slice(componentsStart) || false;
 
       // if a component's property is identified
@@ -84,11 +84,11 @@ export default async function parseScript(
           el.includes("}")
         ) + 1;
         // componentsStr is stringified and trimmed components property
-        const componentsStr = Utils.sliceAndTrim(children, 0, componentsEnd);
+        const componentsStr = utils.sliceAndTrim(children, 0, componentsEnd);
 
         // iter becomes a string[] of any child component's label
         const iter: string[] = _.compact(
-          Utils.trimAndSplit(
+          utils.trimAndSplit(
             componentsStr,
             componentsStr.indexOf("{") + 1,
             componentsStr.indexOf("}"),
@@ -107,7 +107,7 @@ export default async function parseScript(
             // add component to the Queue if it has not been parsed
             if (!component.isParsed) Queue.push(component);
             // iterate through the tree to secure the component dependency tree
-            Utils.preorderScrub(component.label, current);
+            utils.preorderScrub(component.label, current);
             // attach the component as a dependency to its parent
             current.child?.add(component);
           }
