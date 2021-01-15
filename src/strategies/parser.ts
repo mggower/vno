@@ -1,8 +1,8 @@
 import Compiler from "./compiler.ts";
 
 import { ParserInterface } from "../lib/types.ts";
-import { Queue, Storage } from "../lib/utils.ts";
-import { colors, parse } from "../lib/deps.ts";
+import { Queue, ShowCodeFrame, Storage } from "../lib/utils.ts";
+import { colors, sfcCompiler } from "../lib/deps.ts";
 
 import fn from "./parser-utils/_fn.ts";
 
@@ -23,7 +23,8 @@ Parser.prototype.parse = async function () {
     const sourceRaw = current?.split
       ?.join("");
 
-    const astSource = parse(
+    // parse component
+    const astSource = sfcCompiler.parse(
       sourceRaw,
       { filename: `${current?.label}.vue`, sourceMap: false },
     );
@@ -37,12 +38,9 @@ Parser.prototype.parse = async function () {
 
       // show static analysis errors
       if (astSource.errors.length) {
-        console.log(colors.red("\nstatic analysis Error:"));
-        astSource.errors.forEach((error: string) => {
-          console.error(error);
-        });
+        ShowCodeFrame(astSource.descriptor, astSource.errors);
       }
-
+      // isolate the parts
       else {
         fn.parseTemplate(current, astSource.descriptor.template);
         await fn.parseScript(current, astSource.descriptor.script);

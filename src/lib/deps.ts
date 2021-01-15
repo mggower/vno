@@ -27,4 +27,4 @@ export {
   superoak,
 };
 
-export * from "https://deno.land/x/vue_sfc_compiler@v1.0.0/mod.ts";
+export * as sfcCompiler from "https://deno.land/x/vue_sfc_compiler@v1.0.0/mod.ts";
