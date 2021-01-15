@@ -39,7 +39,7 @@ export default async function parseScript(
       });
 
       // identify if a name property is provided
-      const nameIndex = Utils.indexOfRegExp(/(name)/, script);
+      const nameIndex = Utils.indexOfRegExp(/^\s*(name\s*:)/, script);
       // if no name property, save the label in kebab-case as the name
       if (nameIndex < 0) {
         current.name = _.kebabCase(current.label);
@@ -47,7 +47,7 @@ export default async function parseScript(
         current.name = script[nameIndex].split(/[`'"]/)[1];
       }
       // isolate the data inside of an export statement
-      const exportStart = Utils.indexOfRegExp(/^(export)/, script);
+      const exportStart = Utils.indexOfRegExp(/^\s*(export)/, script);
       const exportEnd = script.lastIndexOf("}");
 
       // returns a stringified and trimmed version of our components script
@@ -75,7 +75,7 @@ export default async function parseScript(
       }
 
       // locate if this component has any children
-      const componentsStart = Utils.indexOfRegExp(/(components:)/, script);
+      const componentsStart = Utils.indexOfRegExp(/^\s*(components\s*:)/gm, script);
       const children = script.slice(componentsStart) || false;
 
       // if a component's property is identified
