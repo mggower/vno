@@ -3,7 +3,7 @@ import {
   StorageInterface,
   UtilityInterface,
 } from "../lib/types.ts";
-import { colors } from "../lib/deps.ts";
+import { asrt, colors, sfcCompiler } from "../lib/deps.ts";
 
 // #region memoize
 // memoize is used to cache child components that
@@ -97,7 +97,7 @@ const utils: UtilityInterface = {
   multilineCommentPattern: /\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\//gm,
   htmlCommentPattern: /<!--([\s\S]*?)-->/gm,
   importPattern: /import(?:["'\s]*([\w*${}\n\r\t, ]+)from\s*)?["'\s]["'\s](.*[@\w_-]+)["'\s].*$/gm,
-  urlPattern: /(ftp|http|https|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gm
+  urlPattern: /(ftp|http|https|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gm,
 };
 
 // compile typescript code to string javascrit code
@@ -148,12 +148,19 @@ export async function importResolver(
       // add component code to bundler detect resource call's
       await file.write(encoder.encode(`${source} ({ ${script} })`));
 
-      const [diagnostic, output] = await Deno.bundle(temp, undefined, { strict: false });
+      const [diagnostic, output] = await Deno.bundle(
+        temp,
+        undefined,
+        { strict: false },
+      );
 
       // show bundler diagnostic
       if (diagnostic?.length) {
         diagnostic.forEach((file) => {
-          console.log(colors.yellow("[vno warn] => "), colors.green(file.messageText ?? ""));
+          console.log(
+            colors.yellow("[vno warn] => "),
+            colors.green(file.messageText ?? ""),
+          );
         });
       }
 
@@ -222,4 +229,46 @@ export async function middleCodeResolver(
   return output;
 }
 
+// replate '\r' with a '\n'
+export const removeCarriageReturn = (text: string) =>
+  text.split("\r").filter((text) => text !== "\r").join("\n");
+
+export function ShowCodeFrame(content: any, errors?: any) {
+  const { filename, source, template } = content;
+
+  const templateAnalysis = sfcCompiler.compileTemplate(
+    { source: removeCarriageReturn(template.content), filename },
+  );
+
+  // detect if the error is in the template
+  if (templateAnalysis.errors.length) {
+    console.log(colors.red(`\nTemplate Error in: ${colors.green(filename)}\n`));
+    templateAnalysis.errors.forEach((error) => {
+      console.log(colors.yellow(`${error.toString()}\n`));
+    });
+    console.log(
+      colors.green(
+        sfcCompiler.generateCodeFrame(
+          (templateAnalysis.source as string).trimStart(),
+        ),
+      ),
+    );
+  } // show component error
+  else {
+    const messages = new Set();
+    console.log(
+      colors.red(`\nComponent Error in: ${colors.green(filename)}\n`),
+    );
+    errors.forEach((error: any) => {
+      // not show the same message twice
+      messages.add(`${error.toString()}`);
+    });
+    console.log(colors.yellow([...messages].join("\n")));
+    console.log(colors.yellow("\n"));
+    // show code frame
+    console.log(
+      colors.green(sfcCompiler.generateCodeFrame(removeCarriageReturn(source))),
+    );
+  }
+}
 export default utils;

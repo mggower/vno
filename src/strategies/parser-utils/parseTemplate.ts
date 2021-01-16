@@ -1,19 +1,11 @@
 import { ComponentInterface } from "../../lib/types.ts";
-import Utils from "../../lib/utils.ts";
-import { compileTemplate } from "../../lib/deps.ts";
+import Utils, { removeCarriageReturn } from "../../lib/utils.ts";
 
 // parseTemplate is responsible for parsing template tags
 export default function parseTemplate(current: ComponentInterface, ast: any) {
   try {
+    // remove '\r' from the chunks
     current.split = current.split?.map((text) => text.replace("\r", ""));
-
-    const analysis = compileTemplate(
-      { source: ast.content, filename: `${current.label}.vue`, isProd: true },
-    );
-
-    if (analysis.errors.length) {
-      throw new Error(`${analysis.errors.join("\n")}`);
-    }
 
     const open: number = Utils.indexOfRegExp(
       /<template.*>/gi,
@@ -30,8 +22,13 @@ export default function parseTemplate(current: ComponentInterface, ast: any) {
       );
     }
 
-    current.template = analysis.source.replace(Utils.htmlCommentPattern, "")
-      .trim("");
+    // remove '\r' before inject template
+    current.template = removeCarriageReturn(ast.content).replace(
+      // remove <!-- ---> from template
+      Utils.htmlCommentPattern,
+      "",
+    );
+
     current.split = current?.split?.slice(close + 1);
   } catch (error) {
     console.error(
