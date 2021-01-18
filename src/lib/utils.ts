@@ -3,6 +3,7 @@ import {
   StorageInterface,
   UtilityInterface,
 } from "../lib/types.ts";
+import { asrt, colors, sfcCompiler } from "../lib/deps.ts";
 
 // #region memoize
 // memoize is used to cache child components that
@@ -94,7 +95,180 @@ const utils: UtilityInterface = {
     return str.slice(start, end).replace(regex, replaced).split(split);
   },
   multilineCommentPattern: /\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\//gm,
-  htmlCommentPattern: /<!--([\s\S]*?)-->/gm
+  htmlCommentPattern: /<!--([\s\S]*?)-->/gm,
+  importPattern: /import(?:["'\s]*([\w*${}\n\r\t, ]+)from\s*)?["'\s]["'\s](.*[@\w_-]+)["'\s].*$/gm,
+  urlPattern: /(ftp|http|https|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gm,
 };
 
+// compile typescript code to string javascrit code
+export async function TsCompile(source: string, path: string, cut = true) {
+  const temp = `./${Math.random().toString().replace(".", "")}.ts`;
+  try {
+    const file = await Deno.create(temp);
+    const encoder = new TextEncoder();
+
+    await file.write(encoder.encode(source));
+
+    const [, outPut] = await Deno.compile(
+      temp,
+      undefined,
+      { strict: false },
+    );
+
+    // filter javascript output
+    const [script] = Object.entries(outPut).flat().filter((chunk) =>
+      !chunk.includes("file:///")
+    );
+
+    await Deno.remove(temp, { recursive: true });
+
+    return cut ? script.substring(3, script.length - 4) : script;
+  } catch (error: any) {
+    await Deno.remove(temp, { recursive: true });
+    throw new Error(
+      colors.red(
+        `Typescript compilation Error in ${colors.yellow(path)}`,
+      ),
+    );
+  }
+}
+
+export async function importResolver(
+  source: string,
+  path: string,
+  script: string,
+) {
+  const temp = `./${Math.random().toString().replace(".", "")}.ts`;
+  try {
+    // saves import statements from external sources
+    if (source.trim() !== "" && utils.importPattern.test(source.trim())) {
+      const file = await Deno.create(temp);
+      const encoder = new TextEncoder();
+
+      // add component code to bundler when external source calls exist
+      await file.write(encoder.encode(`${source} ({ ${script} })`));
+
+      const [diagnostic, output] = await Deno.bundle(
+        temp,
+        undefined,
+        { strict: false },
+      );
+
+      // show bundler diagnostic
+      if (diagnostic?.length) {
+        diagnostic.forEach((file) => {
+          console.log(
+            colors.yellow("[vno warn] => "),
+            colors.green(file.messageText ?? ""),
+          );
+        });
+      }
+
+      // remove temp file
+      await Deno.remove(temp, { recursive: true });
+
+      // remove component object
+      return output.replace(/\(\{((?:.|\r?\n)+?)\}\);/gm, "");
+    }
+
+    // ignore if import statement is not from external source
+    return source;
+  } catch (error: any) {
+    await Deno.remove(temp, { recursive: true });
+    throw new Error(
+      colors.red(
+        `Resolve bundler Error in ${colors.yellow(path)}`,
+      ),
+    );
+  }
+}
+
+// takes all the intermediate code in a component and injects it on top of the components bundle
+export async function middleCodeResolver(
+  { split, path, script }: ComponentInterface,
+) {
+  const tagPattern = /<script.*>/gim;
+
+  let endLine = false;
+  const chunks: string[] = [];
+  const imports: string[] = [];
+  for (const chunk of (split as string[])) {
+    if ((/export default/gm).test(chunk)) {
+      endLine = true;
+    }
+
+    // ignore imports like .vue
+    if (
+      !endLine &&
+      !tagPattern.test(chunk) &&
+      !chunk.includes(".vue")
+    ) {
+      if (utils.importPattern.test(chunk)) {
+        // TODO: resolve and inject all imports that not is a component .vue or is a import_map.json call
+        imports.push(chunk);
+      } else {
+        chunks.push(chunk);
+      }
+    }
+  }
+
+  const compilerOutPut = await TsCompile(
+    chunks.join("\n"),
+    path as string,
+    false,
+  );
+
+  // merge componet code with external and component middlecode
+  const output = await importResolver(
+    `${imports.join("\n")}\n${compilerOutPut}`,
+    path as string,
+    script as string,
+  );
+
+  // bundler + compiler output
+  return output;
+}
+
+// replate '\r' with a '\n'
+export const removeCarriageReturn = (text: string) =>
+  text.split("\r").filter((text) => text !== "\r").join("\n");
+
+export function ShowCodeFrame(content: any, errors?: any) {
+  const { filename, source, template } = content;
+
+  const templateAnalysis = sfcCompiler.compileTemplate(
+    { source: removeCarriageReturn(template.content), filename },
+  );
+
+  // detect if the error is in the template
+  if (templateAnalysis.errors.length) {
+    console.log(colors.red(`\nTemplate Error in: ${colors.green(filename)}\n`));
+    templateAnalysis.errors.forEach((error) => {
+      console.log(colors.yellow(`${error.toString()}\n`));
+    });
+    console.log(
+      colors.green(
+        sfcCompiler.generateCodeFrame(
+          (templateAnalysis.source as string).trimStart(),
+        ),
+      ),
+    );
+  } // show component error
+  else {
+    const messages = new Set();
+    console.log(
+      colors.red(`\nComponent Error in: ${colors.green(filename)}\n`),
+    );
+    errors.forEach((error: any) => {
+      // do not show the same message twice
+      messages.add(`${error.toString()}`);
+    });
+    console.log(colors.yellow([...messages].join("\n")));
+    console.log(colors.yellow("\n"));
+    // show code frame
+    console.log(
+      colors.green(sfcCompiler.generateCodeFrame(removeCarriageReturn(source))),
+    );
+  }
+}
 export default utils;
