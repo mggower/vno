@@ -19,13 +19,10 @@ Parser.prototype.parse = async function () {
   // iterate through the Queue while it is populated
   while (Queue.length) {
     const current = Queue.shift();
-    // normalize source
-    const sourceRaw = current?.split
-      ?.join("");
-
+  
     // parse component
     const astSource = sfcCompiler.parse(
-      sourceRaw,
+      current?.sourceRaw,
       { filename: `${current?.label}.vue`, sourceMap: false },
     );
 
@@ -39,8 +36,7 @@ Parser.prototype.parse = async function () {
       // show static analysis errors
       if (astSource.errors.length) {
         ShowCodeFrame(astSource.descriptor, astSource.errors);
-      }
-      // isolate the parts
+      } // isolate the parts
       else {
         fn.parseTemplate(current, astSource.descriptor.template);
         await fn.parseScript(current, astSource.descriptor.script);
