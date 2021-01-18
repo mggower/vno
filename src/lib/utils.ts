@@ -140,12 +140,12 @@ export async function importResolver(
 ) {
   const temp = `./${Math.random().toString().replace(".", "")}.ts`;
   try {
-    // pack if it is an external call
+    // saves import statements from external sources
     if (source.trim() !== "" && utils.importPattern.test(source.trim())) {
       const file = await Deno.create(temp);
       const encoder = new TextEncoder();
 
-      // add component code to bundler detect resource call's
+      // add component code to bundler when external source calls exist
       await file.write(encoder.encode(`${source} ({ ${script} })`));
 
       const [diagnostic, output] = await Deno.bundle(
@@ -171,7 +171,7 @@ export async function importResolver(
       return output.replace(/\(\{((?:.|\r?\n)+?)\}\);/gm, "");
     }
 
-    // ignore if not is a external call 'import ....'
+    // ignore if import statement is not from external source
     return source;
   } catch (error: any) {
     await Deno.remove(temp, { recursive: true });
@@ -260,7 +260,7 @@ export function ShowCodeFrame(content: any, errors?: any) {
       colors.red(`\nComponent Error in: ${colors.green(filename)}\n`),
     );
     errors.forEach((error: any) => {
-      // not show the same message twice
+      // do not show the same message twice
       messages.add(`${error.toString()}`);
     });
     console.log(colors.yellow([...messages].join("\n")));
