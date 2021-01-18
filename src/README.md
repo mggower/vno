@@ -53,7 +53,7 @@ deno install --allow-net --unstable https://deno.land/x/vno/install/vno.ts
 ### a quick word about permissions
 - Deno is secure by default, this means that explicit permissions are required for certain tasks.
 - You can avoid responding to the permissions requests by flagging the installation script.
-- Most of our module require read and write permissions ```--allow-read``` & ```--allow-write```
+- Most of our module requires read and write permissions ```--allow-read``` & ```--allow-write```
 - If you decide not to flag permissions at installation, you will be prompted in the terminal after executing a command.
 - **note: If you would like to avoid writing out the permissions altogether, you can also use the '-A' tag**
 
