@@ -109,25 +109,28 @@ export async function TsCompile(source: string, path: string, cut = true) {
 
     await file.write(encoder.encode(source));
 
-    const [, outPut] = await Deno.compile(
-      temp,
-      undefined,
-      { strict: false },
-    );
+    const { files } = await Deno.emit(temp, {
+      bundle: undefined,
+      check: true,
+      compilerOptions: { strict: false },
+    });
 
     // filter javascript output
-    const [script] = Object.entries(outPut).flat().filter((chunk) =>
+    const [script] = Object.entries(files).flat().filter((chunk) =>
       !chunk.includes("file:///")
     );
 
     await Deno.remove(temp, { recursive: true });
 
-    return cut ? script.substring(3, script.length - 4) : script;
+    return (cut ? script.substring(3, script.length - 4) : script);
+
+    // return files;
   } catch (error: any) {
     await Deno.remove(temp, { recursive: true });
+    console.log(error);
     throw new Error(
       colors.red(
-        `Typescript compilation Error in ${colors.yellow(path)}`,
+      `Typescript compilation Error in ${colors.yellow(path)}`,
       ),
     );
   }
@@ -148,15 +151,15 @@ export async function importResolver(
       // add component code to bundler when external source calls exist
       await file.write(encoder.encode(`${source} ({ ${script} })`));
 
-      const [diagnostic, output] = await Deno.bundle(
-        temp,
-        undefined,
-        { strict: false },
-      );
+      const { files, diagnostics } = await Deno.emit(temp, {
+        bundle: "esm",
+        check: true,
+        compilerOptions: { strict: false },
+      });
 
       // show bundler diagnostic
-      if (diagnostic?.length) {
-        diagnostic.forEach((file) => {
+      if (diagnostics?.length) {
+        diagnostics.forEach((file) => {
           console.log(
             colors.yellow("[vno warn] => "),
             colors.green(file.messageText ?? ""),
@@ -164,11 +167,15 @@ export async function importResolver(
         });
       }
 
+      let out = "";
+      for (const script in files) {
+        out += files[script];
+      }
       // remove temp file
       await Deno.remove(temp, { recursive: true });
 
       // remove component object
-      return output.replace(/\(\{((?:.|\r?\n)+?)\}\);/gm, "");
+      return out.replace(/\(\{((?:.|\r?\n)+?)\}\);/gm, "");
     }
 
     // ignore if import statement is not from external source

@@ -35,6 +35,7 @@
 
 ### vno installation
 - run the following command in your terminal to install vno on your machine.
+> you need deno 1.7 or above
 
 ```
 deno install --allow-net --unstable https://deno.land/x/vno/install/vno.ts
