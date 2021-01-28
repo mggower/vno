@@ -34,8 +34,10 @@
 - OR you can use the vno build method to compile an existing vue file structure into a deno-legible .js file
 
 ### vno installation
+
+- vno requires the use of Deno version 1.7 or above
 - run the following command in your terminal to install vno on your machine.
-> you need deno 1.7 or above
+
 
 ```
 deno install --allow-net --unstable https://deno.land/x/vno/install/vno.ts
