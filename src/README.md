@@ -31,7 +31,7 @@
 ## How to use vno
 
 - You can use the vno Command Line Interface to quickly create a new vue project in a deno runtime
-- OR you can use the vno build method to compile an existing vue file structure into a deno-legible .js file
+- OR you can use the vno build method to compile an existing vue file structure into a Deno-legible .js file
 
 ### vno installation
 
