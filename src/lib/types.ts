@@ -6,14 +6,14 @@ export interface OptionsInterface {
   terminal?: boolean;
 }
 export interface InitializeInterface {
-  config(options: OptionsInterface): Function;
-  walk(entry: string, rootLabel: string): void;
+  config(options: OptionsInterface): Promise<any>;
+  walk(entry: string, rootLabel: string): Promise<void>;
 }
 // #endregion
 
 // #region parser.ts
 export interface ParserInterface {
-  parse(): Function;
+  parse(): Promise<void>;
 }
 // #endregion
 
@@ -22,8 +22,8 @@ export interface CompilerInterface {
   mount: string;
   vue: string;
   build(): void;
-  write(): void;
-  traverse(): void;
+  write(current: ComponentInterface): void;
+  traverse(current: ComponentInterface): void;
 }
 // #endregion
 
@@ -91,8 +91,8 @@ export interface UtilityInterface {
 // #region renderer.ts
 export interface RendererInterface {
   html: string;
-  createRenderer(): string;
-  htmlStringify(): string;
+  createRenderer(options: HtmlInterface, route: ComponentInterface): string;
+  htmlStringify(options: HtmlInterface, route?: ComponentInterface): string;
 }
 export interface HtmlInterface {
   language: string;

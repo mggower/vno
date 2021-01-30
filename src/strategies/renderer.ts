@@ -1,45 +1,39 @@
-import {
-  ComponentInterface,
-  HtmlInterface,
-  RendererInterface,
-} from "../lib/types.ts";
-
-import _$ from "../lib/defaults.ts";
+import { ComponentInterface, HtmlInterface } from "../lib/types.ts";
 import { Storage } from "../lib/utils.ts";
+import _$ from "../lib/defaults.ts";
 
-function Renderer(this: RendererInterface) {
-  this.html = "";
-}
+class Renderer {
+  public html: string;
 
-Renderer.prototype.createRenderer = function (
-  obj: object,
-  route: ComponentInterface = Storage.root,
-) {
-  this.html = this.htmlStringify({ ..._$.HTML, ...obj }, route);
-  return this.html;
-};
-
-Renderer.prototype.htmlStringify = function (
-  options: HtmlInterface,
-  route?: ComponentInterface,
-): string {
-  const { language, title, root, meta, vue, build, link, script } = options;
-
-  let links = "";
-  if (link) {
-    for (const rel in link) {
-      links += `<link rel="${rel}" href="${link[rel]}">`;
-    }
+  constructor() {
+    this.html = "";
+  }
+  public createRenderer(
+    obj: object,
+    route: ComponentInterface = Storage.root,
+  ): string {
+    this.html = this.htmlStringify({ ..._$.HTML, ...obj }, route);
+    return this.html;
   }
 
-  let scripts = "";
-  if (script) {
-    for (const type in script) {
-      scripts += `<script type="${type}" src='${script[type]}'></script>`;
-    }
-  }
+  public htmlStringify(options: HtmlInterface, route?: ComponentInterface): string {
+    const { language, title, root, meta, vue, build, link, script } = options;
 
-  return `<!DOCTYPE html>
+    let links = "";
+    if (link) {
+      for (const rel in link) {
+        links += `<link rel="${rel}" href="${link[rel]}">`;
+      }
+    }
+
+    let scripts = "";
+    if (script) {
+      for (const type in script) {
+        scripts += `<script type="${type}" src='${script[type]}'></script>`;
+      }
+    }
+
+    return `<!DOCTYPE html>
   <html lang="${language}">
   <head>
     <meta charset="${meta.charset}" />
@@ -57,6 +51,6 @@ Renderer.prototype.htmlStringify = function (
     ${scripts ? scripts : ""}
   </body>
   </html>`.replace(/\n|\s{2,}/gm, "");
-};
-
+  }
+}
 export default Renderer;
