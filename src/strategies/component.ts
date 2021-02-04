@@ -1,11 +1,54 @@
-import { ComponentInterface, SiblingInterface } from "../lib/types.ts";
-
+import {
+  ComponentIF,
+  ComponentInterface,
+  ParentIF,
+  RootIF,
+  SiblingInterface,
+} from "../lib/types.ts";
+import _def from "../lib/defaults.ts";
+import SiblingList from "./sibling.ts";
 /**
  * Component
  * the component defines the architecture for parsing data
  * it is constructed with file data and then parsed.
  * #endregion
  */
+function createComponent(label: string, path: string): ComponentIF {
+  const sourceRaw = Deno.readTextFileSync(path);
+  const split = sourceRaw.split(/\n/);
+  return {
+    label,
+    path,
+    sourceRaw,
+    split,
+    isParsed: false,
+  };
+}
+
+function saveAsRoot(component: ComponentIF): RootIF {
+  return {
+    ...component,
+    vue: _def.CDN,
+    isRoot: true,
+  };
+}
+
+function saveAsParent(component: ComponentIF): ParentIF {
+  const child = new SiblingList();
+  return {
+    ...component,
+    child,
+    sibling: null,
+  };
+}
+
+const Test = createComponent("Test", "./Test.vue");
+// console.log(Test)
+const Rooty = saveAsRoot(Test);
+// console.log(Rooty);
+const Parent = saveAsParent(Rooty);
+console.log("sluts");
+console.log(Parent);
 class Component implements ComponentInterface {
   public label: string;
   public path: string | URL;
@@ -15,7 +58,7 @@ class Component implements ComponentInterface {
   public sibling: ComponentInterface | null = null;
   public data: any;
   public sourceRaw: string = "";
-  public vue?: string | undefined;
+  public vue: string = _def.CDN;
   public split?: string[] | undefined;
   public name?: string | undefined;
   public template?: string | undefined;
@@ -40,11 +83,8 @@ class Component implements ComponentInterface {
   public runData(): void {
     try {
       if (!this.path) {
-        throw (
-          `There was an error identifying the path for ${this.label}`
-        );
+        throw `There was an error identifying the path for ${this.label}`;
       }
-      
       this.sourceRaw = Deno.readTextFileSync(this.path);
       this.split = this.sourceRaw.split(/\n/);
     } catch (error: any) {

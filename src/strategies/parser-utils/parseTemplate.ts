@@ -1,8 +1,11 @@
-import { ComponentInterface } from "../../lib/types.ts";
+import { ComponentInterface, TemplateIF } from "../../lib/types.ts";
 import Utils, { removeCarriageReturn } from "../../lib/utils.ts";
 
 // parseTemplate is responsible for parsing template tags
-export default function parseTemplate(current: ComponentInterface, ast: any) {
+export default function parseTemplate(
+  current: ComponentInterface,
+  ast: any,
+) /**: TemplateIF*/ {
   try {
     // remove '\r' from the chunks
     current.split = current.split?.map((text) => text.replace("\r", ""));
@@ -30,6 +33,18 @@ export default function parseTemplate(current: ComponentInterface, ast: any) {
     );
 
     current.split = current?.split?.slice(close + 1);
+
+    // const template = removeCarriageReturn(ast.content).replace(
+    //   // remove <!-- ---> from template
+    //   Utils.htmlCommentPattern,
+    //   "",
+    // );
+    // const split = current?.split?.slice(close + 1);
+    // return {
+    //   ...current,
+    //   template,
+    //   split,
+    // }
   } catch (error) {
     console.error(
       "Error inside of parseTemplate()=>:",

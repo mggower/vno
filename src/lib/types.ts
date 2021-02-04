@@ -31,14 +31,14 @@ export interface CompilerInterface {
 export interface ComponentInterface {
   label: string;
   path: string | URL;
-  isRoot: boolean;
   isParsed: boolean;
   child: SiblingInterface | null;
   sibling: ComponentInterface | null;
   data: any;
   sourceRaw: string;
+  vue: string;
+  isRoot: boolean;
   runData(): void;
-  vue?: string;
   split?: string[];
   name?: string;
   template?: string;
@@ -46,6 +46,26 @@ export interface ComponentInterface {
   style?: string;
   instance?: string;
   middlecode?: string;
+}
+export interface ComponentIF {
+  label: string;
+  path: string | URL;
+  isParsed: boolean;
+  sourceRaw: string;
+  split: string[];
+}
+export interface RootIF extends ComponentIF {
+  vue: string;
+  isRoot: boolean;
+}
+
+export interface ParentIF extends ComponentIF {
+  child: SiblingInterface;
+  sibling: ComponentInterface | null;
+}
+
+export interface TemplateIF extends ComponentIF {
+  template: string;
 }
 // #endregion
 

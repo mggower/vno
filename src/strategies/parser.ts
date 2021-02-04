@@ -4,19 +4,14 @@ import { ParserInterface } from "../lib/types.ts";
 import fn from "./parser-utils/_fn.ts";
 import Compiler from "./compiler.ts";
 
-/**
- * #region Parser
- * (2/3) in bundling cycle -> Parser invokes Compiler
- * #endregion
- */
+/** Parser
+    (2/3) in bundling cycle -> Parser invokes Compiler */
 class Parser implements ParserInterface {
   constructor() {
     Queue.push(Storage.root);
   }
-  /**
-   * parse is responsible for invoking all the parser-utils
-   * functions for each component in the Queue.
-   */
+  /** parse is responsible for invoking all the parser-utils
+      functions for each component in the Queue. */
   public async parse(): Promise<void> {
     // iterate through the Queue while it is populated
     while (Queue.length) {

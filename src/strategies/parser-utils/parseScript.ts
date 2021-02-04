@@ -97,7 +97,7 @@ export default async function parseScript(
         // childComponents looks in Storage to retrieve an array of all component objects
         const childComponents = iter.map((child: string) => Storage[child]);
         // instantiate a new SiblingList on the current components child property
-        current.child = new (SiblingList as any)();
+        current.child = new SiblingList();
 
         while (childComponents.length) {
           // iterate through childComponents
