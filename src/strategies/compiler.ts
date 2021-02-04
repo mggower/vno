@@ -4,17 +4,14 @@ import _def from "../lib/defaults.ts";
 import { fs } from "../lib/deps.ts";
 
 /**
- * #region Compiler
+ * Compiler
  * (3/3) in bundling cycle
  * Compiler writes component instances to build file
  * and writes styling to style css file
- * #endregion
  */
 class Compiler implements CompilerInterface {
-  /** mounts the root component to the dom */
-  public mount: string;
-  /** imports vue in build file */
-  public vue: string;
+  public mount: string; /** mounts the root component to the dom */
+  public vue: string; /** imports vue in build file */
   constructor() {
     this.mount = `\n${Storage.root.label}.$mount("#${Storage.root.name}");`;
     this.vue = `import Vue from '${Storage.root.vue}';\n`;
@@ -53,11 +50,10 @@ class Compiler implements CompilerInterface {
   }
 
   /**
-   * #region traverse
+   * traverse
    * traverse mimics a postorder tree traversal
    * it iterates through the component tree, and
    * writes from the least dependent to the root
-   * #endregion
    */
   public traverse(current: ComponentInterface): void {
     if (current.child?.head) this.traverse(current.child.head);

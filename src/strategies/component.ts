@@ -1,7 +1,7 @@
 import { ComponentInterface, SiblingInterface } from "../lib/types.ts";
 
 /**
- * #region Component
+ * Component
  * the component defines the architecture for parsing data
  * it is constructed with file data and then parsed.
  * #endregion
@@ -40,8 +40,11 @@ class Component implements ComponentInterface {
   public runData(): void {
     try {
       if (!this.path) {
-        throw `There was an error identifying the path for ${this.label}`;
+        throw (
+          `There was an error identifying the path for ${this.label}`
+        );
       }
+      
       this.sourceRaw = Deno.readTextFileSync(this.path);
       this.split = this.sourceRaw.split(/\n/);
     } catch (error: any) {
