@@ -27,45 +27,59 @@ export interface CompilerInterface {
 }
 // #endregion
 
-// #region component.ts
+// // #region component.ts
+// export interface ComponentInterface {
+//   label: string;
+//   path: string | URL;
+//   isParsed: boolean;
+//   child: SiblingInterface | null;
+//   sibling: ComponentInterface | null;
+//   data: any;
+//   sourceRaw: string;
+//   vue: string;
+//   isRoot: boolean;
+//   runData(): void;
+//   split?: string[];
+//   name?: string;
+//   template?: string;
+//   script?: string;
+//   style?: string;
+//   instance?: string;
+//   middlecode?: string;
+// }
 export interface ComponentInterface {
   label: string;
-  path: string | URL;
-  isParsed: boolean;
-  child: SiblingInterface | null;
-  sibling: ComponentInterface | null;
-  data: any;
-  sourceRaw: string;
-  vue: string;
+  path: string;
   isRoot: boolean;
-  runData(): void;
-  split?: string[];
-  name?: string;
-  template?: string;
-  script?: string;
-  style?: string;
-  instance?: string;
-  middlecode?: string;
-}
-export interface ComponentIF {
-  label: string;
-  path: string | URL;
   isParsed: boolean;
   sourceRaw: string;
+  sibling: ComponentInterface | null;
   split: string[];
 }
-export interface RootIF extends ComponentIF {
+export interface RootInterface extends ComponentInterface {
   vue: string;
-  isRoot: boolean;
 }
 
-export interface ParentIF extends ComponentIF {
-  child: SiblingInterface;
-  sibling: ComponentInterface | null;
-}
 
-export interface TemplateIF extends ComponentIF {
+export interface TemplateInterface extends ComponentInterface {
   template: string;
+}
+
+export interface ScriptInterface extends TemplateInterface {
+  name: string;
+  script: string;
+  middlecode: string | unknown;
+}
+export interface ParentInterface extends ScriptInterface {
+  child: SiblingInterface;
+}
+
+export interface StyleInterface extends ScriptInterface {
+  style: string;
+}
+
+export interface InstanceInterface extends StyleInterface {
+  instance: string;
 }
 // #endregion
 
@@ -76,11 +90,13 @@ export interface SiblingInterface {
   add(component: ComponentInterface): void;
   scrub(label: string): boolean;
 }
+// export type Component = Pick<ComponentInterface | RootInterface>
 // #endregion
 
 // #region utils.ts
 export interface StorageInterface {
   [key: string]: ComponentInterface;
+  root: RootInterface;
 }
 export interface UtilityInterface {
   prompt(msg: string): Promise<string>;

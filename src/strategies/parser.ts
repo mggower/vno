@@ -11,11 +11,11 @@ class Parser implements ParserInterface {
     Queue.push(Storage.root);
   }
   /** parse is responsible for invoking all the parser-utils
-      functions for each component in the Queue. */
+      functions for each component in the Queue.*/
   public async parse(): Promise<void> {
     // iterate through the Queue while it is populated
     while (Queue.length) {
-      const current = Queue.shift();
+      let current = Queue.shift();
 
       // parse component
       const astSource = sfcCompiler.parse(
@@ -35,10 +35,10 @@ class Parser implements ParserInterface {
           ShowCodeFrame(astSource.descriptor, astSource.errors);
         } // isolate the parts
         else {
-          fn.parseTemplate(current, astSource.descriptor.template);
-          await fn.parseScript(current, astSource.descriptor.script);
-          fn.parseStyle(current, astSource.descriptor.styles);
-          fn.componentStringify(current);
+          current = fn.parseTemplate(current, astSource.descriptor.template);
+          current = await fn.parseScript(current, astSource.descriptor.script);
+          current = fn.parseStyle(current, astSource.descriptor.styles);
+          current = fn.componentStringify(current);
           current.isParsed = true;
         }
       }

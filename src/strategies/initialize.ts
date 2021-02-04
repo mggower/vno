@@ -1,7 +1,7 @@
 import { InitializeInterface, OptionsInterface } from "../lib/types.ts";
 import { fs, path } from "../lib/deps.ts";
 import { Storage } from "../lib/utils.ts";
-import Component from "./component.ts";
+import {createComponent, saveAsRoot} from "./component.ts";
 import _def from "../lib/defaults.ts";
 import Parser from "./parser.ts";
 
@@ -47,10 +47,10 @@ class Initialize implements InitializeInterface {
       /** if the current label is the provide root label */
       if (label === rootLabel) {
         /** save a new instance of the Component object in storage and mark it as the root */
-        Storage.root = new Component(rootLabel, file.path, true);
+        Storage.root = saveAsRoot(createComponent(rootLabel, file.path))
       } else if (label) {
-        /** store all other components as new instances of Component in storage
-        Storage[label] = new Component(label, file.path); */
+        /** store all other components as new instances of Component in storage */
+        Storage[label] = createComponent(label, file.path);
       }
     }
   }

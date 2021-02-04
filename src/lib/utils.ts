@@ -1,5 +1,6 @@
 import {
   ComponentInterface,
+  ComponentIF
   StorageInterface,
   UtilityInterface,
 } from "../lib/types.ts";
