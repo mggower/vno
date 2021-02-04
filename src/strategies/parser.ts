@@ -1,6 +1,6 @@
 import { Queue, ShowCodeFrame, Storage } from "../lib/utils.ts";
 import { colors, sfcCompiler } from "../lib/deps.ts";
-import { ParserInterface } from "../lib/types.ts";
+import { ParentInterface, ParserInterface, TemplateInterface, ScriptInterface } from "../lib/types.ts";
 import fn from "./parser-utils/_fn.ts";
 import Compiler from "./compiler.ts";
 
@@ -15,7 +15,7 @@ class Parser implements ParserInterface {
   public async parse(): Promise<void> {
     // iterate through the Queue while it is populated
     while (Queue.length) {
-      let current = Queue.shift();
+      let current: any = Queue.shift();
 
       // parse component
       const astSource = sfcCompiler.parse(

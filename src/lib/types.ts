@@ -55,11 +55,8 @@ export interface ComponentInterface {
   sourceRaw: string;
   sibling: ComponentInterface | null;
   split: string[];
+  vue: string | unknown;
 }
-export interface RootInterface extends ComponentInterface {
-  vue: string;
-}
-
 
 export interface TemplateInterface extends ComponentInterface {
   template: string;

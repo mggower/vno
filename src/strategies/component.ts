@@ -21,13 +21,14 @@ export function createComponent(label: string, path: string): ComponentInterface
     path,
     sourceRaw,
     split,
+    vue: null,
     sibling: null,
     isRoot: false,
     isParsed: false,
   };
 }
 
-export function saveAsRoot(component: ComponentInterface): RootInterface {
+export function saveAsRoot(component: ComponentInterface): ComponentInterface {
   return {
     ...component,
     isRoot: true,

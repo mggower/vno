@@ -1,4 +1,4 @@
-import { CompilerInterface, ComponentInterface } from "../lib/types.ts";
+import { CompilerInterface, ComponentInterface, InstanceInterface } from "../lib/types.ts";
 import { Storage } from "../lib/utils.ts";
 import _def from "../lib/defaults.ts";
 import { fs } from "../lib/deps.ts";
@@ -37,12 +37,7 @@ class Compiler implements CompilerInterface {
   }
 
   /** write is responsible for writing each instance to the build */
-  public write(current: ComponentInterface): void {
-    if (!current.instance) {
-      throw (
-        `${current.label} is missing its instance data`
-      );
-    }
+  public write(current: InstanceInterface): void {
     Deno.writeTextFileSync(_def.BUILD_PATH, current.instance, { append: true });
     if (current.style) {
       Deno.writeTextFileSync(_def.STYLE_PATH, current.style, { append: true });
