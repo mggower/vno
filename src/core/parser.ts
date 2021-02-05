@@ -37,7 +37,7 @@ async function parseComponent(
   queue: Component[],
 ): Promise<Parsed> {
   let current = component;
-
+  
   const astSource = sfcCompiler.parse(current.sourceRaw, {
     filename: `${current?.label}.vue`,
     sourceMap: false,
@@ -63,7 +63,7 @@ async function parseComponent(
     current = parseStyle(current, astSource.descriptor.styles);
     current = componentStringify(current);
   }
-
+ 
   return {
     ...current,
     isParsed: true,
@@ -182,7 +182,7 @@ function attachChildren(
     const component = childComponents.pop() as Component;
     if (component === undefined) continue;
     if (!component.isParsed) queue.push(component);
-    Utils.preorderScrub(component.label, parent);
+    Utils.preorderScrub(component.label, parent, storage);
     parent.child.add(component);
   }
 

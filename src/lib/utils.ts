@@ -12,17 +12,17 @@ export function memoize() {
   // and its value is the "current" or parent component that
   // it was last attached to.
   // #endregion
-  const cache: Storage = {};
+  const cache = {} as Storage;
   // #region "scrubbed" conditions
   // if the 'label' argument is located in the cache, invoke
   // scrub with the last parent component, and the label as
   // arguments; otherwise, invoke scrub from the root
   // #endregion
-  return (label: string, current: Component) => {
+  return (label: string, current: Component, storage: Storage) => {
     if (cache[label]) {
       scrub(cache[label], label);
     } else {
-      scrub(Storage.root, label);
+      scrub(storage.root, label);
     }
     cache[label] = current;
   };

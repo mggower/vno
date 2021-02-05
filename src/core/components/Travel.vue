@@ -12,13 +12,9 @@
 </template>
 
 <script>
-import Destinations from './Destinations.vue';
 
 export default {
   name: 'travel',
-  components: {
-    Destinations,
-  },
   data() {
     return {
       locations: [

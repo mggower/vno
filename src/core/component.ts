@@ -1,5 +1,5 @@
 import { Component, Composite, Primitive, Root } from "../lib/newtypes.ts";
-import SiblingList from "sibling_list.ts";
+import SiblingList from "./sibling_list.ts";
 
 export function createComponent(label: string, path: string): Primitive {
   const sourceRaw = Deno.readTextFileSync(path);
