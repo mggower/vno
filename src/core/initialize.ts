@@ -1,5 +1,5 @@
 import { Options, Storage } from "../lib/newtypes.ts";
-import { createComponent, saveAsRoot } from "../strategies/component.ts";
+import { createComponent, saveAsRoot } from "./component.ts";
 import _def from "../lib/defaults.ts";
 import { fs, path } from "../lib/deps.ts";
 
@@ -25,8 +25,7 @@ async function createStorage(options: Options): Promise<Storage> {
 
     if (label === options.root) {
       /** label as root in storage */
-      storage.root = saveAsRoot(storage[label]);
-      storage.root.vue = options.vue || _def.CDN;
+      storage.root = saveAsRoot(storage[label], options.vue || _def.CDN);
     }
   }
 

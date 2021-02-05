@@ -1,0 +1,8 @@
+{
+  "root": "App",
+  "entry": "./",
+  "options": {
+    "title": "an example application"
+  },
+  "server": "./server.ts"
+}

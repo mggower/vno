@@ -1,27 +1,29 @@
-import { Storage } from "https://deno.land/x/evt@v1.9.11/lib/types/lib.dom.ts";
-
+import { Options, Storage } from "../lib/newtypes.ts";
+import createStorage from "./initialize.ts";
+import parseApplication from "./parser.ts";
+import compileApp from "./compiler.ts";
 
 class vno {
   public storage: object;
   public queue: [];
-  public initialize(): Storage;
-  public parser(): Storage;
-  public compiler(): Storage;
+
 
   constructor() {
     this.storage = {};
     this.queue = [];
   }
 
-  public initialize(): Storage {
-    
-  }
-
-  public parser(): Storage {
-    
-  }
-
-  public compiler(): Storage {
-    
+  public async build(options: Options): Promise<Storage> {
+    let storage = await createStorage(options);
+    storage = await parseApplication(storage);
+    return compileApp(storage) as Storage;
   }
 }
+
+const demo = new vno();
+const options = {
+  entry: "./",
+  root: "App",
+};
+
+demo.build(options)

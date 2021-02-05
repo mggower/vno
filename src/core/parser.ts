@@ -99,7 +99,6 @@ async function parseScript(
   storage: Storage,
   queue: Component[],
 ): Promise<Component> {
-  let newComponent;
   // isolate the content inside of <script>
   const open = Utils.indexOfRegExp(/<script.*>/gi, current.split);
   const close = Utils.indexOfRegExp(/<\/script>/gi, current.split);
@@ -122,12 +121,14 @@ async function parseScript(
     });
 
   const name = setComponentName(current, scriptArr);
-  const script = resolveScript(current, scriptArr, analysis.lang === "ts");
+  const script = await resolveScript(
+    current,
+    scriptArr,
+    analysis.lang === "ts",
+  );
   const middlecode = analysis.attrs?.load
-    ? await middleCodeResolver(current)
+    ? await middleCodeResolver(current) as string
     : null;
-
-  
 
   // locate if this component has any children
   const componentsStart = Utils.indexOfRegExp(
@@ -136,19 +137,17 @@ async function parseScript(
   );
   const children = scriptArr.slice(componentsStart) || false;
 
-  newComponent = {
+  const newComponent = {
     ...current,
     name,
     script,
-    middlecode: middlecode || null,
+    middlecode,
     stage: "script",
   } as Component;
-  // if a component's property is identified
-  if (children) {
-    newComponent = attachChildren(newComponent, children, storage, queue);
-  }
 
-  return newComponent as Component;
+  return (children
+    ? attachChildren(newComponent, children, storage, queue)
+    : newComponent) as Component;
 }
 
 function attachChildren(
@@ -192,7 +191,6 @@ function attachChildren(
     ...parent,
   };
 }
-// import { colors, scssCompiler, sfcCompiler } from "../../lib/deps.ts";
 
 // parseStyle is responsible for parsing data inside of <style> tags
 function parseStyle(current: Component, styles: any): Component {
@@ -295,7 +293,7 @@ async function resolveScript(
   let script = tsCheck /** transform typescript to javascript */
     ? await TsCompile(`({ ${trimmed} })`, current.path) as string
     : trimmed;
-  
+
   // remove comments /* */ in script and style tag's
   return script.replace(Utils.multilineCommentPattern, "") as string;
 }

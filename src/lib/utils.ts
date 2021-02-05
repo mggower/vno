@@ -1,9 +1,5 @@
-import {
-  ComponentInterface,
-  ComponentIF
-  StorageInterface,
-  UtilityInterface,
-} from "../lib/types.ts";
+import { UtilityInterface } from "../lib/types.ts";
+import { Component, Storage } from "../lib/newtypes.ts";
 import { asrt, colors, sfcCompiler } from "../lib/deps.ts";
 
 // #region memoize
@@ -16,13 +12,13 @@ export function memoize() {
   // and its value is the "current" or parent component that
   // it was last attached to.
   // #endregion
-  const cache: StorageInterface = {};
+  const cache: Storage = {};
   // #region "scrubbed" conditions
   // if the 'label' argument is located in the cache, invoke
   // scrub with the last parent component, and the label as
   // arguments; otherwise, invoke scrub from the root
   // #endregion
-  return (label: string, current: ComponentInterface) => {
+  return (label: string, current: Component) => {
     if (cache[label]) {
       scrub(cache[label], label);
     } else {
@@ -32,15 +28,15 @@ export function memoize() {
   };
 }
 // scrub mimics a preorder tree traversal
-function scrub(component: ComponentInterface, label: string) {
+function scrub(component: Component, label: string) {
   if (component.child) component.child.scrub(label);
   if (component.child?.head) scrub(component.child.head, label);
   if (component.sibling) scrub(component.sibling, label);
 }
 // the Queue is used to sequence child components to be parsed
-export const Queue: ComponentInterface[] = [];
+// export const Queue: Component[] = [];
 // the Storage holds a reference to all components
-export const Storage: StorageInterface = {};
+// export const Storage: Storage = {};
 
 // global utility functions
 const utils: UtilityInterface = {
@@ -97,8 +93,10 @@ const utils: UtilityInterface = {
   },
   multilineCommentPattern: /\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\//gm,
   htmlCommentPattern: /<!--([\s\S]*?)-->/gm,
-  importPattern: /import(?:["'\s]*([\w*${}\n\r\t, ]+)from\s*)?["'\s]["'\s](.*[@\w_-]+)["'\s].*$/gm,
-  urlPattern: /(ftp|http|https|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gm,
+  importPattern:
+    /import(?:["'\s]*([\w*${}\n\r\t, ]+)from\s*)?["'\s]["'\s](.*[@\w_-]+)["'\s].*$/gm,
+  urlPattern:
+    /(ftp|http|https|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gm,
 };
 
 // compile typescript code to string javascrit code
@@ -131,7 +129,7 @@ export async function TsCompile(source: string, path: string, cut = true) {
     console.log(error);
     throw new Error(
       colors.red(
-      `Typescript compilation Error in ${colors.yellow(path)}`,
+        `Typescript compilation Error in ${colors.yellow(path)}`,
       ),
     );
   }
@@ -193,7 +191,7 @@ export async function importResolver(
 
 // takes all the intermediate code in a component and injects it on top of the components bundle
 export async function middleCodeResolver(
-  { split, path, script }: ComponentInterface,
+  { split, path, script }: Component,
 ) {
   const tagPattern = /<script.*>/gim;
 
