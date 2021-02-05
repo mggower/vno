@@ -1,4 +1,4 @@
-import { Component, Parsed, Storage } from "../lib/newtypes.ts";
+import { Parsed, ParsedApp } from "../lib/newtypes.ts";
 import _def from "../lib/defaults.ts";
 import { fs } from "../lib/deps.ts";
 
@@ -8,7 +8,7 @@ import { fs } from "../lib/deps.ts";
  * Compiler writes component instances to build file
  * and writes styling to style css file
  */
-function compileApp(storage: Storage): Storage {
+function compileApp(storage: ParsedApp): void {
   const mount = `\n${storage.root.label}.$mount("#${storage.root.name}");`;
   const vue = `import Vue from '${storage.root.vue}';\n`;
 
@@ -18,20 +18,31 @@ function compileApp(storage: Storage): Storage {
   Deno.writeTextFileSync(_def.BUILD_PATH, _def.IGNORE + vue);
   // invokes traverse to write the components in single threaded sequence
 
-  traverseGraph(storage.root as Parsed);
+  traverseGraph(storage.root);
   // write to build, mount app to the dom to complete
   Deno.writeTextFileSync(_def.BUILD_PATH, mount, { append: true });
 
-  return storage;
+
 }
 
 function traverseGraph(current: Parsed): void {
+  if (hasValidInstance(current) === false) {
+    throw new TypeError(`${current.label} has no instance prop`)
+  }
+  
   if (current.child?.head) traverseGraph(current.child.head as Parsed);
   if (current.sibling) traverseGraph(current.sibling as Parsed);
+
   Deno.writeTextFileSync(_def.BUILD_PATH, current.instance, { append: true });
+
   if (current.style) {
     Deno.writeTextFileSync(_def.STYLE_PATH, current.style, { append: true });
   }
+}
+
+function hasValidInstance(obj: unknown): obj is Parsed {
+  return obj !== null &&
+    typeof (obj as Parsed).instance === "string"
 }
 
 export default compileApp;

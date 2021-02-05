@@ -27,6 +27,17 @@ export interface Component {
   style: string | null;
   instance: string | null;
   isParsed: boolean;
+  saveAsRoot(vue: string): void;
+  saveAsParent(): void;
+  parseComponent(storage: Storage, queue: Component[]): void;
+  parseTemplate(ast:any): void;
+  parseScript(analysis: any, storage: Storage,queue: Component[]): void;
+  attachChildren(children: string[], storage: Storage, queue: Component[]): void;
+  parseStyle(styles: any): void;
+  componentStringify(): void;
+  setComponentName(data: string[]): void;
+  resolveScript(data: string[], tsCheck: boolean): void;
+  
 }
 
 
@@ -61,6 +72,10 @@ export interface Storage {
   root: Component;
 }
 
+export interface ParsedApp {
+  [key: string]: Parsed;
+  root: Parsed;
+}
 export interface SibList {
   head: Component | null;
   tail: Component | null;
