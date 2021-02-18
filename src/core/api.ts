@@ -1,10 +1,11 @@
 import { Component, Options, ParsedApp, Storage } from "../lib/newtypes.ts";
 
 import compileApp from "./compiler.ts";
-import Comp from "./component.ts";
+import Comp from "./component.ts";  
 
 import _def from "../lib/defaults.ts";
 import { fs, path } from "../lib/deps.ts";
+import { isValidOptions } from "./typegaurds.ts";
 class vno {
   public storage: Storage;
   public queue: Component[];
@@ -26,9 +27,9 @@ class vno {
       this.storage[label] = new Comp(label, file.path);
 
       if (label === options.root) {
-      /** label as root in storage */
+        /** label as root in storage */
         this.storage[label].saveAsRoot(options.vue || _def.CDN);
-        this.storage.root = this.storage[label]
+        this.storage.root = this.storage[label];
       }
     }
 
@@ -66,9 +67,3 @@ const options = {
 };
 
 demo.build(options);
-
-function isValidOptions(obj: unknown): obj is Options {
-  return obj !== null &&
-    typeof (obj as Options).entry === "string" &&
-    typeof (obj as Options).root === "string";
-}
