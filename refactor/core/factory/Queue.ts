@@ -8,7 +8,8 @@ export default class Queue implements Factory.Queue {
     this.length = 0;
   }
 
-  public enqueue(component: App.Component): void {
+  public enqueue(component: App.Component | null): void {
+    if (component === null) return;
     this.components.push(component);
     this.length = this.components.length;
   }
@@ -20,7 +21,7 @@ export default class Queue implements Factory.Queue {
     return component;
   }
 
-  public isEmpty(): boolean {
+  public isFilled(): boolean {
     return this.length > 0;
   }
 }

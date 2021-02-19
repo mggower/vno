@@ -9,7 +9,7 @@ export namespace Factory {
     [key: string]: App.Component;
   }
   export interface Storage {
-    root: App.Component | unknown;
+    root: App.Component;
     app: AppStorage;
     vue: string;
     setRoot(component: App.Component): void;
@@ -20,7 +20,7 @@ export namespace Factory {
     length: number;
     enqueue(component: App.Component): void;
     dequeue(): App.Component | undefined;
-    isEmpty(): boolean;
+    isFilled(): boolean;
   }
   export interface DepsList {
     head: App.Component | null;
@@ -31,27 +31,21 @@ export namespace Factory {
 }
 
 export namespace App {
-  export interface Component {
-    type: "composite" | "primitive";
-
+  
+  export interface Primitive {
+    type: "primitive" | "composite";
     label: string;
     path: string;
-
     sourceRaw: string;
     split: string[];
-
     name: string | null;
     sibling: Component | null;
-
     template: string | null;
     script: string | null;
     middlecode: string | null;
     style: string | null;
     instance: string | null;
-
     isParsed: boolean;
-
-    saveAsParent(): void;
     parseComponent(Storage: Factory.Storage, Queue: Factory.Queue): void;
     parseTemplate(ast: any): void;
     parseScript(
@@ -59,14 +53,13 @@ export namespace App {
       storage: Factory.Storage,
       Queue: Factory.Queue,
     ): void;
-
     parseStyle(styles: any): void;
     componentStringify(): void;
     setComponentName(data: string[]): void;
     resolveScript(data: string[], tsCheck: boolean): void;
   }
-
-  export interface composite extends Component {
+  export interface Composite extends Primitive {
+    type: 'composite'
     child: Factory.DepsList;
     attachChildren(
       children: string[],
@@ -74,4 +67,6 @@ export namespace App {
       Queue: Factory.Queue,
     ): void;
   }
+
+  export type Component = Primitive | Composite;
 }
