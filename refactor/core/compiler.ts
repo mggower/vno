@@ -1,10 +1,9 @@
 import { hasValidInstance } from "./lib/types/typegaurds.ts";
-
 import _def from "./lib/defaults.ts";
 import { fs } from "./lib/deps.ts";
-import { App, Factory } from "./lib/types/interfaces.ts";
+import { App } from "./lib/types/interfaces.ts";
 
-export default function compileApp(storage: Factory.Storage): void {
+export default function compileApp(storage: App.Storage): void {
   const mount = `\n${storage.root.label}.$mount("#${storage.root.name}");`;
   const vue = `import Vue from '${storage.vue}';\n`;
 
@@ -28,22 +27,22 @@ function traverseGraph(current: App.Component): void {
     throw new TypeError(`${current.label} has no instance prop`);
   }
 
-  if (current.type === "composite" && current.child.head) {
-    traverseGraph(current.child.head);
+  if (current.dependants !== null && current.dependants.head) {
+    traverseGraph(current.dependants.head);
   }
 
   if (current.sibling) {
     traverseGraph(current.sibling);
   }
 
-  if (current.instance) {
-    Deno.writeTextFileSync(_def.BUILD_PATH, current.instance, {
+  if (current.parsed_data?.instance) {
+    Deno.writeTextFileSync(_def.BUILD_PATH, current.parsed_data?.instance, {
       append: true,
     });
   }
 
-  if (current.style) {
-    Deno.writeTextFileSync(_def.STYLE_PATH, current.style, {
+  if (current.parsed_data?.styles) {
+    Deno.writeTextFileSync(_def.STYLE_PATH, current.parsed_data?.styles, {
       append: true,
     });
   }

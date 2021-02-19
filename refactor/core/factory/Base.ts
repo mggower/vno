@@ -1,4 +1,4 @@
-import { Cmpnt, Factory } from "../lib/types/interfaces.ts";
+import { App, Cmpnt } from "../lib/types/interfaces.ts";
 import { _, sfcCompiler } from "../lib/deps.ts";
 import * as utils from "../utils/utils.ts";
 export default abstract class CBase {
@@ -6,10 +6,10 @@ export default abstract class CBase {
   protected _phase: Cmpnt.EnPhase;
   protected __raw__: string;
   protected __ast__: any;
-  protected __split__: Cmpnt.Tags;
+  protected __split__: Cmpnt.tags;
   protected _name: string | unknown;
   public parsed_data: Cmpnt.ParsedData | null;
-  public dependants: Factory.DepsList | null;
+  public dependants: App.DepsList | null;
   public is_parsed: boolean;
   constructor(public label: string, public path: string) {
     this._type = Cmpnt.EnType.Primitive;

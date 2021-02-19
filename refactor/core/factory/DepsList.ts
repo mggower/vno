@@ -1,17 +1,74 @@
-import { App, Factory } from "../lib/types/interfaces.ts";
-import Component from "./Component.ts";
-export default class DepsList implements Factory.DepsList {
-  head: Component | null;
-  tail: Component | null;
+import { App, Fctry } from "../lib/types/interfaces.ts";
+export default class DepsList implements App.DepsList {
+  head: App.Component | null;
+  tail: App.Component | null;
   constructor() {
     this.head = null;
     this.tail = null;
   }
-  add(component: Component): void {
-    throw new Error("Method not implemented.");
-  }
-  scrub(label: string): boolean {
-    throw new Error("Method not implemented.");
-  }
 
+  public add: Fctry.deps.add = (component) => {
+    if (!this.head) {
+      this.head = component;
+      this.tail = component;
+    } else if (this.tail !== null) {
+      this.tail.sibling = component;
+      this.tail = component;
+      this.tail.sibling = null;
+    }
+  };
+  
+  public scrub: Fctry.deps.scrub = (label) => {
+    if (!this.head) return false;
+
+    let removed, current, prev;
+    // if the label matches the head, remove the head
+    if (this.head.label === label) {
+      removed = this.head;
+
+      // if the head has a sibling,
+      // it becomes the head, otherwise the list is null
+      if (this.head.sibling) this.head = this.head.sibling;
+      else this.head = null;
+      // ensure that the removed component has no attachments
+      removed.sibling = null;
+      return true;
+    }
+
+    // assign current and previous to iterate
+    if (this.head.sibling) {
+      current = this.head.sibling;
+      prev = this.head;
+    } else {
+      return false;
+    }
+
+    while (current.sibling) {
+      // if a match is made
+      if (current.label === label) {
+        removed = current;
+        // remove current and attach previous to its sibling
+        prev.sibling = current.sibling;
+        // ensure no attachments
+        removed.sibling = null;
+        return true;
+      }
+      // if no match is made, continue iteration
+      prev = current;
+      current = current.sibling;
+    }
+
+    // if the tail matches the label
+    if (current.label === label) {
+      removed = current;
+      // the tail is assigned to prev
+      this.tail = prev;
+      this.tail.sibling = null;
+      // ensure no attachments
+      removed.sibling = null;
+      return true;
+    }
+
+    return false;
+  };
 }

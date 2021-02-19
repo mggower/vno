@@ -1,27 +1,26 @@
-import { App, Factory } from "../lib/types/interfaces.ts";
+import Component from './Component.ts';
+import { App, Fctry } from "../lib/types/interfaces.ts";
 
-export default class Queue implements Factory.Queue {
-  components: App.Component[];
+export default class Queue implements App.Queue {
+  components: Component[];
   length: number;
   constructor() {
-    this.components = [] as App.Component[];
+    this.components = [] as Component[];
     this.length = 0;
   }
 
-  public enqueue(component: App.Component | null): void {
+  public enqueue: Fctry.que.enqueue = (component) => {
     if (component === null) return;
     this.components.push(component);
     this.length = this.components.length;
   }
 
-  public dequeue(): App.Component | undefined {
+  public dequeue: Fctry.que.dequeue = () => {
     if (!this.length) return undefined;
     const component = this.components.shift();
     this.length = this.components.length;
     return component;
   }
 
-  public isFilled(): boolean {
-    return this.length > 0;
-  }
+  public isFilled: Fctry.que.is_filled = (() => this.length > 0);
 }

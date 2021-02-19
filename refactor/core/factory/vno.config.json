@@ -1,0 +1,9 @@
+{
+  "root": "App",
+  "entry": "./",
+  "options": {
+    "child": "HelloVno",
+    "port": "3000",
+    "title": "your project"
+  }
+}

@@ -5,8 +5,10 @@ import { colors } from "../lib/deps.ts";
 import * as utils from '../utils/utils.ts';
 import DepsList from "./DepsList.ts";
 export default class Component extends CBase {
+  public sibling: Component | null;
   constructor(label: string, path: string) {
     super(label, path);
+    this.sibling = null;
   }
 
   public defineComposite = () => {
@@ -14,7 +16,7 @@ export default class Component extends CBase {
     this._type = Cmpnt.EnType.Composite;
   };
 
-  public parseComponent: Cmpnt.ParCom = async (storage, queue) => {
+  public parseComponent: Cmpnt.prs_comp = async (storage, queue) => {
     console.log(
       colors
         .green(`[vno: compiling] => ${colors.yellow(this.path)}`),
@@ -31,3 +33,4 @@ export default class Component extends CBase {
     }
   };
 }
+
