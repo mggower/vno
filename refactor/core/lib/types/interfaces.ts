@@ -1,3 +1,4 @@
+import Component from "../../factory/Component.ts";
 export namespace Factory {
   export interface Options {
     entry: string;
@@ -6,67 +7,105 @@ export namespace Factory {
     terminal?: boolean;
   }
   export interface AppStorage {
-    [key: string]: App.Component;
+    [key: string]: Component;
   }
   export interface Storage {
-    root: App.Component;
+    root: Component;
     app: AppStorage;
     vue: string;
-    setRoot(component: App.Component): void;
+    setRoot(component: Component): void;
     setVue(vue: string | undefined): void;
   }
   export interface Queue {
-    components: App.Component[];
+    components: Component[];
     length: number;
-    enqueue(component: App.Component): void;
-    dequeue(): App.Component | undefined;
+    enqueue(component: Component): void;
+    dequeue(): Component | undefined;
     isFilled(): boolean;
   }
   export interface DepsList {
-    head: App.Component | null;
-    tail: App.Component | null;
-    add(component: App.Component): void;
+    head: Component | null;
+    tail: Component | null;
+    add(component: Component): void;
     scrub(label: string): boolean;
   }
 }
 
-export namespace App {
-  
-  export interface Primitive {
-    type: "primitive" | "composite";
-    label: string;
-    path: string;
-    sourceRaw: string;
-    split: string[];
-    name: string | null;
-    sibling: Component | null;
-    template: string | null;
-    script: string | null;
-    middlecode: string | null;
-    style: string | null;
-    instance: string | null;
-    isParsed: boolean;
-    parseComponent(Storage: Factory.Storage, Queue: Factory.Queue): void;
-    parseTemplate(ast: any): void;
-    parseScript(
-      analysis: any,
-      storage: Factory.Storage,
-      Queue: Factory.Queue,
-    ): void;
-    parseStyle(styles: any): void;
-    componentStringify(): void;
-    setComponentName(data: string[]): void;
-    resolveScript(data: string[], tsCheck: boolean): void;
+export namespace Cmpnt {
+  export enum EnType {
+    Primitive = "PRIMITIVE",
+    Composite = "COMPOSITE",
   }
-  export interface Composite extends Primitive {
-    type: 'composite'
-    child: Factory.DepsList;
-    attachChildren(
-      children: string[],
+
+  export enum EnPhase {
+    Constructor = "CONSTRUCTOR",
+    Template = "TEMPLATE",
+    Script = "SCRIPT",
+    Style = "STYLE",
+    Complete = "COMPLETE",
+  }
+  interface ast {
+    type: string;
+    content: string;
+    loc?: object;
+    lang?: string;
+    attrs?: {
+      load: any;
+    };
+    scoped?: boolean;
+  }
+  export interface Tags {
+    template: ast;
+    script: ast;
+    styles: ast[];
+  }
+
+  export interface ParCom {
+    (storage: Factory.Storage, queue: Factory.Queue): Promise<void>;
+  }
+ 
+
+  interface postParser {
+    template?: string;
+    script?: string;
+    middlecode?: string | null;
+    styles?: string;
+    instance?: string;
+  }
+
+  export type ParsedData = postParser;
+}
+
+export namespace Prs {
+  export interface gen {
+    (curr: Component): void;
+  }
+  export interface scrpt {
+    (
+      curr: Component,
       storage: Factory.Storage,
-      Queue: Factory.Queue,
+      queue: Factory.Queue,
     ): void;
   }
 
-  export type Component = Primitive | Composite;
+  export interface str {
+    (curr: Component, storage: Factory.Storage): string;
+  }
+
+  export interface rS {
+    (data: string[], tsCheck: boolean, path: string): Promise<string>;
+  }
+
+  export interface mCR {
+    (curr: Component, script: string): Promise<string>;
+  }
+
+  export interface cD {
+    (
+      curr: Component,
+      arr: string[],
+      storage: Factory.Storage,
+      queue: Factory.Queue,
+    ): void;
+  }
 }
