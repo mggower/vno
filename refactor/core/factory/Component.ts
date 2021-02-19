@@ -34,7 +34,7 @@ export default class Primitive implements App.Primitive {
     this.isParsed = false;
   }
 
-  async parseComponent(
+  public async parseComponent(
     storage: Factory.Storage,
     queue: Factory.Queue,
   ): Promise<void> {
@@ -44,9 +44,8 @@ export default class Primitive implements App.Primitive {
     });
 
     console.log(
-      colors.green(
-        `[vno: compiling] => ${colors.yellow(this.path as string)}`,
-      ),
+      colors
+        .green(`[vno: compiling] => ${colors.yellow(this.path as string)}`),
     );
 
     if (astSource.errors.length) {
@@ -65,8 +64,9 @@ export default class Primitive implements App.Primitive {
   }
 
   public parseTemplate(ast: any) {
-    const close = utils
-      .indexOfRegExp(/<\/template>/gi, this.split as string[]);
+    const close = utils.indexOfRegExp(
+      /<\/template>/gi, this.split as string[]
+    );
     // remove /r & <!-- --> from template
     this.template = removeCarriageReturn(ast.content)
       .replace(utils.htmlCommentPattern, "");
@@ -79,8 +79,12 @@ export default class Primitive implements App.Primitive {
     storage: Factory.Storage,
     queue: Factory.Queue,
   ) {
-    const open = utils.indexOfRegExp(/<script.*>/gi, this.split);
-    const close = utils.indexOfRegExp(/<\/script>/gi, this.split);
+    const open = utils.indexOfRegExp(
+      /<script.*>/gi, this.split
+    );
+    const close = utils.indexOfRegExp(
+      /<\/script>/gi, this.split
+    );
 
     if (open < 0 || close < 0) {
       console.warn(
