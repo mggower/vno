@@ -1,5 +1,5 @@
 import { Component, ComponentContainer } from "../dts/type.vno.d.ts";
-import * as _def from "../lib/defaults.ts";
+import * as _default from "../lib/defaults.ts";
 export default class Storage {
   private _root: Component;
   private _vue: string;
@@ -8,7 +8,7 @@ export default class Storage {
   constructor() {
     this.app = <ComponentContainer> {};
     this._root = <Component> {};
-    this._vue = _def.CDN;
+    this._vue = _default.CDN;
   }
 
   get root() {

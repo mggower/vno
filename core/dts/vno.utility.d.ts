@@ -9,11 +9,8 @@ export interface TsHelper {
 }
 
 export type IdxOf = (exp: RegExp, arr: string[]) => number;
-
 export type Join = <Elem>(array: Elem[], idx1: number, idx2: number) => string;
-
 export type Split = (str: string, idx1: number, idx2: number) => string[];
-
 export type CompId = (id: string, ref: Component, box?: Storage) => void;
 
 export interface ResolveAttrs {

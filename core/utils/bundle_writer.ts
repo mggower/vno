@@ -1,5 +1,5 @@
-import { hasValidInstance } from "../lib/typeGaurds.ts";
-import _def from "../lib/defaults.ts";
+import { hasValidInstance } from "../lib/type_gaurds.ts";
+import * as _def from "../lib/defaults.ts";
 import { fs } from "../lib/deps.ts";
 import * as types from "../lib/types.ts";
 

@@ -1,5 +1,5 @@
 import DepsList from "../factory/DepsList.ts";
-import * as utils from "./utils.ts";
+import { utils } from "./vno.utils.ts";
 
 import { TsCompile } from "./ts_compile.ts";
 import { _, colors } from "../lib/deps.ts";
@@ -7,6 +7,9 @@ import { preorderScrub } from "./scrub.ts";
 import { ComponentList, ResolveAttrs, ResolveSrc } from "../dts/type.vno.d.ts";
 
 export const _script: ResolveSrc = async function (data, path, tsCheck) {
+  if (typeof data === "string") {
+    throw new TypeError("invalid arguments");
+  }
   const start = utils.indexOfRegExp(/^\s*(export)/, data);
   const end = data.lastIndexOf("}");
 
