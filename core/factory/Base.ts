@@ -4,17 +4,15 @@ import * as utils from "../utils/utils.ts";
 
 export default abstract class Base {
   protected _type: types.EnType;
-  protected _phase: types.EnPhase;
   protected __raw__: string;
   protected __ast__: types.src
   protected __split__: types.split;
-  protected _name: string | unknown;
+  public name: string;
   public parsed_data: types.parsedData | null;
   public dependants: types.DepsList | null;
   public is_parsed: boolean;
   constructor(public label: string, public path: string) {
     this._type = types.EnType.Primitive;
-    this._phase = types.EnPhase.Constructor;
     this.label = label;
     this.path = path;
     this.__raw__ = Deno.readTextFileSync(path);
@@ -27,7 +25,7 @@ export default abstract class Base {
       script: this.__ast__.descriptor.script,
       styles: this.__ast__.descriptor.styles,
     };
-    this._name = this.setComponentName();
+    this.name = this.setComponentName();
     this.parsed_data = null;
     this.dependants = null;
     this.is_parsed = false;
@@ -41,10 +39,7 @@ export default abstract class Base {
     return data[index].split(/[`'"]/)[1];
   }
 
-  get name() {
-    return this._name as string;
-  }
-
+  // raw data 
   get temp_data() {
     return this.__split__.template;
   }
@@ -57,6 +52,7 @@ export default abstract class Base {
     return this.__split__.styles;
   }
 
+  // resolved data
   set template(template: string) {
     this.parsed_data = {
       ...this.parsed_data,
@@ -65,10 +61,7 @@ export default abstract class Base {
   }
 
   get template() {
-    if (this.parsed_data?.template) {
-      return this.parsed_data.template;
-    }
-    return "no template";
+    return this.parsed_data?.template ?? "";
   }
 
   set script(script: string) {
@@ -79,10 +72,7 @@ export default abstract class Base {
   }
 
   get script() {
-    if (this.parsed_data?.script) {
-      return this.parsed_data.script;
-    }
-    return "no script";
+    return this.parsed_data?.script ?? "";
   }
 
   set styles(styles: string) {
@@ -92,10 +82,7 @@ export default abstract class Base {
     };
   }
   get styles() {
-    if (this.parsed_data?.styles) {
-      return this.parsed_data.styles;
-    }
-    return "no styles";
+    return this.parsed_data?.styles ?? "";
   }
 
   set middlecode(middlecode: string | null) {
@@ -108,10 +95,7 @@ export default abstract class Base {
   }
 
   get middlecode() {
-    if (this.parsed_data?.middlecode) {
-      return this.parsed_data?.middlecode;
-    }
-    return "no middlecode";
+      return this.parsed_data?.middlecode ?? "";
   }
 
   set instance(instance: string) {
@@ -122,9 +106,6 @@ export default abstract class Base {
   }
 
   get instance() {
-    if (this.parsed_data?.instance) {
-      return this.parsed_data?.instance;
-    }
-    return "no instance";
+      return this.parsed_data?.instance ?? "";
   }
 }

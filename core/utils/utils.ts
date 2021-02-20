@@ -1,140 +1,40 @@
-import * as types from "../lib/types.ts";
-import { sfcCompiler } from "../lib/deps.ts";
-import { colors } from "../lib/deps.ts";
+import { IdxOf, Join, Pattern, Split } from "../dts/type.vno.d.ts";
 
-export const indexOfRegExp: types.iore = (
-  regex,
-  array,
-) => (array.findIndex((element) => regex.test(element)));
-
-export const sliceAndTrim: types.sat = (
-  array,
-  start,
-  end,
-  regex = /(\s{2,})/g,
-  replaced = " ",
-) => (array.slice(start, end).join("").replace(regex, replaced));
-
-export const trimAndSplit: types.tas = (
-  str,
-  start,
-  end,
-  split = ",",
-  regex = /\s/g,
-  replaced = "",
-) => (str.slice(start, end).replace(regex, replaced).split(split));
-
-function memoize() {
-  const cache = {} as types.container;
-  return (label: string, current: types.Component, storage: types.Storage) => {
-    if (cache[label]) {
-      scrub(cache[label], label);
-    } else {
-      scrub(storage.root, label);
-    }
-    cache[label] = current;
-  };
-}
-
-function scrub(component: types.Component, label: string) {
-  if (component.dependants) component.dependants.scrub(label);
-  if (component.dependants?.head) scrub(component.dependants.head, label);
-  if (component.sibling) scrub(component.sibling, label);
-}
-
-export const preorderScrub = memoize();
-
-export const prompt = async function (msg: string) {
-  const buf = new Uint8Array(1024);
-  await Deno.stdout.write(new TextEncoder().encode(`${msg}: `));
-  const n = <number>await Deno.stdin.read(buf);
-  return new TextDecoder().decode(buf.subarray(0, n)).trim();
-};
-
-export const patterns = {
+// reoccuring patterns
+export const patterns: Pattern = {
   multilineComment: /\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\//gm,
   htmlComment: /<!--([\s\S]*?)-->/gm,
   import:
     /import(?:["'\s]*([\w*${}\n\r\t, ]+)from\s*)?["'\s]["'\s](.*[@\w_-]+)["'\s].*$/gm,
   url:
     /(ftp|http|https|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gm,
+  whitespace: /(\s{2,})/g,
 };
 
-export const removeCarriageReturn: (text: string) => string = (text) => (
-  text.split("\r").filter((text) => text !== "\r").join("\n")
-);
-
-// compile typescript code to string javascrit code
-export const TsCompile: types.tc = async (source, path, cut = true) => {
-  const temp = `./${Math.random().toString().replace(".", "")}.ts`;
-  try {
-    const file = await Deno.create(temp);
-    const encoder = new TextEncoder();
-
-    await file.write(encoder.encode(source));
-
-    const { files } = await Deno.emit(temp, {
-      bundle: undefined,
-      check: true,
-      compilerOptions: { strict: false },
-    });
-
-    // filter javascript output
-    const [script] = Object.entries(files).flat().filter((chunk) =>
-      !chunk.includes("file:///")
-    );
-
-    await Deno.remove(temp, { recursive: true });
-
-    return (cut ? script.substring(3, script.length - 4) : script);
-
-    // return files;
-  } catch (error) {
-    await Deno.remove(temp, { recursive: true });
-    console.log(error);
-    throw new Error(
-      colors.red(
-        `Typescript compilation Error in ${colors.yellow(path)}`,
-      ),
-    );
-  }
+// returns index of pattern match
+export const indexOfRegExp: IdxOf = function (rx, arr) {
+  return arr.findIndex((el) => rx.test(el));
 };
 
-export function ShowCodeFrame(content: types.desc, errors?: []) {
-  const { filename, source, template } = content;
+// trims excess whitespace from an slice of an array and joins as string
+export const sliceAndTrim: Join = function (arr, i, j) {
+  return arr.slice(i, j).join("").replace(patterns.whitespace, " ");
+};
 
-  const templateAnalysis = sfcCompiler.compileTemplate(
-    { source: removeCarriageReturn(template.content), filename },
-  );
+// trims any whitespace from a slice of a string and returns as array
+export const trimAndSplit: Split = function (str, i, j) {
+  return str.slice(i, j).replace(/\s/g, "").split(",");
+};
 
-  // detect if the error is in the template
-  if (templateAnalysis.errors.length) {
-    console.log(colors.red(`\nTemplate Error in: ${colors.green(filename)}\n`));
-    templateAnalysis.errors.forEach((error) => {
-      console.log(colors.yellow(`${error.toString()}\n`));
-    });
-    console.log(
-      colors.green(
-        sfcCompiler.generateCodeFrame(
-          (templateAnalysis.source as string).trimStart(),
-        ),
-      ),
-    );
-    // show component error
-  } else {
-    const messages = new Set();
-    console.log(
-      colors.red(`\nComponent Error in: ${colors.green(filename)}\n`),
-    );
-    errors?.forEach((error: string) => {
-      // do not show the same message twice
-      messages.add(`${error.toString()}`);
-    });
-    console.log(colors.yellow([...messages].join("\n")));
-    console.log(colors.yellow("\n"));
-    // show code frame
-    console.log(
-      colors.green(sfcCompiler.generateCodeFrame(removeCarriageReturn(source))),
-    );
-  }
-}
+// stdin/out decoder for cli
+export const prompt = async function (msg: string): Promise<string> {
+  const buf = new Uint8Array(1024);
+  await Deno.stdout.write(new TextEncoder().encode(`${msg}: `));
+  const n = <number> await Deno.stdin.read(buf);
+  return new TextDecoder().decode(buf.subarray(0, n)).trim();
+};
+
+// removes carriage return for windows users
+export const removeCarriageReturn = function (text: string): string {
+  return text.split("\r").filter((text) => text !== "\r").join("\n");
+};

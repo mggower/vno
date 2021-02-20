@@ -1,16 +1,17 @@
-import * as utils from "./utils.ts";
-import * as types from "../lib/types.ts";
 import DepsList from "../factory/DepsList.ts";
-import { _, colors } from "../lib/deps.ts";
+import * as utils from "./utils.ts";
 
-export const _script: types.scr = async function (data, tsCheck, path) {
+import { TsCompile } from "./ts_compile.ts";
+import { _, colors } from "../lib/deps.ts";
+import { preorderScrub } from "./scrub.ts";
+import { ComponentList, ResolveAttrs, ResolveSrc } from "../dts/type.vno.d.ts";
+
+export const _script: ResolveSrc = async function (data, path, tsCheck) {
   const start = utils.indexOfRegExp(/^\s*(export)/, data);
   const end = data.lastIndexOf("}");
 
   const trimmed = utils.sliceAndTrim(data, start + 1, end);
-  let script = tsCheck
-    ? await utils.TsCompile(`({ ${trimmed} })`, path)
-    : trimmed;
+  let script = tsCheck ? await TsCompile(`({ ${trimmed} })`, path) : trimmed;
 
   script = script
     .replace(utils.patterns.multilineComment, "")
@@ -19,7 +20,11 @@ export const _script: types.scr = async function (data, tsCheck, path) {
   return script;
 };
 
-export const _dependants: types.dep = function (curr, arr, storage, queue) {
+export const _dependants: ResolveAttrs = function (curr, arr, storage, queue) {
+  if (!Array.isArray(arr) || !storage || !queue) {
+    throw new TypeError("invalid arguments");
+  }
+
   // locate if this component has any children
   const start = utils.indexOfRegExp(/^\s*(components\s*:)/gm, arr);
   if (start < 0) return;
@@ -27,17 +32,17 @@ export const _dependants: types.dep = function (curr, arr, storage, queue) {
   const children = arr.slice(start);
 
   const end = children.findIndex((el) => el.includes("}")) + 1;
-  const components_str = utils.sliceAndTrim(children, 0, end);
+  const componentsStr = utils.sliceAndTrim(children, 0, end);
 
   const iter: string[] = _.compact(
     utils.trimAndSplit(
-      components_str,
-      components_str.indexOf("{") + 1,
-      components_str.indexOf("}"),
+      componentsStr,
+      componentsStr.indexOf("{") + 1,
+      componentsStr.indexOf("}"),
     ),
   );
 
-  const dependants: types.Component[] = iter.map((child: string) =>
+  const dependants: ComponentList = iter.map((child: string) =>
     storage.app[child]
   );
 
@@ -48,13 +53,13 @@ export const _dependants: types.dep = function (curr, arr, storage, queue) {
 
     if (component) {
       if (!component.is_parsed) queue.enqueue(component);
-      utils.preorderScrub(component.label, curr, storage);
+      preorderScrub(component.label, curr, storage);
       curr.dependants.add(component);
     }
   }
 };
 
-export const _middlecode: types.mid = async function (curr, script) {
+export const _middlecode: ResolveAttrs = async function (curr, script) {
   const data = curr.script_data.content.split("\n");
   let endLine = false;
 
@@ -81,20 +86,24 @@ export const _middlecode: types.mid = async function (curr, script) {
     }
   }
 
-  const compilerOutPut = await utils
-    .TsCompile(chunks.join("\n"), curr.path, false);
+  const compilerOutPut = await TsCompile(chunks.join("\n"), curr.path, false);
 
   const output = await _imports(
     `${imports.join("\n")}\n${compilerOutPut}`,
     curr.path,
-    script,
+    script as string,
   );
 
   return output;
 };
 
-export const _imports: types.imp = async function (source, path, script) {
+export const _imports: ResolveSrc = async function (source, path, script) {
+  if (typeof source !== "string") {
+    throw new TypeError("invalid arguments");
+  }
+
   const temp = `./${Math.random().toString().replace(".", "")}.ts`;
+
   try {
     // saves import statements from external sources
     if (
@@ -135,7 +144,7 @@ export const _imports: types.imp = async function (source, path, script) {
 
     // ignore if import statement is not from external source
     return source;
-  } catch (error: any) {
+  } catch (e) {
     await Deno.remove(temp, { recursive: true });
     throw new Error(
       colors.red(

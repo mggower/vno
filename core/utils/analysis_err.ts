@@ -1,0 +1,42 @@
+import { Desc } from "../dts/type.vno.d.ts";
+import { colors, sfcCompiler } from "../lib/deps.ts";
+import { removeCarriageReturn } from "./utils.ts";
+
+export function ShowCodeFrame(content: Desc, errors?: string[]): void {
+  const { filename, source, template } = content;
+
+  const templateAnalysis = sfcCompiler.compileTemplate(
+    { source: removeCarriageReturn(template.content), filename },
+  );
+
+  // detect if the error is in the template
+  if (templateAnalysis.errors.length) {
+    console.log(colors.red(`\nTemplate Error in: ${colors.green(filename)}\n`));
+    templateAnalysis.errors.forEach((error) => {
+      console.log(colors.yellow(`${error.toString()}\n`));
+    });
+    console.log(
+      colors.green(
+        sfcCompiler.generateCodeFrame(
+          (templateAnalysis.source as string).trimStart(),
+        ),
+      ),
+    );
+    // show component error
+  } else {
+    const messages = new Set();
+    console.log(
+      colors.red(`\nComponent Error in: ${colors.green(filename)}\n`),
+    );
+    errors?.forEach((error: string) => {
+      // do not show the same message twice
+      messages.add(`${error.toString()}`);
+    });
+    console.log(colors.yellow([...messages].join("\n")));
+    console.log(colors.yellow("\n"));
+    // show code frame
+    console.log(
+      colors.green(sfcCompiler.generateCodeFrame(removeCarriageReturn(source))),
+    );
+  }
+}

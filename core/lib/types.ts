@@ -96,50 +96,13 @@ export interface parsedData {
   instance?: string;
 }
 
-export type str = (curr: Component, storage: Storage) => string;
-export type gen = (curr: Component) => void;
-export type scrpt = (
-  curr: Component,
-  storage: Storage,
-  queue: Queue,
-) => void;
 
-export type mid = (curr: Component, script: string) => Promise<string>;
-export type imp = (
-  source: string,
-  path: string,
-  script: string,
-) => Promise<string>;
-export type scr = (
-  data: string[],
-  tsCheck: boolean,
-  path: string,
-) => Promise<string>;
-export type dep = (
-  curr: Component,
-  arr: string[],
-  storage: Storage,
-  queue: Queue,
-) => void;
+// generic object types
+interface Box<T> {
+  contents: T;
+}
 
-export type iore = (regex: RegExp, array: string[]) => number;
-export type sat = (
-  array: string[],
-  start: number,
-  end: number,
-  regex?: RegExp,
-  replaced?: string,
-) => string;
-export type tc = (
-  source: string,
-  path: string,
-  cut?: boolean,
-) => Promise<string>;
-export type tas = (
-  str: string,
-  start: number,
-  end: number,
-  split?: string,
-  regex?: RegExp,
-  replaced?: string,
-) => string[];
+// generic functions
+function setContents<T>(box: Box<T>, newContents: T) {
+  box.contents = newContents;
+}

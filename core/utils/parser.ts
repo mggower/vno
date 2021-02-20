@@ -1,9 +1,9 @@
 import * as utils from "./utils.ts";
-import * as types from "../lib/types.ts";
 import * as resolver from "./resolver.ts";
 import { _, colors, scssCompiler, sfcCompiler } from "../lib/deps.ts";
+import { ParserMethod } from '../dts/type.vno.d.ts';
 
-export const template: types.gen = function (curr) {
+export const template: ParserMethod = function (curr) {
   let template = curr.temp_data.content;
   template = utils.removeCarriageReturn(template).replace(
     utils.patterns.htmlComment,
@@ -12,7 +12,7 @@ export const template: types.gen = function (curr) {
   curr.template = template;
 };
 
-export const script: types.scrpt = async function (curr, storage, queue) {
+export const script: ParserMethod = async function (curr, storage, queue) {
   let script = curr.script_data.content;
 
   // prevent to cut urls like http://, https://, ftp:// or file://
@@ -30,13 +30,13 @@ export const script: types.scrpt = async function (curr, storage, queue) {
 
   script = await resolver._script(
     scriptArr,
-    curr.script_data.lang === "ts",
     curr.path,
+    curr.script_data.lang === "ts",
   );
 
   const middlecode = curr.script_data.attrs?.load
     ? await resolver._middlecode(curr, script)
-    : null;
+    : undefined;
 
   resolver._dependants(curr, scriptArr, storage, queue);
   
@@ -44,7 +44,7 @@ export const script: types.scrpt = async function (curr, storage, queue) {
   curr.script = script;
 };
 
-export const style: types.gen = function (curr) {
+export const style: ParserMethod = function (curr) {
   if (!curr.style_data.length) return;
   let styles = curr.style_data[0].content;
 
@@ -64,7 +64,10 @@ export const style: types.gen = function (curr) {
   curr.styles = styles;
 };
 
-export const stringify: types.str = function (curr, storage) {
+export const stringify: ParserMethod = function (curr, storage) {
+  if (!storage) {
+    throw new TypeError("invalid arguments")
+  }
   let instance = "none";
   if (curr.parsed_data) {
     if (curr === storage.root) {
