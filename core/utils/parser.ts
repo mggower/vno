@@ -1,24 +1,24 @@
-import * as utils from "./utils/utils.ts";
-import { Prs } from "./lib/types/interfaces.ts";
+import * as utils from "./utils.ts";
+import * as types from "../lib/types.ts";
 import * as resolver from "./resolver.ts";
-import { _, colors, scssCompiler, sfcCompiler } from "./lib/deps.ts";
+import { _, colors, scssCompiler, sfcCompiler } from "../lib/deps.ts";
 
-export const template: Prs.gen = function (curr) {
+export const template: types.gen = function (curr) {
   let template = curr.temp_data.content;
   template = utils.removeCarriageReturn(template).replace(
     utils.patterns.htmlComment,
     "",
   );
-  curr.parsed_data = { ...curr.parsed_data, template };
+  curr.template = template;
 };
 
-export const script: Prs.scrpt = async function (curr, storage, queue) {
+export const script: types.scrpt = async function (curr, storage, queue) {
   let script = curr.script_data.content;
 
   // prevent to cut urls like http://, https://, ftp:// or file://
-  let script_arr: string[] = script
+  const scriptArr: string[] = script
     .split("\n")
-    .map((line) => {
+    .map((line: string) => {
       if (!utils.patterns.url.test(line)) {
         const comment = line.indexOf("//");
         if (comment > 0) {
@@ -29,20 +29,22 @@ export const script: Prs.scrpt = async function (curr, storage, queue) {
     });
 
   script = await resolver._script(
-    script_arr,
+    scriptArr,
     curr.script_data.lang === "ts",
     curr.path,
   );
 
-  let middlecode = curr.script_data.attrs?.load
+  const middlecode = curr.script_data.attrs?.load
     ? await resolver._middlecode(curr, script)
     : null;
 
-  resolver._dependants(curr, script_arr, storage, queue);
-  curr.parsed_data = { ...curr.parsed_data, script, middlecode };
+  resolver._dependants(curr, scriptArr, storage, queue);
+  
+  curr.middlecode = middlecode;
+  curr.script = script;
 };
 
-export const style: Prs.gen = function (curr) {
+export const style: types.gen = function (curr) {
   if (!curr.style_data.length) return;
   let styles = curr.style_data[0].content;
 
@@ -59,10 +61,10 @@ export const style: Prs.gen = function (curr) {
       ));
     }
   }
-  curr.parsed_data = { ...curr.parsed_data, styles };
+  curr.styles = styles;
 };
 
-export const stringify: Prs.str = function (curr, storage) {
+export const stringify: types.str = function (curr, storage) {
   let instance = "none";
   if (curr.parsed_data) {
     if (curr === storage.root) {
@@ -72,7 +74,7 @@ export const stringify: Prs.str = function (curr, storage) {
       instance = `${curr.parsed_data.middlecode ??
         ""}\nconst ${curr.label} = Vue.component("${curr.name}", {\n  /* html */\n  template: \`${curr.parsed_data.template}\`,\n ${curr.parsed_data.script});\n`;
     }
-    curr.parsed_data = { ...curr.parsed_data, instance };
   }
+  curr.instance = instance;
   return instance;
 };

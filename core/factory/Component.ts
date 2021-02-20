@@ -1,22 +1,28 @@
 import CBase from "./Base.ts";
-import * as Parse from "../parser.ts";
-import { Cmpnt } from "../lib/types/interfaces.ts";
+import * as Parse from "../utils/parser.ts";
+import * as types from "../lib/types.ts";
 import { colors } from "../lib/deps.ts";
-import * as utils from '../utils/utils.ts';
+import * as utils from "../utils/utils.ts";
 import DepsList from "./DepsList.ts";
 export default class Component extends CBase {
   public sibling: Component | null;
   constructor(label: string, path: string) {
     super(label, path);
+    this.label = label;
+    this.path = path;
     this.sibling = null;
   }
 
-  public defineComposite = () => {
-    this.dependants = new DepsList();
-    this._type = Cmpnt.EnType.Composite;
-  };
+  ast() {
+    console.log(this.__ast__)
+  }
 
-  public parseComponent: Cmpnt.prs_comp = async (storage, queue) => {
+  public defineComposite(): void {
+    this.dependants = new DepsList();
+    this._type = types.EnType.Composite;
+  }
+
+  public parseComponent: types.prsComp = async (storage, queue) => {
     console.log(
       colors
         .green(`[vno: compiling] => ${colors.yellow(this.path)}`),
@@ -33,4 +39,3 @@ export default class Component extends CBase {
     }
   };
 }
-

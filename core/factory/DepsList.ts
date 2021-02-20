@@ -1,40 +1,23 @@
-import { Component, SibList } from "../lib/newtypes.ts";
-
-/**
- * #region SiblingList
- * is a data structure that mimics a linked list
- * it is attached to a parent component's "child"
- * property & attaches all siblings to eachother
- * #endregion
- */
-class SiblingList implements SibList {
-  public head: Component | null;
-  public tail: Component;
-
+import * as types from "../lib/types.ts";
+export default class DepsList implements types.DepsList {
+  head: types.Component | null;
+  tail: types.Component | null;
   constructor() {
     this.head = null;
-    this.tail = (null as unknown as Component);
+    this.tail = null;
   }
-  /**
-   * add will attach the newest sibling to the end of the list
-   * @param {ComponentInterface} component
-   */
-  public add(component: Component): void {
+
+  public add(component: types.Component) {
     if (!this.head) {
       this.head = component;
       this.tail = component;
-    } else {
+    } else if (this.tail !== null) {
       this.tail.sibling = component;
       this.tail = component;
       this.tail.sibling = null;
     }
   }
 
-  /**
-   * scrub will remove a sibling from a list
-   * and remove its associations to its siblings
-   * @param {string} label
-   */
   public scrub(label: string): boolean {
     if (!this.head) return false;
 
@@ -89,5 +72,3 @@ class SiblingList implements SibList {
     return false;
   }
 }
-
-export default SiblingList;

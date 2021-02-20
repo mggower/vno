@@ -1,20 +1,21 @@
-import { App, Fctry } from "./lib/types/interfaces.ts";
-import { fs, path } from "./lib/deps.ts";
+import * as types from "../lib/types.ts";
+import { fs, path } from "../lib/deps.ts";
 
-import * as gaurd from "./lib/types/typegaurds.ts";
-import * as _def from "./lib/defaults.ts";
+import * as gaurd from "../lib/typeGaurds.ts";
+import * as _def from "../lib/defaults.ts";
 
-import Storage from "./factory/Storage.ts";
-import Component from "./factory/Component.ts";
-import Queue from "./factory/Queue.ts";
+import Storage from "./Storage.ts";
+import Component from "./Component.ts";
+import Queue from "./Queue.ts";
 
-import compileApp from "./compiler.ts";
+import compileApp from "../utils/compiler.ts";
+
 export default class VNO {
-  public storage: App.Storage;
-  public queue: App.Queue;
-  public options: Fctry.Options;
+  public storage: types.Storage;
+  public queue: types.Queue;
+  public options: types.Options;
   // remove options and refactor to read vno.config.json
-  constructor(options: Fctry.Options) {
+  constructor(options: types.Options) {
     if (gaurd.isValidOptions(options) === false) {
       throw new TypeError("received invalid options");
     }
@@ -24,7 +25,7 @@ export default class VNO {
     this.options = options;
   }
 
-  public async createStorage(): Promise<App.Storage> {
+  private async createStorage(): Promise<types.Storage> {
     if (gaurd.checkVueCDN(this.options)) {
       this.storage.setVue(this.options.vue);
     }
@@ -41,10 +42,10 @@ export default class VNO {
       }
     }
 
-    return this.storage as App.Storage;
+    return this.storage as types.Storage;
   }
 
-  public async parseApplication(): Promise<App.Storage> {
+  private async parseApplication(): Promise<types.Storage> {
     if (gaurd.isStorageReady(this.storage) === false) {
       throw new TypeError("failure to ready build");
     }
@@ -60,21 +61,13 @@ export default class VNO {
       await current.parseComponent(this.storage, this.queue);
     }
 
-    return this.storage as App.Storage;
+    return this.storage as types.Storage;
   }
 
-  public async build(): Promise<App.Storage> {
+  public async build(): Promise<types.Storage> {
     await this.createStorage();
     await this.parseApplication();
-    compileApp(this.storage as App.Storage);
-    return this.storage as App.Storage;
+    compileApp(this.storage as types.Storage);
+    return this.storage as types.Storage;
   }
 }
-
-const demo = new VNO({
-  entry: "./factory/",
-  root: "App",
-});
-
-await demo.build();
-console.log(demo.storage.app["HelloVno"].parsed_data?.script);

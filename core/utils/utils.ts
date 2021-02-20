@@ -1,13 +1,13 @@
-import { App, Fctry, Uti } from "../lib/types/interfaces.ts";
+import * as types from "../lib/types.ts";
 import { sfcCompiler } from "../lib/deps.ts";
 import { colors } from "../lib/deps.ts";
 
-export const indexOfRegExp: Uti.iore = (
+export const indexOfRegExp: types.iore = (
   regex,
   array,
 ) => (array.findIndex((element) => regex.test(element)));
 
-export const sliceAndTrim: Uti.sat = (
+export const sliceAndTrim: types.sat = (
   array,
   start,
   end,
@@ -15,7 +15,7 @@ export const sliceAndTrim: Uti.sat = (
   replaced = " ",
 ) => (array.slice(start, end).join("").replace(regex, replaced));
 
-export const trimAndSplit: Uti.tas = (
+export const trimAndSplit: types.tas = (
   str,
   start,
   end,
@@ -25,8 +25,8 @@ export const trimAndSplit: Uti.tas = (
 ) => (str.slice(start, end).replace(regex, replaced).split(split));
 
 function memoize() {
-  const cache = {} as Fctry.store.container;
-  return (label: string, current: App.Component, storage: App.Storage) => {
+  const cache = {} as types.container;
+  return (label: string, current: types.Component, storage: types.Storage) => {
     if (cache[label]) {
       scrub(cache[label], label);
     } else {
@@ -36,7 +36,7 @@ function memoize() {
   };
 }
 
-function scrub(component: App.Component, label: string) {
+function scrub(component: types.Component, label: string) {
   if (component.dependants) component.dependants.scrub(label);
   if (component.dependants?.head) scrub(component.dependants.head, label);
   if (component.sibling) scrub(component.sibling, label);
@@ -58,7 +58,7 @@ export const removeCarriageReturn: (text: string) => string = (text) => (
 );
 
 // compile typescript code to string javascrit code
-export const TsCompile: Uti.tc = async (source, path, cut = true) => {
+export const TsCompile: types.tc = async (source, path, cut = true) => {
   const temp = `./${Math.random().toString().replace(".", "")}.ts`;
   try {
     const file = await Deno.create(temp);
@@ -82,7 +82,7 @@ export const TsCompile: Uti.tc = async (source, path, cut = true) => {
     return (cut ? script.substring(3, script.length - 4) : script);
 
     // return files;
-  } catch (error: any) {
+  } catch (error) {
     await Deno.remove(temp, { recursive: true });
     console.log(error);
     throw new Error(
@@ -93,7 +93,7 @@ export const TsCompile: Uti.tc = async (source, path, cut = true) => {
   }
 };
 
-export function ShowCodeFrame(content: any, errors?: any) {
+export function ShowCodeFrame(content: types.desc, errors?: []) {
   const { filename, source, template } = content;
 
   const templateAnalysis = sfcCompiler.compileTemplate(
@@ -113,13 +113,13 @@ export function ShowCodeFrame(content: any, errors?: any) {
         ),
       ),
     );
-  } // show component error
-  else {
+    // show component error
+  } else {
     const messages = new Set();
     console.log(
       colors.red(`\nComponent Error in: ${colors.green(filename)}\n`),
     );
-    errors.forEach((error: any) => {
+    errors?.forEach((error: string) => {
       // do not show the same message twice
       messages.add(`${error.toString()}`);
     });

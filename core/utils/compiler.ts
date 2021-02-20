@@ -1,9 +1,9 @@
-import { hasValidInstance } from "./lib/types/typegaurds.ts";
-import _def from "./lib/defaults.ts";
-import { fs } from "./lib/deps.ts";
-import { App } from "./lib/types/interfaces.ts";
+import { hasValidInstance } from "../lib/typeGaurds.ts";
+import _def from "../lib/defaults.ts";
+import { fs } from "../lib/deps.ts";
+import * as types from "../lib/types.ts";
 
-export default function compileApp(storage: App.Storage): void {
+export default function compileApp(storage: types.Storage): void {
   const mount = `\n${storage.root.label}.$mount("#${storage.root.name}");`;
   const vue = `import Vue from '${storage.vue}';\n`;
 
@@ -22,7 +22,7 @@ export default function compileApp(storage: App.Storage): void {
   });
 }
 
-function traverseGraph(current: App.Component): void {
+function traverseGraph(current: types.Component): void {
   if (hasValidInstance(current) === false) {
     throw new TypeError(`${current.label} has no instance prop`);
   }
@@ -35,14 +35,14 @@ function traverseGraph(current: App.Component): void {
     traverseGraph(current.sibling);
   }
 
-  if (current.parsed_data?.instance) {
-    Deno.writeTextFileSync(_def.BUILD_PATH, current.parsed_data?.instance, {
+  if (current.instance) {
+    Deno.writeTextFileSync(_def.BUILD_PATH, current.instance, {
       append: true,
     });
   }
 
-  if (current.parsed_data?.styles) {
-    Deno.writeTextFileSync(_def.STYLE_PATH, current.parsed_data?.styles, {
+  if (current.styles) {
+    Deno.writeTextFileSync(_def.STYLE_PATH, current.styles, {
       append: true,
     });
   }
