@@ -1,4 +1,9 @@
-import { Options, Component, Storage } from '../dts/type.vno.d.ts';
+import type {
+  Component,
+  Options,
+  ParsedData,
+  Storage,
+} from "../dts/type.vno.d.ts";
 
 export function isValidOptions(obj: unknown): obj is Options {
   return obj !== null &&
@@ -19,3 +24,5 @@ export function hasValidInstance(obj: unknown): obj is Component {
   return obj !== null &&
     typeof (obj as Component).instance === "string";
 }
+
+

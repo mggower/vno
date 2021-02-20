@@ -1,5 +1,4 @@
 // defaults
-
 // CDN (as of [01/05/21] this is the only stable vue CDN that works in Deno)
 export const CDN = "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
 
