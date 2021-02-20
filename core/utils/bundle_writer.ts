@@ -3,7 +3,7 @@ import _def from "../lib/defaults.ts";
 import { fs } from "../lib/deps.ts";
 import * as types from "../lib/types.ts";
 
-export default function writeBundle(storage: types.Storage): void {
+export function writeBundle(storage: types.Storage): void {
   const mount = `\n${storage.root.label}.$mount("#${storage.root.name}");`;
   const vue = `import Vue from '${storage.vue}';\n`;
 

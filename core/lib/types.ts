@@ -96,13 +96,3 @@ export interface parsedData {
   instance?: string;
 }
 
-
-// generic object types
-interface Box<T> {
-  contents: T;
-}
-
-// generic functions
-function setContents<T>(box: Box<T>, newContents: T) {
-  box.contents = newContents;
-}

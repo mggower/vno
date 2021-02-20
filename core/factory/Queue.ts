@@ -1,27 +1,28 @@
-import * as types from "../lib/types.ts";
+import { Component, ComponentList } from "../dts/type.vno.d.ts";
+export default class Queue {
+  public components: ComponentList;
 
-export default class Queue implements types.Queue {
-  components: types.Component[];
-  length: number;
   constructor() {
-    this.components = [] as types.Component[];
-    this.length = 0;
+    this.components = <ComponentList> [];
   }
 
-  public enqueue(component: types.Component): void {
-    if (component === null) return;
-    this.components.push(component);
-    this.length = this.components.length;
+  get length() {
+    return this.components.length;
   }
 
-  public dequeue(): types.Component | undefined {
-    if (!this.length) return undefined;
-    const component = this.components.shift();
-    this.length = this.components.length;
-    return component;
+  public enqueue(component: Component): void {
+    if (component != null) {
+      this.components.push(component);
+    }
   }
 
-  public isFilled() {
-    return this.length > 0
+  public dequeue(): Component | undefined {
+    if (!this.isEmpty()) {
+      return this.components.shift();
+    }
+  }
+
+  public isEmpty() {
+    return this.length < 1;
   }
 }

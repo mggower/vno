@@ -1,12 +1,12 @@
+import { utils } from "./vno.utils.ts";
 import { Desc } from "../dts/type.vno.d.ts";
 import { colors, sfcCompiler } from "../lib/deps.ts";
-import { removeCarriageReturn } from "./utils.ts";
 
 export function ShowCodeFrame(content: Desc, errors?: string[]): void {
   const { filename, source, template } = content;
 
   const templateAnalysis = sfcCompiler.compileTemplate(
-    { source: removeCarriageReturn(template.content), filename },
+    { source: utils.removeCarriageReturn(template.content), filename },
   );
 
   // detect if the error is in the template
@@ -36,7 +36,9 @@ export function ShowCodeFrame(content: Desc, errors?: string[]): void {
     console.log(colors.yellow("\n"));
     // show code frame
     console.log(
-      colors.green(sfcCompiler.generateCodeFrame(removeCarriageReturn(source))),
+      colors.green(
+        sfcCompiler.generateCodeFrame(utils.removeCarriageReturn(source)),
+      ),
     );
   }
 }

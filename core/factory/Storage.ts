@@ -1,22 +1,29 @@
-import * as types from '../lib/types.ts';
-import * as _def from '../lib/defaults.ts';
-
-export default class Storage implements types.Storage {
-  public app: types.container;
-  public vue: string;
-  public root: types.Component;
+import { Component, ComponentContainer } from "../dts/type.vno.d.ts";
+import * as _def from "../lib/defaults.ts";
+export default class Storage {
+  private _root: Component;
+  private _vue: string;
+  public app: ComponentContainer;
 
   constructor() {
-    this.app = {} as types.container;
-    this.root = {} as types.Component;
-    this.vue = _def.CDN;
+    this.app = <ComponentContainer> {};
+    this._root = <Component> {};
+    this._vue = _def.CDN;
   }
 
-  public setRoot(component: types.Component): void {
-    this.root = component;
+  get root() {
+    return this._root;
   }
 
-  public setVue(vue: string|undefined): void {
-    if (vue !== undefined) this.vue = vue;
+  set root(component: Component) {
+    this._root = component;
+  }
+
+  get vue() {
+    return this._vue;
+  }
+
+  set vue(vue: string) {
+    this._vue = vue;
   }
 }

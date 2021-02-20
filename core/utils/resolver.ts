@@ -46,7 +46,7 @@ export const _dependants: ResolveAttrs = function (curr, arr, storage, queue) {
     storage.app[child]
   );
 
-  curr.dependants = new DepsList();
+  curr.defineComposite();
 
   while (dependants.length) {
     const component = dependants.pop();

@@ -1,17 +1,17 @@
-import * as types from "../lib/types.ts";
-export default class DepsList implements types.DepsList {
-  head: types.Component | null;
-  tail: types.Component | null;
+import { Component } from '../dts/type.vno.d.ts';
+export default class DepsList {
+  head: Component | null;
+  tail: Component | null;
   constructor() {
     this.head = null;
     this.tail = null;
   }
 
-  public add(component: types.Component) {
+  public add(component: Component): void {
     if (!this.head) {
       this.head = component;
       this.tail = component;
-    } else if (this.tail !== null) {
+    } else if (this.tail != null) {
       this.tail.sibling = component;
       this.tail = component;
       this.tail.sibling = null;
@@ -22,20 +22,20 @@ export default class DepsList implements types.DepsList {
     if (!this.head) return false;
 
     let removed, current, prev;
-    // if the label matches the head, remove the head
+
     if (this.head.label === label) {
       removed = this.head;
 
-      // if the head has a sibling,
-      // it becomes the head, otherwise the list is null
-      if (this.head.sibling) this.head = this.head.sibling;
-      else this.head = null;
-      // ensure that the removed component has no attachments
+      if (this.head.sibling) {
+        this.head = this.head.sibling;
+      } else {
+        this.head = null;
+      }
+
       removed.sibling = null;
       return true;
     }
 
-    // assign current and previous to iterate
     if (this.head.sibling) {
       current = this.head.sibling;
       prev = this.head;
@@ -44,27 +44,24 @@ export default class DepsList implements types.DepsList {
     }
 
     while (current.sibling) {
-      // if a match is made
       if (current.label === label) {
         removed = current;
-        // remove current and attach previous to its sibling
         prev.sibling = current.sibling;
-        // ensure no attachments
         removed.sibling = null;
+
         return true;
       }
-      // if no match is made, continue iteration
+
       prev = current;
       current = current.sibling;
     }
 
-    // if the tail matches the label
     if (current.label === label) {
       removed = current;
-      // the tail is assigned to prev
+
       this.tail = prev;
       this.tail.sibling = null;
-      // ensure no attachments
+      
       removed.sibling = null;
       return true;
     }

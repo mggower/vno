@@ -1,10 +1,11 @@
-import CBase from "./Base.ts";
-import * as Parse from "../utils/parser.ts";
-import * as types from "../lib/types.ts";
-import { colors } from "../lib/deps.ts";
-import * as utils from "../utils/utils.ts";
+import Base from "./Base.ts";
 import DepsList from "./DepsList.ts";
-export default class Component extends CBase {
+
+import { colors } from "../lib/deps.ts";
+import { parse, ShowCodeFrame } from "../utils/vno.utils.ts";
+import { ComponentType, Queue, Storage } from "../dts/type.vno.d.ts";
+
+export default class Component extends Base {
   public sibling: Component | null;
   constructor(label: string, path: string) {
     super(label, path);
@@ -13,29 +14,29 @@ export default class Component extends CBase {
     this.sibling = null;
   }
 
-  ast() {
-    console.log(this.__ast__)
+  get ast() {
+    return this.__ast__;
   }
 
   public defineComposite(): void {
     this.dependants = new DepsList();
-    this._type = types.EnType.Composite;
+    this.type = ComponentType.Composite;
   }
 
-  public parseComponent: types.prsComp = async (storage, queue) => {
+  public async parseComponent(storage: Storage, queue: Queue): Promise<void> {
     console.log(
       colors
         .green(`[vno: compiling] => ${colors.yellow(this.path)}`),
     );
 
     if (this.__ast__.errors.length) {
-      utils.ShowCodeFrame(this.__ast__.descriptor, this.__ast__.errors);
+      ShowCodeFrame(this.__ast__.descriptor, this.__ast__.errors);
     } else {
-      await Parse.script(this, storage, queue);
-      Parse.template(this);
-      Parse.style(this);
-      Parse.stringify(this, storage);
+      await parse.script(this, storage, queue);
+      parse.template(this);
+      parse.style(this);
+      parse.stringify(this, storage);
       this.is_parsed = true;
     }
-  };
+  }
 }

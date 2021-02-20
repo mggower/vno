@@ -1,32 +1,42 @@
-import * as types from "../lib/types.ts";
+import {
+  ComponentType,
+  DepsList,
+  ParsedData,
+  RawData,
+  Src,
+} from "../dts/type.vno.d.ts";
+
+import { utils } from "../utils/vno.utils.ts";
 import { _, sfcCompiler } from "../lib/deps.ts";
-import * as utils from "../utils/utils.ts";
 
 export default abstract class Base {
-  protected _type: types.EnType;
+  protected __type__: ComponentType;
   protected __raw__: string;
-  protected __ast__: types.src
-  protected __split__: types.split;
+  protected __ast__: Src;
+  protected __data__: RawData;
+
   public name: string;
-  public parsed_data: types.parsedData | null;
-  public dependants: types.DepsList | null;
+  public parsed_data: ParsedData;
+  public dependants: DepsList | null;
   public is_parsed: boolean;
+
   constructor(public label: string, public path: string) {
-    this._type = types.EnType.Primitive;
     this.label = label;
     this.path = path;
+
+    this.__type__ = ComponentType.Primitive;
     this.__raw__ = Deno.readTextFileSync(path);
     this.__ast__ = sfcCompiler.parse(this.__raw__, {
       filename: `${this.label}.vue`,
       sourceMap: false,
     });
-    this.__split__ = {
+    this.__data__ = {
       template: this.__ast__.descriptor.template,
       script: this.__ast__.descriptor.script,
       styles: this.__ast__.descriptor.styles,
     };
     this.name = this.setComponentName();
-    this.parsed_data = null;
+    this.parsed_data = <ParsedData> {};
     this.dependants = null;
     this.is_parsed = false;
   }
@@ -39,54 +49,83 @@ export default abstract class Base {
     return data[index].split(/[`'"]/)[1];
   }
 
-  // raw data 
+  get type() {
+    return this.__type__;
+  }
+
+  set type(input: ComponentType) {
+    switch (input) {
+      case ComponentType.Composite:
+        this.__type__ = ComponentType.Composite;
+        break;
+      default:
+        this.__type__ = ComponentType.Primitive;
+    }
+  }
+
+  // raw data
   get temp_data() {
-    return this.__split__.template;
+    return this.__data__.template;
   }
 
   get script_data() {
-    return this.__split__.script;
+    return this.__data__.script;
   }
 
   get style_data() {
-    return this.__split__.styles;
+    return this.__data__.styles;
   }
 
   // resolved data
-  set template(template: string) {
-    this.parsed_data = {
-      ...this.parsed_data,
-      template
+  set template(template: string | undefined) {
+    if (template != null) {
+      this.parsed_data = {
+        ...this.parsed_data,
+        template,
+      };
     }
   }
 
   get template() {
-    return this.parsed_data?.template ?? "";
+    if (this.parsed_data.template) {
+      return this.parsed_data.template as string;
+    }
+    return undefined;
   }
 
-  set script(script: string) {
-    this.parsed_data = {
-      ...this.parsed_data,
-      script
+  set script(script: string | undefined) {
+    if (script != null) {
+      this.parsed_data = {
+        ...this.parsed_data,
+        script,
+      };
     }
   }
 
   get script() {
-    return this.parsed_data?.script ?? "";
+    if (this.parsed_data.script) {
+      return this.parsed_data.script as string;
+    }
+    return undefined;
   }
 
-  set styles(styles: string) {
-    this.parsed_data = {
-      ...this.parsed_data,
-      styles,
-    };
+  set styles(styles: string | undefined) {
+    if (styles != null) {
+      this.parsed_data = {
+        ...this.parsed_data,
+        styles,
+      };
+    }
   }
   get styles() {
-    return this.parsed_data?.styles ?? "";
+    if (this.parsed_data.styles) {
+      return this.parsed_data.styles as string;
+    }
+    return undefined;
   }
 
-  set middlecode(middlecode: string | null) {
-    if (middlecode !== null) {
+  set middlecode(middlecode: string | undefined) {
+    if (middlecode != null) {
       this.parsed_data = {
         ...this.parsed_data,
         middlecode,
@@ -95,17 +134,25 @@ export default abstract class Base {
   }
 
   get middlecode() {
-      return this.parsed_data?.middlecode ?? "";
+    if (this.parsed_data.middlecode) {
+      return this.parsed_data.middlecode as string;
+    }
+    return undefined;
   }
 
-  set instance(instance: string) {
-    this.parsed_data = {
-      ...this.parsed_data,
-      instance
+  set instance(instance: string | undefined) {
+    if (instance != null) {
+      this.parsed_data = {
+        ...this.parsed_data,
+        instance,
+      };
     }
   }
 
   get instance() {
-      return this.parsed_data?.instance ?? "";
+    if (this.parsed_data.instance) {
+      return this.parsed_data.instance as string;
+    }
+    return undefined;
   }
 }

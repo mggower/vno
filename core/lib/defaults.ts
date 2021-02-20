@@ -3,8 +3,16 @@
 // CDN (as of [01/05/21] this is the only stable vue CDN that works in Deno)
 export const CDN = "https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js";
 
+// relative paths for vno-build/ in compiler.ts
+export const VNO_PATH = "vno-build";
+export const BUILD_PATH = "vno-build/build.js";
+export const STYLE_PATH = "vno-build/style.css";
+
+// ignore linting in build
+export const IGNORE = `// deno-lint-ignore-file\n`;
+
 // HTML for server-side rendering
-const HTML = {
+export const HTML = {
   language: "en",
   title: "vno application",
   root: "app",
@@ -18,12 +26,3 @@ const HTML = {
   script: {},
   build: { bundle: "./build.js", style: "./style.css" },
 };
-
-// relative paths for vno-build/ in compiler.ts
-const VNO_PATH = "vno-build";
-const BUILD_PATH = "vno-build/build.js";
-const STYLE_PATH = "vno-build/style.css";
-// ignore linting in build
-const IGNORE = `// deno-lint-ignore-file\n`;
-
-export default { CDN, HTML, VNO_PATH, BUILD_PATH, STYLE_PATH, IGNORE };

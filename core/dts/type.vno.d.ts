@@ -1,10 +1,14 @@
-import {
+export {
   Component,
   ComponentContainer,
   ComponentList,
+  ComponentType,
+  ParsedData,
+  ParseSelf,
+  RawData,
 } from "./vno.component.d.ts";
 
-import {
+export {
   CompId,
   IdxOf,
   Join,
@@ -13,31 +17,10 @@ import {
   TsHelper,
 } from "./vno.utility.d.ts";
 
-import { ParserMethod } from "./vno.parser.d.ts";
+export { ParserMethod } from "./vno.parser.d.ts";
 
-import { Desc, Src, Tag } from "./vno.analysis.d.ts";
+export { Desc, Src, Tag } from "./vno.analysis.d.ts";
 
-import { DepsList, Queue, Storage } from "./vno.factory.d.ts";
+export { DepsList, Options, Queue, Storage } from "./vno.factory.d.ts";
 
-import { ResolveAttrs, ResolveSrc } from "./vno.resolver.d.ts";
-
-export {
-  CompId,
-  Component,
-  ComponentContainer,
-  ComponentList,
-  DepsList,
-  Desc,
-  IdxOf,
-  Join,
-  ParserMethod,
-  Pattern,
-  Queue,
-  ResolveAttrs,
-  ResolveSrc,
-  Split,
-  Src,
-  Storage,
-  Tag,
-  TsHelper,
-};
+export { ResolveAttrs, ResolveSrc } from "./vno.resolver.d.ts";

@@ -1,24 +1,24 @@
-import { Component, ComponentContainer } from './vno.component.d.ts';
+import StorageClass from "../factory/Storage.ts";
+import QueueClass from "../factory/Queue.ts";
+import DepsListClass from "../factory/DepsList.ts";
 
-export interface Storage {
-  root: Component;
-  app: ComponentContainer;
+export type Storage = StorageClass;
+export type Queue = QueueClass;
+export type DepsList = DepsListClass;
+
+interface OptionsBase {
+  entry: string;
+  root: string;
+}
+interface OptionsVue {
   vue: string;
-  setRoot(component: Component): void;
-  setVue(vue: string | undefined): void;
+}
+interface OptionsTerminal {
+  terminal: boolean;
 }
 
-export interface Queue {
-  components: Component[];
-  length: number;
-  enqueue(component: Component): void;
-  dequeue(): Component | undefined;
-  isFilled(): boolean;
-}
-
-export interface DepsList {
-  head: Component | null;
-  tail: Component | null;
-  add(component: Component): void;
-  scrub(label: string): boolean;
-}
+export type Options =
+  | OptionsBase & OptionsVue & OptionsTerminal
+  | OptionsBase & OptionsTerminal
+  | OptionsBase & OptionsVue
+  | OptionsBase;

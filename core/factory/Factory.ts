@@ -1,21 +1,20 @@
-import * as types from "../lib/types.ts";
-import { fs, path } from "../lib/deps.ts";
+import { Options } from "../dts/type.vno.d.ts";
 
+import { fs, path } from "../lib/deps.ts";
 import * as gaurd from "../lib/typeGaurds.ts";
 import * as _def from "../lib/defaults.ts";
 
-import Storage from "./Storage.ts";
 import Component from "./Component.ts";
+import Storage from "./Storage.ts";
 import Queue from "./Queue.ts";
 
-import compileApp from "../utils/compiler.ts";
-
+import { writeBundle } from "../utils/vno.utils.ts";
 export default class Factory {
-  public storage: types.Storage;
-  public queue: types.Queue;
-  public options: types.Options;
+  private options: Options;
+  public storage: Storage;
+  public queue: Queue;
   // remove options and refactor to read vno.config.json
-  constructor(options: types.Options) {
+  constructor(options: Options) {
     if (gaurd.isValidOptions(options) === false) {
       throw new TypeError("received invalid options");
     }
@@ -25,7 +24,7 @@ export default class Factory {
     this.options = options;
   }
 
-  private async createStorage(): Promise<types.Storage> {
+  private async createStorage(): Promise<void> {
     if (gaurd.checkVueCDN(this.options)) {
       this.storage.setVue(this.options.vue);
     }
@@ -41,11 +40,9 @@ export default class Factory {
         this.storage.root = component;
       }
     }
-
-    return this.storage as types.Storage;
   }
 
-  private async parseApplication(): Promise<types.Storage> {
+  private async parseApplication(): Promise<void> {
     if (gaurd.isStorageReady(this.storage) === false) {
       throw new TypeError("failure to ready build");
     }
@@ -60,14 +57,12 @@ export default class Factory {
 
       await current.parseComponent(this.storage, this.queue);
     }
-
-    return this.storage as types.Storage;
   }
 
-  public async build(): Promise<types.Storage> {
+  public async build(): Promise<Storage> {
     await this.createStorage();
     await this.parseApplication();
-    compileApp(this.storage as types.Storage);
-    return this.storage as types.Storage;
+    writeBundle(this.storage);
+    return this.storage as Storage;
   }
 }

@@ -1,21 +1,21 @@
-import * as type from "./types.ts";
+import { Options, Component, Storage } from '../dts/type.vno.d.ts';
 
-export function isValidOptions(obj: unknown): obj is type.Options {
+export function isValidOptions(obj: unknown): obj is Options {
   return obj !== null &&
-    typeof (obj as type.Options).entry === "string" &&
-    typeof (obj as type.Options).root === "string";
+    typeof (obj as Options).entry === "string" &&
+    typeof (obj as Options).root === "string";
 }
 
-export function checkVueCDN(obj: unknown): obj is type.Options {
-  return typeof (obj as type.Options).vue === "string";
+export function checkVueCDN(obj: unknown): obj is Options {
+  return typeof (obj as Options).vue === "string";
 }
 
-export function isStorageReady(obj: unknown): obj is type.Storage {
-  return typeof (obj as type.Storage).root !== undefined &&
-    typeof (obj as type.Storage).vue === "string";
+export function isStorageReady(obj: unknown): obj is Storage {
+  return typeof (obj as Storage).root !== undefined &&
+    typeof (obj as Storage).vue === "string";
 }
 
-export function hasValidInstance(obj: unknown): obj is type.Component {
+export function hasValidInstance(obj: unknown): obj is Component {
   return obj !== null &&
-    typeof (obj as type.Component).parsed_data?.instance === "string";
+    typeof (obj as Component).instance === "string";
 }
