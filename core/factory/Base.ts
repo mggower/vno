@@ -2,7 +2,7 @@ import * as types from "../lib/types.ts";
 import { _, sfcCompiler } from "../lib/deps.ts";
 import * as utils from "../utils/utils.ts";
 
-export default abstract class CBase {
+export default abstract class Base {
   protected _type: types.EnType;
   protected _phase: types.EnPhase;
   protected __raw__: string;
