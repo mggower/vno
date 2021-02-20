@@ -10,7 +10,7 @@ import Queue from "./Queue.ts";
 
 import compileApp from "../utils/compiler.ts";
 
-export default class VNO {
+export default class Factory {
   public storage: types.Storage;
   public queue: types.Queue;
   public options: types.Options;
