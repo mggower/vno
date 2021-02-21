@@ -24,3 +24,5 @@ export {
   RawData,
   Storage,
 } from "./vno.factory.d.ts";
+
+export { CreateInputs } from "./vno.cli.tools.d.ts";

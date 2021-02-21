@@ -1,9 +1,3 @@
-
-export enum VueVersion {
-  Vue2 = 2,
-  Vue3
-}
-
 export enum ComponentType {
   Primitive = "PRIMTIVE",
   Composite = "COMPOSITE"

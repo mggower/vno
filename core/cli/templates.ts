@@ -1,10 +1,10 @@
-import { terminalOptions } from "../lib/types.ts";
+import { CreateInputs } from "../dts/type.vno.d.ts";
 import { _ } from "../lib/deps.ts";
 
 // template literal strings for HTML/Components/Server/Deps
-export const childComponent = (childName: string) => {
+export const childComponent = (componentsName: string) => {
   return (
-`<template>
+    `<template>
   <div class="hello">
     <h1>{{ msg }}</h1>
     <p>
@@ -27,7 +27,7 @@ export const childComponent = (childName: string) => {
 
 <script>
 export default {
-  name: '${_.kebabCase(childName)}',
+  name: '${_.kebabCase(componentsName)}',
   props: {
     msg: String,
   },
@@ -49,13 +49,14 @@ li {
   a {
   color: #79d0b2;
 }
-</style>`);
+</style>`
+  );
 };
 
-export const rootComponent = (userOptions: terminalOptions) => {
+export const rootComponent = (options: CreateInputs) => {
   return (
-`<template>
-  <div id="${userOptions.root.toLowerCase()}">
+    `<template>
+  <div id="${options.root.toLowerCase()}">
     <img
       src="https://svgshare.com/i/SNz.svg"
       alt="image"
@@ -63,16 +64,20 @@ export const rootComponent = (userOptions: terminalOptions) => {
       width="450"
       height="450"
     />
-    <${userOptions.child} msg="you are building: ${userOptions.title} with vno" />
+    <${
+      options.components[0]
+    } msg="you are building: ${options.title} with vno" />
   </div>
 </template>
 
 <script>
-import ${userOptions.child} from './components/${userOptions.child}.vue';
+import ${options.components[0]} from './components/${
+      options.components[0]
+    }.vue';
 
 export default {
-  name: '${_.kebabCase(userOptions.root)}',
-  components: {${userOptions.child}},
+  name: '${_.kebabCase(options.root)}',
+  components: {${options.components[0]}},
 }
 </script>
 
@@ -80,7 +85,7 @@ export default {
 html {
   background-color: #203A42;
 }
-#${userOptions.root.toLowerCase()} {
+#${options.root.toLowerCase()} {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -88,7 +93,8 @@ html {
   color: #79d0b2;
   margin-top: 60px;
 }
-</style>`);
+</style>`
+  );
 };
 
 export const genericComponent = () => {
@@ -108,32 +114,33 @@ export const genericComponent = () => {
 </style>`;
 };
 
-export const htmlTemplate = (userOptions: terminalOptions) => {
+export const htmlTemplate = (options: CreateInputs) => {
   return (
-`<!DOCTYPE html>
+    `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
-    <title>${userOptions.title}</title>
+    <title>${options.title}</title>
   </head>
   <body>
-    <div id="${_.kebabCase(userOptions.root)}">
+    <div id="${_.kebabCase(options.root)}">
       <!-- built files will be auto injected -->
     </div>
     <script type="module" src="./build.js"></script>
   </body>
 </html>
-`);
+`
+  );
 };
 
-export const vnoConfig = (userOptions: terminalOptions) => {
-  const { child, root, port, title } = userOptions;
+export const vnoConfig = (options: CreateInputs) => {
+  const { root, port, title } = options;
   return JSON.stringify(
-    { root, entry: "./", options: { child, port, title } },
+    { root, entry: "./", options: { port, title } },
     null,
-    2
+    2,
   );
 };

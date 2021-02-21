@@ -2,7 +2,6 @@ import { resolver, utils } from "./vno.utils.ts";
 import { _, colors, scssCompiler, sfcCompiler } from "../lib/deps.ts";
 import { ParserMethod } from "../dts/type.vno.d.ts";
 import { VueCDN } from "../lib/constants.ts";
-import { hasValidInstance } from "../lib/type_gaurds.ts";
 
 export const template: ParserMethod = function (curr) {
   let template = curr.temp_data.content;

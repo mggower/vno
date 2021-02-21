@@ -34,11 +34,13 @@ interface ConfigRequired {
 interface ConfigExtension {
   vue?: VueCDN | number;
   terminal?: boolean;
+  server?: string;
 }
 interface ConfigOptions {
   child?: string;
   port?: number;
   title?: string;
+  hostname?: string;
 }
 
 
