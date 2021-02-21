@@ -2,11 +2,8 @@ import { oak, path } from "../lib/deps.ts";
 import { print } from "./vno.cli.ts";
 
 export const runDev = async function (port: number, hostname: string) {
-  console.log("runDev: import.meta.main = ", import.meta.main);
-  console.log("runDev: import.meta.url = ", import.meta.url);
-
   const server: oak.Application = new oak.Application();
-  console.log("the call is coming from inside the house");
+
   server.use(async (context, next) => {
     const { pathname } = context.request.url;
 

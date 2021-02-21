@@ -8,7 +8,12 @@ const cmnd = {
   run: /run/i,
   dev: /dev/i,
   server: /server/i,
+  quiet: /quiet/i,
 };
+
+const quietArg =
+  ((arg: string | undefined) =>
+    typeof arg === "string" ? cmnd.quiet.test(arg) : undefined);
 
 export const create = async function (args: string[]): Promise<void> {
   if (!cmnd.create.test(args[0])) return;
@@ -30,10 +35,6 @@ export const build = async function (args: string[]): Promise<void> {
   const vno = new Factory();
   await vno.build();
 
-  const quietArg =
-    ((arg: string | undefined) =>
-      typeof arg === "string" ? arg.toLowerCase() === "quiet" : undefined);
-
   if (quietArg(args[1]) || quietArg(args[2])) print.QUIET();
   else print.ASCII();
 };
@@ -43,6 +44,9 @@ export const run = async function (args: string[]): Promise<void> {
 
   const vno = new Factory();
   await vno.build();
+
+  if (quietArg(args[2]) || quietArg(args[3])) print.QUIET();
+  else print.ASCII();
   const { port, hostname } = vno;
 
   if (cmnd.dev.test(args[1])) {
