@@ -4,6 +4,7 @@ import type {
   ParsedData,
   Storage,
 } from "../dts/type.vno.d.ts";
+import { VueCDN } from "./constants.ts";
 
 export function isValidOptions(obj: unknown): obj is Options {
   return obj !== null &&
@@ -11,18 +12,25 @@ export function isValidOptions(obj: unknown): obj is Options {
     typeof (obj as Options).root === "string";
 }
 
-export function checkVueCDN(obj: unknown): obj is Options {
-  return typeof (obj as Options).vue === "string";
+export function vueLogger(input: Options) {
+  switch (input.vue) {
+    case 3:
+      return VueCDN.Vue3;
+    case 2:
+      return VueCDN.Vue2;
+    default:
+      return VueCDN.Vue2;
+  }
 }
 
 export function isStorageReady(obj: unknown): obj is Storage {
-  return typeof (obj as Storage).root !== undefined &&
+  return obj != null &&
+    typeof (obj as Storage).root !== undefined &&
     typeof (obj as Storage).vue === "string";
 }
 
 export function hasValidInstance(obj: unknown): obj is Component {
   return obj !== null &&
-    typeof (obj as Component).instance === "string";
+    typeof (obj as Component).parsed_data.instance === "string";
 }
-
 

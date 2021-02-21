@@ -1,6 +1,7 @@
 {
   "root": "App",
   "entry": "./",
+  "vue": 2,
   "options": {
     "child": "HelloVno",
     "port": "3000",

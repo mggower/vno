@@ -1,10 +1,13 @@
-import DepsList from "../factory/DepsList.ts";
 import { utils } from "./vno.utils.ts";
-
 import { TsCompile } from "./ts_compile.ts";
 import { _, colors } from "../lib/deps.ts";
 import { preorderScrub } from "./scrub.ts";
-import { ComponentList, ResolveAttrs, ResolveSrc } from "../dts/type.vno.d.ts";
+import {
+  Component,
+  ComponentList,
+  ResolveAttrs,
+  ResolveSrc,
+} from "../dts/type.vno.d.ts";
 
 export const _script: ResolveSrc = async function (data, path, tsCheck) {
   if (typeof data === "string") {
@@ -45,11 +48,11 @@ export const _dependants: ResolveAttrs = function (curr, arr, storage, queue) {
     ),
   );
 
-  const dependants: ComponentList = iter.map((child: string) =>
-    storage.app[child]
+  const dependants: ComponentList = iter.map(
+    (child: string) => storage.get(child) as Component,
   );
 
-  curr.defineComposite();
+  curr.isComposite();
 
   while (dependants.length) {
     const component = dependants.pop();

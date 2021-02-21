@@ -11,7 +11,7 @@ export type Queue = QueueClass;
 export type DepsList = DepsListClass;
 
 import { Tag } from "./type.vno.d.ts";
-
+import { VueCDN } from '../lib/constants.ts';
 export interface ComponentContainer {
   [key: string]: Component;
 }
@@ -26,9 +26,22 @@ interface StrObj {
 
 export type ParsedData = Record<string, unknown> | StrObj;
 
-export interface Options {
+interface ConfigRequired {
   entry: string;
   root: string;
-  vue?: string;
+}
+
+interface ConfigExtension {
+  vue?: VueCDN | number;
   terminal?: boolean;
+}
+interface ConfigOptions {
+  child?: string;
+  port?: number;
+  title?: string;
+}
+
+
+export interface Options extends ConfigRequired, ConfigExtension {
+  options?: ConfigOptions;
 }

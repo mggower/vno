@@ -1,7 +1,7 @@
-import Base, { ComponentType } from "./Base.ts";
+import Base from "./Base.ts";
 import DepsList from "./DepsList.ts";
 import { Queue, Storage } from "../dts/type.vno.d.ts";
-
+import { ComponentType } from '../lib/constants.ts';
 import { parse, ShowCodeFrame } from "../utils/vno.utils.ts";
 import { colors } from "../lib/deps.ts";
 
@@ -18,7 +18,7 @@ export default class Component extends Base {
     return this.__ast__;
   }
 
-  public defineComposite(): void {
+  public isComposite(): void {
     this.dependants = new DepsList();
     this.type = ComponentType.Composite;
   }
@@ -35,7 +35,7 @@ export default class Component extends Base {
       await parse.script(this, storage, queue);
       parse.template(this);
       parse.style(this);
-      parse.stringify(this, storage);
+      parse.toJavaScript(this, storage);
       this.is_parsed = true;
     }
   }

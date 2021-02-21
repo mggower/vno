@@ -1,11 +1,7 @@
 import { DepsList, ParsedData, RawData, Src } from "../dts/type.vno.d.ts";
 import { utils } from "../utils/vno.utils.ts";
 import { _, sfcCompiler } from "../lib/deps.ts";
-
-export enum ComponentType {
-  Primitive = "PRIMITIVE",
-  Composite = "COMPOSITE",
-}
+import { ComponentType } from '../lib/constants.ts';
 export default abstract class Base {
   protected __type__: ComponentType;
   protected __raw__: string;
@@ -54,6 +50,9 @@ export default abstract class Base {
     switch (input) {
       case ComponentType.Composite:
         this.__type__ = ComponentType.Composite;
+        break;
+      case ComponentType.Primitive:
+        this.__type__ = ComponentType.Primitive;
         break;
       default:
         this.__type__ = ComponentType.Primitive;

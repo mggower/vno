@@ -17,7 +17,6 @@ export {
   Component,
   ComponentContainer,
   ComponentList,
-  ComponentType,
   DepsList,
   Options,
   ParsedData,

@@ -1,6 +1,8 @@
+import { vueLogger } from "../lib/type_gaurds.ts";
+import { Options } from "../dts/type.vno.d.ts";
 import { fs, path } from "../lib/deps.ts";
 
-export async function configReader(): Promise<void | Record<string, unknown>> {
+export async function configReader(): Promise<void | Options> {
   let configFile;
   for await (const file of fs.walk(Deno.cwd())) {
     const currFile = path.parse(file.path);
@@ -13,6 +15,7 @@ export async function configReader(): Promise<void | Record<string, unknown>> {
     const configPath = `${Deno.cwd()}/${configFile.base}`;
     const json = await Deno.readTextFile(configPath);
     const res = JSON.parse(json);
-    return res;
+    res.vue = vueLogger(res);
+    return res as Options;
   }
 }

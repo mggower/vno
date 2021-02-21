@@ -1,6 +1,8 @@
 import { resolver, utils } from "./vno.utils.ts";
 import { _, colors, scssCompiler, sfcCompiler } from "../lib/deps.ts";
 import { ParserMethod } from "../dts/type.vno.d.ts";
+import { VueCDN } from "../lib/constants.ts";
+import { hasValidInstance } from "../lib/type_gaurds.ts";
 
 export const template: ParserMethod = function (curr) {
   let template = curr.temp_data.content;
@@ -63,20 +65,30 @@ export const style: ParserMethod = function (curr) {
   curr.styles = styles;
 };
 
-export const stringify: ParserMethod = function (curr, storage) {
+export const toJavaScript: ParserMethod = function (curr, storage) {
   if (!storage) {
     throw new TypeError("invalid arguments");
   }
-  let instance = "none";
+  let instance;
   if (curr.parsed_data) {
-    if (curr === storage.root) {
-      instance = `${curr.parsed_data.middlecode ??
-        ""}\nconst ${curr.label} = new Vue({\n  /* html */\n  template: \`${curr.parsed_data.template}\`, ${curr.parsed_data.script}});\n`;
-    } else {
-      instance = `${curr.parsed_data.middlecode ??
-        ""}\nconst ${curr.label} = Vue.component("${curr.name}", {\n  /* html */\n  template: \`${curr.parsed_data.template}\`,\n ${curr.parsed_data.script});\n`;
+    switch (storage.vue) {
+      case VueCDN.Vue3:
+        console.log("VUE@3.0.5");
+        break;
+      case VueCDN.Vue2:
+        if (curr === storage.root) {
+          instance = `${curr.middlecode ??
+            ""}\nconst ${curr.label} = new Vue({\n  /* html */\n  template: \`${curr.template}\`, ${curr.script}});\n`;
+        } else {
+          instance = `${curr.middlecode ??
+            ""}\nconst ${curr.label} = Vue.component("${curr.name}", {\n  /* html */\n  template: \`${curr.template}\`,\n ${curr.script});\n`;
+        }
+        break;
+      default:
+        throw new Error("missing a valid VUE CDN");
     }
   }
+
   curr.instance = instance;
   return instance;
 };
