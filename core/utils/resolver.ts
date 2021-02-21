@@ -57,7 +57,7 @@ export const _dependants: ResolveAttrs = function (curr, arr, storage, queue) {
     if (component) {
       if (!component.is_parsed) queue.enqueue(component);
       preorderScrub(component.label, curr, storage);
-      curr.dependants.add(component);
+      curr.dependants?.add(component);
     }
   }
 };

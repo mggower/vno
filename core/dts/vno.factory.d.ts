@@ -15,19 +15,13 @@ import { Tag } from "./type.vno.d.ts";
 export interface ComponentContainer {
   [key: string]: Component;
 }
-
-export enum ComponentType {
-  Primitive = "PRIMITIVE",
-  Composite = "COMPOSITE",
-}
-
 export interface RawData {
   template: Tag;
   styles: Tag[];
   script: Tag;
 }
 interface StrObj {
-  [x:string]: string;
+  [x: string]: string;
 }
 
 export type ParsedData = Record<string, unknown> | StrObj;

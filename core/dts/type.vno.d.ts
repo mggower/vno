@@ -21,7 +21,6 @@ export {
   DepsList,
   Options,
   ParsedData,
-  ParseSelf,
   Queue,
   RawData,
   Storage,

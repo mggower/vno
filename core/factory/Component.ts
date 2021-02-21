@@ -1,9 +1,9 @@
-import Base from "./Base.ts";
+import Base, { ComponentType } from "./Base.ts";
 import DepsList from "./DepsList.ts";
+import { Queue, Storage } from "../dts/type.vno.d.ts";
 
-import { colors } from "../lib/deps.ts";
 import { parse, ShowCodeFrame } from "../utils/vno.utils.ts";
-import { ComponentType, Queue, Storage } from "../dts/type.vno.d.ts";
+import { colors } from "../lib/deps.ts";
 
 export default class Component extends Base {
   public sibling: Component | null;

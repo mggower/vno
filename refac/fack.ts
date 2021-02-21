@@ -1,8 +1,12 @@
-import Factory from '../core/factory/Factory.ts';
+// import Factory from '../core/factory/Factory.ts';
 
-const vno = new Factory({
-  root: "App",
-  entry: "./"
-})
+// const vno = new Factory({
+//   root: "App",
+//   entry: "./"
+// })
 
-vno.build();
+// vno.build();
+
+import { configReader } from '../core/utils/config.ts';
+
+console.log(await configReader());

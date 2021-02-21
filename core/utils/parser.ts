@@ -1,7 +1,6 @@
-import * as utils from "./utils.ts";
-import * as resolver from "./resolver.ts";
+import { resolver, utils } from "./vno.utils.ts";
 import { _, colors, scssCompiler, sfcCompiler } from "../lib/deps.ts";
-import { ParserMethod } from '../dts/type.vno.d.ts';
+import { ParserMethod } from "../dts/type.vno.d.ts";
 
 export const template: ParserMethod = function (curr) {
   let template = curr.temp_data.content;
@@ -39,8 +38,8 @@ export const script: ParserMethod = async function (curr, storage, queue) {
     : undefined;
 
   resolver._dependants(curr, scriptArr, storage, queue);
-  
-  curr.middlecode = middlecode;
+
+  if (middlecode) curr.middlecode = middlecode;
   curr.script = script;
 };
 
@@ -66,7 +65,7 @@ export const style: ParserMethod = function (curr) {
 
 export const stringify: ParserMethod = function (curr, storage) {
   if (!storage) {
-    throw new TypeError("invalid arguments")
+    throw new TypeError("invalid arguments");
   }
   let instance = "none";
   if (curr.parsed_data) {

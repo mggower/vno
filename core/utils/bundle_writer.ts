@@ -1,9 +1,9 @@
 import { hasValidInstance } from "../lib/type_gaurds.ts";
 import * as _def from "../lib/defaults.ts";
 import { fs } from "../lib/deps.ts";
-import * as types from "../lib/types.ts";
+import { Storage, Component } from '../dts/type.vno.d.ts';
 
-export function writeBundle(storage: types.Storage): void {
+export function writeBundle(storage: Storage): void {
   const mount = `\n${storage.root.label}.$mount("#${storage.root.name}");`;
   const vue = `import Vue from '${storage.vue}';\n`;
 
@@ -22,7 +22,7 @@ export function writeBundle(storage: types.Storage): void {
   });
 }
 
-function traverseGraph(current: types.Component): void {
+function traverseGraph(current: Component): void {
   if (hasValidInstance(current) === false) {
     throw new TypeError(`${current.label} has no instance prop`);
   }

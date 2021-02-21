@@ -1,14 +1,11 @@
-import {
-  ComponentType,
-  DepsList,
-  ParsedData,
-  RawData,
-  Src,
-} from "../dts/type.vno.d.ts";
-
+import { DepsList, ParsedData, RawData, Src } from "../dts/type.vno.d.ts";
 import { utils } from "../utils/vno.utils.ts";
 import { _, sfcCompiler } from "../lib/deps.ts";
 
+export enum ComponentType {
+  Primitive = "PRIMITIVE",
+  Composite = "COMPOSITE",
+}
 export default abstract class Base {
   protected __type__: ComponentType;
   protected __raw__: string;
