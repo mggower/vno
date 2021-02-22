@@ -1,24 +1,25 @@
-import { Options } from "../dts/type.vno.d.ts";
-import { fs, path } from "../lib/deps.ts";
-import { configReader, writeBundle } from "../utils/vno.utils.ts";
-import { VueCDN } from "../lib/constants.ts";
-import * as gaurd from "../lib/type_gaurds.ts";
-import * as _default from "../lib/defaults.ts";
 import Component from "./Component.ts";
 import Storage from "./Storage.ts";
 import Queue from "./Queue.ts";
+import * as gaurd from "../lib/type_gaurds.ts";
+import * as _default from "../lib/defaults.ts";
+import { VueCDN } from "../lib/constants.ts";
+import { Fctry } from "../dts/factory.d.ts";
+import { configReader, writeBundle } from "../utils/vno.utils.ts";
+import { fs, path } from "../lib/deps.ts";
+
 
 export default class Factory {
   public storage: Storage;
   public queue: Queue;
 
-  private _config: Options | null;
+  private _config: Fctry.Config | null;
   private _port: number;
   private _title: string;
   private _hostname: string;
   private _server: string | null;
 
-  constructor(options?: Options) {
+  constructor(options?: Fctry.Config) {
     if (options) {
       if (!gaurd.isValidOptions(options)) {
         throw new TypeError("received invalid options");

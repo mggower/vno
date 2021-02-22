@@ -1,8 +1,8 @@
 import { utils } from "./vno.utils.ts";
-import { Desc } from "../dts/type.vno.d.ts";
+import { Util } from "../dts/factory.d.ts";
 import { colors, sfcCompiler } from "../lib/deps.ts";
 
-export function ShowCodeFrame(content: Desc, errors?: string[]): void {
+export const showCodeFrame: Util.SCF = function (content, errors) {
   const { filename, source, template } = content;
 
   const templateAnalysis = sfcCompiler.compileTemplate(
@@ -41,4 +41,4 @@ export function ShowCodeFrame(content: Desc, errors?: string[]): void {
       ),
     );
   }
-}
+};

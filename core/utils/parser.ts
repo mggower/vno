@@ -1,10 +1,10 @@
-import { resolver, utils } from "./vno.utils.ts";
-import { _, colors, scssCompiler, sfcCompiler } from "../lib/deps.ts";
-import { ParserMethod } from "../dts/type.vno.d.ts";
+import { Cmpt } from "../dts/factory.d.ts";
 import { VueCDN } from "../lib/constants.ts";
+import { _, colors, scssCompiler, sfcCompiler } from "../lib/deps.ts";
+import { resolver, utils } from "./vno.utils.ts";
 
 
-export const template: ParserMethod = function (curr) {
+export const template: Cmpt.Parser = function (curr) {
   let template = curr.temp_data.content;
   template = utils.removeCarriageReturn(template).replace(
     utils.patterns.htmlComment,
@@ -13,7 +13,7 @@ export const template: ParserMethod = function (curr) {
   curr.template = template;
 };
 
-export const script: ParserMethod = async function (curr, storage, queue) {
+export const script: Cmpt.Parser = async function (curr, storage, queue) {
   let script = curr.script_data.content;
 
   // prevent to cut urls like http://, https://, ftp:// or file://
@@ -45,7 +45,7 @@ export const script: ParserMethod = async function (curr, storage, queue) {
   curr.script = script;
 };
 
-export const style: ParserMethod = function (curr) {
+export const style: Cmpt.Parser = function (curr) {
   if (!curr.style_data.length) return;
   let styles = curr.style_data[0].content;
 
@@ -65,7 +65,7 @@ export const style: ParserMethod = function (curr) {
   curr.styles = styles;
 };
 
-export const toJavaScript: ParserMethod = function (curr, storage) {
+export const toJavaScript: Cmpt.Parser = function (curr, storage) {
   if (!storage) {
     throw new TypeError("invalid arguments");
   }

@@ -1,8 +1,8 @@
+import { Util } from "../dts/factory.d.ts";
 import { colors } from "../lib/deps.ts";
-import { TsHelper } from "../dts/type.vno.d.ts";
 
 // compile typescript code to string javascrit code
-export const TsCompile: TsHelper = async function (source, path, cut = true) {
+export const TsCompile: Util.TSC = async function (source, path, cut = true) {
   const temp = `./${Math.random().toString().replace(".", "")}.ts`;
   try {
     const file = await Deno.create(temp);

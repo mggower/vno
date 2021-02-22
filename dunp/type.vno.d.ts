@@ -11,7 +11,7 @@ export {
   Src,
   Tag,
   TsHelper,
-} from "./vno.utility.d.ts";
+} from "./utility.d.ts";
 
 export {
   Component,

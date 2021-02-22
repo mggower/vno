@@ -1,9 +1,9 @@
-import { ComponentContainer, CompId } from '../dts/type.vno.d.ts';
+import { Cmpt, Util } from "../dts/factory.d.ts";
 
 const memoize = function () {
-  const cache = {} as ComponentContainer;
+  const cache = {} as Cmpt.Container;
 
-  const memo: CompId = (label, current, storage) => {
+  const memo: Util.MEMO = (label, current, storage) => {
     if (!storage) {
       throw new Error("storage input is required");
     }
@@ -20,7 +20,7 @@ const memoize = function () {
   return memo;
 }
 
-const scrub: CompId = function (label, component) {
+const scrub: Util.MEMO = function (label, component) {
   if (component.dependants) {
     component.dependants.scrub(label);
 

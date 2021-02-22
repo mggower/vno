@@ -2,14 +2,9 @@ import { utils } from "./vno.utils.ts";
 import { TsCompile } from "./ts_compile.ts";
 import { _, colors } from "../lib/deps.ts";
 import { preorderScrub } from "./scrub.ts";
-import {
-  Component,
-  ComponentList,
-  ResolveAttrs,
-  ResolveSrc,
-} from "../dts/type.vno.d.ts";
+import { Cmpt, Component, Resolve } from "../dts/factory.d.ts";
 
-export const _script: ResolveSrc = async function (data, path, tsCheck) {
+export const _script: Resolve.Source = async function (data, path, tsCheck) {
   if (typeof data === "string") {
     throw new TypeError("invalid arguments");
   }
@@ -17,16 +12,16 @@ export const _script: ResolveSrc = async function (data, path, tsCheck) {
   const end = data.lastIndexOf("}");
 
   const trimmed = utils.sliceAndTrim(data, start + 1, end);
-  let script = tsCheck ? await TsCompile(`({ ${trimmed} })`, path) : trimmed;
+  let script = tsCheck ? await TsCompile(`({ ${trimmed} })`, path) : trimmed as string;
 
   script = script
     .replace(utils.patterns.multilineComment, "")
     .slice(0, script.lastIndexOf(";"));
 
-  return script;
+  return script as string;
 };
 
-export const _dependants: ResolveAttrs = function (curr, arr, storage, queue) {
+export const _dependants: Resolve.Attrs = function (curr, arr, storage, queue) {
   if (!Array.isArray(arr) || !storage || !queue) {
     throw new TypeError("invalid arguments");
   }
@@ -48,7 +43,7 @@ export const _dependants: ResolveAttrs = function (curr, arr, storage, queue) {
     ),
   );
 
-  const dependants: ComponentList = iter.map(
+  const dependants: Cmpt.List = iter.map(
     (child: string) => storage.get(child) as Component,
   );
 
@@ -65,7 +60,7 @@ export const _dependants: ResolveAttrs = function (curr, arr, storage, queue) {
   }
 };
 
-export const _middlecode: ResolveAttrs = async function (curr, script) {
+export const _middlecode: Resolve.Attrs = async function (curr, script) {
   const data = curr.script_data.content.split("\n");
   let endLine = false;
 
@@ -103,7 +98,7 @@ export const _middlecode: ResolveAttrs = async function (curr, script) {
   return output;
 };
 
-export const _imports: ResolveSrc = async function (source, path, script) {
+export const _imports: Resolve.Source = async function (source, path, script) {
   if (typeof source !== "string") {
     throw new TypeError("invalid arguments");
   }

@@ -1,7 +1,6 @@
 import Base from "./Base.ts";
 import DepsList from "./DepsList.ts";
-import { Queue, Storage } from "../dts/type.vno.d.ts";
-import { ComponentType } from '../lib/constants.ts';
+import { Queue, Storage, Cmpt } from "../dts/factory.d.ts";
 import { parse, ShowCodeFrame } from "../utils/vno.utils.ts";
 import { colors } from "../lib/deps.ts";
 
@@ -20,7 +19,7 @@ export default class Component extends Base {
 
   public isComposite(): void {
     this.dependants = new DepsList();
-    this.type = ComponentType.Composite;
+    this.type = Cmpt.Type.Composite;
   }
 
   public async parseComponent(storage: Storage, queue: Queue): Promise<void> {
@@ -33,7 +32,7 @@ export default class Component extends Base {
       ShowCodeFrame(this.__ast__.descriptor, this.__ast__.errors);
     } else {
       await parse.script(this, storage, queue);
-      parse.template(this);
+      parse.template(this as Component);
       parse.style(this);
       parse.toJavaScript(this, storage);
       this.is_parsed = true;

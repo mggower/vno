@@ -1,18 +1,13 @@
-import type {
-  Component,
-  Options,
-  ParsedData,
-  Storage,
-} from "../dts/type.vno.d.ts";
+import type { Fctry, Component, Storage } from "../dts/factory.d.ts";
 import { VueCDN } from "./constants.ts";
 
-export function isValidOptions(obj: unknown): obj is Options {
+export function isValidOptions(obj: unknown): obj is Fctry.Config {
   return obj !== null &&
-    typeof (obj as Options).entry === "string" &&
-    typeof (obj as Options).root === "string";
+    typeof (obj as Fctry.Config).entry === "string" &&
+    typeof (obj as Fctry.Config).root === "string";
 }
 
-export function vueLogger(input: Options) {
+export function vueLogger(input: Fctry.Config) {
   switch (input.vue) {
     case 3:
       return VueCDN.Vue3;
@@ -33,4 +28,3 @@ export function hasValidInstance(obj: unknown): obj is Component {
   return obj !== null &&
     typeof (obj as Component).parsed_data.instance === "string";
 }
-

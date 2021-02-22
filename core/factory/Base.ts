@@ -1,15 +1,14 @@
-import { DepsList, ParsedData, RawData, Src } from "../dts/type.vno.d.ts";
+import { Cmpt, DepsList } from "../dts/factory.d.ts";
 import { utils } from "../utils/vno.utils.ts";
 import { _, sfcCompiler } from "../lib/deps.ts";
-import { ComponentType } from '../lib/constants.ts';
 export default abstract class Base {
-  protected __type__: ComponentType;
+  protected __type__: Cmpt.Type;
   protected __raw__: string;
-  protected __ast__: Src;
-  protected __data__: RawData;
+  protected __ast__: Cmpt.Source;
+  protected __data__: Cmpt.RawData;
 
   public name: string;
-  public parsed_data: ParsedData;
+  public parsed_data: Record<string, unknown>;
   public dependants: DepsList | null;
   public is_parsed: boolean;
 
@@ -17,7 +16,7 @@ export default abstract class Base {
     this.label = label;
     this.path = path;
 
-    this.__type__ = ComponentType.Primitive;
+    this.__type__ = Cmpt.Type.Primitive;
     this.__raw__ = Deno.readTextFileSync(path);
     this.__ast__ = sfcCompiler.parse(this.__raw__, {
       filename: `${this.label}.vue`,
@@ -29,7 +28,7 @@ export default abstract class Base {
       styles: this.__ast__.descriptor.styles,
     };
     this.name = this.setComponentName();
-    this.parsed_data = <ParsedData> {};
+    this.parsed_data = {};
     this.dependants = null;
     this.is_parsed = false;
   }
@@ -46,16 +45,16 @@ export default abstract class Base {
     return this.__type__;
   }
 
-  set type(input: ComponentType) {
+  set type(input: Cmpt.Type) {
     switch (input) {
-      case ComponentType.Composite:
-        this.__type__ = ComponentType.Composite;
+      case Cmpt.Type.Composite:
+        this.__type__ = Cmpt.Type.Composite;
         break;
-      case ComponentType.Primitive:
-        this.__type__ = ComponentType.Primitive;
+      case Cmpt.Type.Primitive:
+        this.__type__ = Cmpt.Type.Primitive;
         break;
       default:
-        this.__type__ = ComponentType.Primitive;
+        this.__type__ = Cmpt.Type.Primitive;
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component } from '../dts/type.vno.d.ts';
+import { Component } from '../dts/factory.d.ts';
 export default class DepsList {
   head: Component | null;
   tail: Component | null;

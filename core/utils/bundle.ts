@@ -1,7 +1,8 @@
 import { hasValidInstance } from "../lib/type_gaurds.ts";
 import * as _def from "../lib/defaults.ts";
 import { fs } from "../lib/deps.ts";
-import { Storage, Component } from '../dts/type.vno.d.ts';
+
+import { Storage, Component } from '../dts/factory.d.ts';
 
 export function writeBundle(storage: Storage): void {
   const mount = `\n${storage.root.label}.$mount("#${storage.root.name}");`;

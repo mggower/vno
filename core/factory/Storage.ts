@@ -1,14 +1,13 @@
-import { Component, ComponentContainer } from "../dts/type.vno.d.ts";
-// import * as _default from "../lib/defaults.ts";
-import { VueCDN } from '../lib/constants.ts';
+import { Cmpt, Component } from "../dts/factory.d.ts";
+import { VueCDN } from "../lib/constants.ts";
 export default class Storage {
   private _root: Component;
   private _vue: VueCDN;
   public size: number;
-  public app: ComponentContainer;
+  public app: Cmpt.Container;
 
   constructor() {
-    this.app = <ComponentContainer> {};
+    this.app = <Cmpt.Container> {};
     this._root = <Component> {};
     this._vue = VueCDN.Vue2;
     this.size = 0;
@@ -23,7 +22,7 @@ export default class Storage {
   public get(label: string): Component | undefined {
     return this.app[label];
   }
-  
+
   get root() {
     return this._root;
   }
