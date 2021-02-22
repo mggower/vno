@@ -3,6 +3,7 @@ import { build, create, run } from "../core/cli/vno.cli.ts";
 // ensure permissions
 const read = { name: "read" } as const;
 const write = { name: "write" } as const;
+
 // permission requests
 const resRead = await Deno.permissions.request(read);
 const resWrite = await Deno.permissions.request(write);
