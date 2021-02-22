@@ -1,5 +1,4 @@
 import { colors } from "../lib/deps.ts";
-// import { fn } from "./vno.cli.ts";
 
 export const logo = (colors.bold(`
   __   ___ __   ___

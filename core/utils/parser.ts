@@ -72,7 +72,13 @@ export const toJavaScript: ParserMethod = function (curr, storage) {
   if (curr.parsed_data) {
     switch (storage.vue) {
       case VueCDN.Vue3:
-        console.log("VUE@3.0.5");
+        if (curr === storage.root) {
+          instance = `${curr.middlecode ??
+            ""}\nconst app = Vue.createApp({\n  /* html */\n  template: \`${curr.template}\`, ${curr.script}});\n`;
+        } else {
+          instance = `${curr.middlecode ??
+            ""}\n app.component("${curr.name}", {\n  /* html */\n  template: \`${curr.template}\`,\n ${curr.script});\n)`;
+        }
         break;
       case VueCDN.Vue2:
         if (curr === storage.root) {
