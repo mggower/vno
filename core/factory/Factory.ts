@@ -1,19 +1,18 @@
-import { configReader, writeBundle } from "../utils/vno.utils.ts";
+import type { Fctry } from "../dts/factory.d.ts";
+import { configReader, vueLogger, writeBundle } from "../lib/lib.ts";
 import { fs, path } from "../lib/deps.ts";
-import { VueCDN } from "../lib/constants.ts";
-import { Fctry } from "../dts/factory.d.ts";
 import Component from "./Component.ts";
 import Storage from "./Storage.ts";
 import Queue from "./Queue.ts";
 import {
+  checkVueVersion,
   isStorageReady,
   isValidOptions,
-  vueLogger,
-} from "../lib/type_gaurds.ts";
-
+} from "../utils/type_gaurds.ts";
 export default class Factory {
   public storage: Storage;
   public queue: Queue;
+  public variable: string;
   private _config: Fctry.Config | null;
   private _port: number;
   private _title: string;
@@ -25,9 +24,12 @@ export default class Factory {
       if (!isValidOptions(options)) {
         throw new TypeError("received invalid options");
       }
-      options.vue = vueLogger(options);
     }
+    // if no options check for vno.config.json
 
+    this.variable = `vno${Math.floor(Math.random() * 1000)}${
+      Math.floor(Math.random() * 1000)
+    }`;
     this.storage = new Storage();
     this.queue = new Queue();
     this._config = options ?? null;
@@ -79,7 +81,6 @@ export default class Factory {
 
   private async createStorage(): Promise<void> {
     if (this.config == null) await this.init();
-    this.storage.vue = this.config?.vue as VueCDN;
 
     for await (
       const file of fs.walk(`${this.config?.entry}`, { exts: ["vue"] })
@@ -100,11 +101,17 @@ export default class Factory {
       throw new Error("failure to ready build");
     }
 
+    const version = checkVueVersion(this._config)
+      ? this._config?.vue as Fctry.Version
+      : 2;
+
+    this.storage.vue = vueLogger(version, this.storage.root, this.variable);
+
     this.queue.enqueue(this.storage.root);
 
     while (!this.queue.isEmpty()) {
       const current = this.queue.dequeue() as Component;
-      await current.parseComponent(this.storage, this.queue);
+      await current.parseComponent(this.storage, this.queue, this.variable);
     }
   }
 

@@ -1,4 +1,4 @@
-import { utils } from "../utils/vno.utils.ts";
+import * as utils from "../utils/utils.ts";
 import { fn, out, template } from "./vno.cli.ts";
 import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
 

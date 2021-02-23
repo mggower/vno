@@ -1,5 +1,3 @@
-import { VueCDN } from "../lib/constants.ts";
-
 import FactoryClass from "../factory/Factory.ts";
 import ComponentClass from "../factory/Component.ts";
 import DepsListClass from "../factory/DepsList.ts";
@@ -18,16 +16,21 @@ export declare namespace Fctry {
   export interface Config {
     entry: string;
     root: string;
-    vue?: VueCDN | number;
+    vue?: Version;
     terminal?: boolean;
     server?: string;
-    options?: ConfigOptions;
+    options?: {
+      port?: number;
+      title?: string;
+      hostname?: string;
+    };
   }
-
-  export interface ConfigOptions {
-    port?: number;
-    title?: string;
-    hostname?: string;
+  export type Version = 2 | 3;
+  export interface Vue {
+    state: Version;
+    dep: string;
+    cdn: string;
+    mount: string;
   }
 }
 

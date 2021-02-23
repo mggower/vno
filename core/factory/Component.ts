@@ -2,7 +2,8 @@ import Base from "./Base.ts";
 import DepsList from "./DepsList.ts";
 import type { Queue, Storage } from "../dts/factory.d.ts";
 import { ComponentType } from "../lib/constants.ts";
-import { parse, showCodeFrame } from "../utils/vno.utils.ts";
+import { parse, showCodeFrame } from "../lib/lib.ts";
+import { compileForV3, javascriptCompile } from "../lib/js_compile.ts";
 import { colors } from "../lib/deps.ts";
 
 export default class Component extends Base {
@@ -23,7 +24,11 @@ export default class Component extends Base {
     this.type = ComponentType.Composite;
   }
 
-  public async parseComponent(storage: Storage, queue: Queue): Promise<void> {
+  public async parseComponent(
+    storage: Storage,
+    queue: Queue,
+    variable: string,
+  ): Promise<void> {
     console.log(
       colors
         .green(`[vno: compiling] => ${colors.yellow(this.path)}`),
@@ -35,7 +40,8 @@ export default class Component extends Base {
       await parse.script(this, storage, queue);
       parse.template(this as Component);
       parse.style(this);
-      parse.toJavaScript(this, storage);
+      javascriptCompile(this, storage);
+      if (storage.vue.state === 3) compileForV3(this, storage, variable);
       this.is_parsed = true;
     }
   }

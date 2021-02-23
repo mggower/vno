@@ -1,26 +1,26 @@
-import { oak, path } from "../lib/deps.ts";
+import { Application, send, path } from "../lib/deps.ts";
 import { print } from "./vno.cli.ts";
 
 export const runDev = async function (port: number, hostname: string) {
-  const server: oak.Application = new oak.Application();
+  const server: Application = new Application();
 
-  server.use(async (context, next) => {
-    const { pathname } = context.request.url;
+  server.use(async (ctx, next) => {
+    const { pathname } = ctx.request.url;
 
     if (pathname === "/") {
-      await oak.send(context, pathname, {
+      await send(ctx, pathname, {
         root: path.join(Deno.cwd(), "public"),
         index: "index.html",
       });
     } else if (pathname === "/build.js") {
-      context.response.type = "application/javascript";
-      await oak.send(context, pathname, {
+      ctx.response.type = "application/javascript";
+      await send(ctx, pathname, {
         root: path.join(Deno.cwd(), "vno-build"),
         index: "build.js",
       });
     } else if (pathname === "/style.css") {
-      context.response.type = "text/css";
-      await oak.send(context, pathname, {
+      ctx.response.type = "text/css";
+      await send(ctx, pathname, {
         root: path.join(Deno.cwd(), "vno-build"),
         index: "style.css",
       });
@@ -28,7 +28,7 @@ export const runDev = async function (port: number, hostname: string) {
   });
 
   // server error handling
-  server.addEventListener("error", (e) => console.error(e));
+  server.addEventListener("error", (e: unknown) => console.error(e));
   // listen for active server
   server.addEventListener("listen", () => print.LISTEN(port, hostname));
   await server.listen({ port, hostname });

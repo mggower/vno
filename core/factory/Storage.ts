@@ -1,15 +1,14 @@
-import { Cmpt, Component } from "../dts/factory.d.ts";
-import { VueCDN } from "../lib/constants.ts";
+import { Cmpt, Component, Fctry } from "../dts/factory.d.ts";
 export default class Storage {
   private _root: Component;
-  private _vue: VueCDN;
+  private _vue: Fctry.Vue;
   public size: number;
   public app: Cmpt.Container;
 
   constructor() {
     this.app = <Cmpt.Container> {};
     this._root = <Component> {};
-    this._vue = VueCDN.Vue2;
+    this._vue = <Fctry.Vue> {};
     this.size = 0;
   }
 
@@ -35,7 +34,7 @@ export default class Storage {
     return this._vue;
   }
 
-  set vue(vue: VueCDN) {
+  set vue(vue: Fctry.Vue) {
     this._vue = vue;
   }
 }

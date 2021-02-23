@@ -1,5 +1,4 @@
-import type { Fctry, Component, Storage } from "../dts/factory.d.ts";
-import { VueCDN } from "./constants.ts";
+import type { Component, Fctry, Storage } from "../dts/factory.d.ts";
 
 export function isValidOptions(obj: unknown): obj is Fctry.Config {
   return obj !== null &&
@@ -7,21 +6,15 @@ export function isValidOptions(obj: unknown): obj is Fctry.Config {
     typeof (obj as Fctry.Config).root === "string";
 }
 
-export function vueLogger(input: Fctry.Config) {
-  switch (input.vue) {
-    case 3:
-      return VueCDN.Vue3;
-    case 2:
-      return VueCDN.Vue2;
-    default:
-      return VueCDN.Vue2;
-  }
+export function checkVueVersion(obj: unknown): obj is Fctry.Config {
+  return (obj as Fctry.Config).vue != null &&
+      (obj as Fctry.Config).vue === 2 ||
+    (obj as Fctry.Config).vue === 3;
 }
 
 export function isStorageReady(obj: unknown): obj is Storage {
   return obj != null &&
-    typeof (obj as Storage).root !== undefined &&
-    typeof (obj as Storage).vue === "string";
+    typeof (obj as Storage).root !== undefined;
 }
 
 export function hasValidInstance(obj: unknown): obj is Component {

@@ -1,6 +1,5 @@
-import { vueLogger } from "../lib/type_gaurds.ts";
 import { Fctry } from "../dts/factory.d.ts";
-import { fs, path } from "../lib/deps.ts";
+import { fs, path } from "./deps.ts";
 
 export async function configReader(): Promise<void | Fctry.Config> {
   let configFile;
@@ -15,7 +14,7 @@ export async function configReader(): Promise<void | Fctry.Config> {
     const configPath = `${Deno.cwd()}/${configFile.base}`;
     const json = await Deno.readTextFile(configPath);
     const res = JSON.parse(json);
-    res.vue = vueLogger(res);
+    res.vue = res.vue ?? 2;
     return res as Fctry.Config;
   }
 }

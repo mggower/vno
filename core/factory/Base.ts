@@ -1,6 +1,6 @@
 import type { Cmpt, DepsList } from "../dts/factory.d.ts";
 import { ComponentType } from "../lib/constants.ts";
-import { utils } from "../utils/vno.utils.ts";
+import * as utils from "../utils/utils.ts";
 import { _, sfcCompiler } from "../lib/deps.ts";
 export default abstract class Base {
   protected __type__: ComponentType;
@@ -148,6 +148,22 @@ export default abstract class Base {
   get instance() {
     if (this.parsed_data.instance) {
       return this.parsed_data.instance as string;
+    }
+    return undefined;
+  }
+
+  set registration(registration: string | undefined) {
+    if (registration != null) {
+      this.parsed_data = {
+        ...this.parsed_data,
+        registration,
+      };
+    }
+  }
+
+  get registration() {
+    if (this.parsed_data.registration) {
+      return this.parsed_data.registration as string;
     }
     return undefined;
   }

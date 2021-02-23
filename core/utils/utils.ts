@@ -1,14 +1,5 @@
-import { Util } from "../dts/factory.d.ts";
-// reoccuring patterns
-export const patterns: Record<string, RegExp> = {
-  multilineComment: /\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*\//gm,
-  htmlComment: /<!--([\s\S]*?)-->/gm,
-  import:
-    /import(?:["'\s]*([\w*${}\n\r\t, ]+)from\s*)?["'\s]["'\s](.*[@\w_-]+)["'\s].*$/gm,
-  url:
-    /(ftp|http|https|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gm,
-  whitespace: /(\s{2,})/g,
-};
+import type { Util } from "../dts/factory.d.ts";
+import { patterns } from "../lib/constants.ts";
 
 // returns index of pattern match
 export const indexOfRegExp: Util.IOF = function (rx, arr) {

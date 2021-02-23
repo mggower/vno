@@ -1,8 +1,9 @@
-import { utils } from "./vno.utils.ts";
+import * as utils from "../utils/utils.ts";
 import { TsCompile } from "./ts_compile.ts";
-import { _, colors } from "../lib/deps.ts";
+import { _, colors } from "./deps.ts";
 import { preorderScrub } from "./scrub.ts";
 import { Cmpt, Component, Resolve } from "../dts/factory.d.ts";
+import { patterns } from "./constants.ts";
 
 export const _script: Resolve.Source = async function (data, path, tsCheck) {
   if (typeof data === "string") {
@@ -15,7 +16,7 @@ export const _script: Resolve.Source = async function (data, path, tsCheck) {
   let script = tsCheck ? await TsCompile(`({ ${trimmed} })`, path) : trimmed as string;
 
   script = script
-    .replace(utils.patterns.multilineComment, "")
+    .replace(patterns.multilineComment, "")
     .slice(0, script.lastIndexOf(";"));
 
   return script as string;
@@ -78,7 +79,7 @@ export const _middlecode: Resolve.Attrs = async function (curr, script) {
       !tagPattern.test(chunk) &&
       !chunk.includes(".vue")
     ) {
-      if (utils.patterns.import.test(chunk)) {
+      if (patterns.import.test(chunk)) {
         imports.push(chunk);
         // TODO: resolve and inject all imports that not is a component .vue or is a import_map.json call
       } else {
@@ -109,7 +110,7 @@ export const _imports: Resolve.Source = async function (source, path, script) {
     // saves import statements from external sources
     if (
       source.trim() !== "" &&
-      utils.patterns.import.test(source.trim())
+      patterns.import.test(source.trim())
     ) {
       const file = await Deno.create(temp);
       const encoder = new TextEncoder();
