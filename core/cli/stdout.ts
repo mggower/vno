@@ -35,7 +35,7 @@ export const WARN = function (msg: string) {
   console.warn(`\n${colors.yellow(msg)}\n`);
 };
 
-// // prints module specific information
+// prints module specific information
 // export const INFO = function (doc: infoInterface) {
 //   // version
 //   console.log(fn.keyYellow("version", doc.version));

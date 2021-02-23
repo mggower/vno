@@ -6,7 +6,6 @@ export * as http from "https://deno.land/std@0.83.0/http/mod.ts";
 export * as asrt from "https://deno.land/std@0.83.0/testing/asserts.ts";
 
 // oak
-export * as oak from "https://deno.land/x/oak@v6.3.1/mod.ts";
 export { Application, send, Context } from "https://deno.land/x/oak@v6.5.0/mod.ts";
 export { superoak } from "https://deno.land/x/superoak@3.0.0/mod.ts";
 

@@ -1,8 +1,9 @@
-import { Cmpt } from "../dts/factory.d.ts";
-import { _, colors, scssCompiler, sfcCompiler } from "./deps.ts";
+import type { Cmpt } from "../dts/factory.d.ts";
 import * as utils from "../utils/utils.ts";
-import { resolver } from "./lib.ts";
+import * as resolver from "./resolver.ts";
 import { patterns } from "./constants.ts";
+import { _, colors, scssCompiler, sfcCompiler } from "./deps.ts";
+
 export const template: Cmpt.Parser = function (curr) {
   let template = curr.temp_data.content;
   template = utils.removeCarriageReturn(template).replace(

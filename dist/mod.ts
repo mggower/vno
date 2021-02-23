@@ -1,5 +1,10 @@
+// primary classes
 import Factory from "../core/factory/Factory.ts";
-import Component from "../core/factory/Component.ts";
+export { Factory };
+  
+// namespace for class Factory library types, 
+export type { Fctry } from "../core/dts/factory.d.ts";
+// namespace for class Component library types,
+export type { Cmpt } from "../core/dts/factory.d.ts";
 
-export default Factory;
-export { Component };
+export { runDevServer } from "../core/cli/dev.ts";

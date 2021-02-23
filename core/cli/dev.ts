@@ -1,7 +1,7 @@
 import { Application, send, path } from "../lib/deps.ts";
-import { print } from "./vno.cli.ts";
+import * as print from "./stdout.ts";
 
-export const runDev = async function (port: number, hostname: string) {
+export const runDevServer = async function (port: number, hostname: string) {
   const server: Application = new Application();
 
   server.use(async (ctx, next) => {

@@ -1,10 +1,11 @@
-import Base from "./Base.ts";
-import DepsList from "./DepsList.ts";
 import type { Queue, Storage } from "../dts/factory.d.ts";
-import { ComponentType } from "../lib/constants.ts";
-import { parse, showCodeFrame } from "../lib/lib.ts";
 import { compileForV3, javascriptCompile } from "../lib/js_compile.ts";
+import { ComponentType } from "../lib/constants.ts";
+import { showCodeFrame } from "../lib/code_frame.ts";
 import { colors } from "../lib/deps.ts";
+import * as parse from "../lib/parser.ts";
+import DepsList from "./DepsList.ts";
+import Base from "./Base.ts";
 
 export default class Component extends Base {
   public sibling: Component | null;

@@ -25,3 +25,13 @@ export const reqs: string[] = [
   "\nWhat would you like to name your root Vue component? (recommend: App)",
   "\nPlease enter a project title",
 ];
+
+// command tests
+export const cmnd = {
+  create: /create/i,
+  build: /build/i,
+  run: /run/i,
+  dev: /dev/i,
+  server: /server/i,
+  quiet: /quiet/i,
+};

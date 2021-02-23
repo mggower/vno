@@ -1,6 +1,8 @@
-import * as utils from "../utils/utils.ts";
-import { fn, out, template } from "./vno.cli.ts";
 import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
+import * as utils from "../utils/utils.ts";
+import * as fn from "./fns.ts";
+import * as out from "./constants.ts";
+import * as template from "./templates.ts";
 
 export const createApplication = async function (repo?: string) {
   let app = out.options;
@@ -10,7 +12,7 @@ export const createApplication = async function (repo?: string) {
 
   // customize function initializes out/stores answers
   if (choice.trim()[0].toLowerCase() === "y") app = await customize(repo);
-  else fn.msgGreen(out.creating);
+  else fn.green(out.creating);
 
   // progress bar
   renderProgress();
@@ -45,7 +47,7 @@ export const createApplication = async function (repo?: string) {
 export const customize = async function (repo?: string) {
   let output = out.options;
 
-  fn.msgGreen(out.init);
+  fn.green(out.init);
   const reqs = out.reqs.slice();
 
   // project title
@@ -75,14 +77,14 @@ export const customize = async function (repo?: string) {
     : out.options.port;
 
   // request to confirm input
-  fn.msgGreen(fn.confirmation(title, root, componentRes, portRes));
+  fn.green(fn.confirmation(title, root, componentRes, portRes));
   const confirm: string = await utils.prompt(reqs.pop() as string);
 
   if (confirm.trim()[0].toLowerCase() === "y") {
     output = { title, root, components, port };
-    fn.msgGreen(out.creating);
+    fn.green(out.creating);
   } else { // reset on rejection
-    fn.msgYellow(out.reset);
+    fn.yellow(out.reset);
     await customize(repo);
   }
 

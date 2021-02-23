@@ -1,19 +1,10 @@
 import Factory from "../factory/Factory.ts";
+import * as print from "./stdout.ts";
 import { fs, path } from "../lib/deps.ts";
-import { createApplication, print, runDev } from "./vno.cli.ts";
-
-const cmnd = {
-  create: /create/i,
-  build: /build/i,
-  run: /run/i,
-  dev: /dev/i,
-  server: /server/i,
-  quiet: /quiet/i,
-};
-
-const quietArg =
-  ((arg: string | undefined) =>
-    typeof arg === "string" ? cmnd.quiet.test(arg) : undefined);
+import { createApplication } from "./create.ts";
+import { runDevServer } from "./dev.ts";
+import { quietArg } from "./fns.ts";
+import { cmnd } from "./constants.ts";
 
 export const create = async function (args: string[]): Promise<void> {
   if (!cmnd.create.test(args[0])) return;
@@ -50,7 +41,7 @@ export const run = async function (args: string[]): Promise<void> {
   const { port, hostname } = vno;
 
   if (cmnd.dev.test(args[1])) {
-    await runDev(port, hostname);
+    await runDevServer(port, hostname);
     Deno.exit(0);
   } else if (cmnd.server.test(args[1])) {
     if (vno.server == null) return;

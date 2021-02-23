@@ -1,5 +1,7 @@
 import type { Fctry } from "../dts/factory.d.ts";
-import { configReader, vueLogger, writeBundle } from "../lib/lib.ts";
+import { configReader } from "../lib/config_reader.ts";
+import { vueLogger } from "../lib/vue_logger.ts";
+import { writeBundle } from "../lib/bundle.ts";
 import { fs, path } from "../lib/deps.ts";
 import Component from "./Component.ts";
 import Storage from "./Storage.ts";
@@ -9,6 +11,7 @@ import {
   isStorageReady,
   isValidOptions,
 } from "../utils/type_gaurds.ts";
+
 export default class Factory {
   public storage: Storage;
   public queue: Queue;

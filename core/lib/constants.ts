@@ -41,3 +41,4 @@ export const patterns: Record<string, RegExp> = {
     /(ftp|http|https|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gm,
   whitespace: /(\s{2,})/g,
 };
+

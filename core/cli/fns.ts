@@ -1,20 +1,20 @@
 import { colors } from "../lib/deps.ts";
-import { out } from "./vno.cli.ts";
+import { cmnd, options } from "./constants.ts";
 
-export const msgGreen = function (str: string) {
+export const green = function (str: string) {
   console.log(colors.green(str));
 };
 
-export const msgYellow = function (str: string) {
+export const yellow = function (str: string) {
   console.log(colors.yellow(str));
 };
 
 export const confirmation = function <S>(a: S, b: S, c: S, d: S): string {
   return `\nYour Project:\n\n` +
-    `    Title: ${a || out.options.title}\n` +
-    `    Root: ${b || out.options.root}\n` +
+    `    Title: ${a || options.title}\n` +
+    `    Root: ${b || options.root}\n` +
     `    Additional Component(s): ${c}\n` +
-    `    Port: ${d || out.options.port}\n`;
+    `    Port: ${d || options.port}\n`;
 };
 
 // prints key/values to terminal in yellow with 2-space indent
@@ -48,3 +48,8 @@ export const lineLength = function (str: string, length: number, tab: number) {
   breaks(str);
   return output;
 };
+
+// test for quiet argument
+export const quietArg =
+  ((arg: string | undefined) =>
+    typeof arg === "string" ? cmnd.quiet.test(arg) : undefined);

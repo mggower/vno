@@ -1,4 +1,4 @@
-import { build, create, run } from "../core/cli/vno.cli.ts";
+import { build, create, run } from "../core/cli/commands.ts";
 
 // ensure permissions
 const read = { name: "read" } as const;

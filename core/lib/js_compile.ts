@@ -1,6 +1,6 @@
-import { Cmpt, Component, Storage} from "../dts/factory.d.ts";
+import { Component, Storage } from "../dts/factory.d.ts";
 
-export const javascriptCompile: Cmpt.Parser = function (curr, storage) {
+export function javascriptCompile(curr: Component, storage: Storage): string {
   if (!storage) {
     throw new TypeError("invalid arguments");
   }
@@ -31,11 +31,18 @@ export const javascriptCompile: Cmpt.Parser = function (curr, storage) {
     }
   }
 
+  if (!instance) {
+    throw new Error("compilation failed");
+  }
   curr.instance = instance;
   return instance;
-};
+}
 
-export function compileForV3(curr: Component, storage: Storage, variable: string) {
+export function compileForV3(
+  curr: Component,
+  storage: Storage,
+  variable: string,
+): string {
   if (!storage) {
     throw new TypeError("invalid arguments");
   }
@@ -47,7 +54,10 @@ export function compileForV3(curr: Component, storage: Storage, variable: string
       registration = `${variable}.component("${curr.name}", ${curr.label})\n`;
     }
   }
-
+  
+  if (!registration) {
+    throw new Error("compilation failed");
+  }
   curr.registration = registration;
   return registration;
-};
+}
