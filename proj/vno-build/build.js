@@ -1,10 +1,10 @@
 /* eslint-disable */
 /* eslint-disable prettier/prettier */
 // deno-lint-ignore-file
-import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js';
+import * as Vue from "https://cdn.jsdelivr.net/npm/vue@3.0.5/dist/vue.esm-browser.js";
 
-const HelloVno = Vue.component("hello-vno", {
-  template:  /* html */ `
+const HelloVno = {
+  template: /* html */ `
   <div class="hello">
     <h1>{{ msg }}</h1>
     <p>
@@ -24,10 +24,10 @@ const HelloVno = Vue.component("hello-vno", {
     </ul>
   </div>
 `,
-  name: 'hello-vno', props: { msg: String, },});
+  name: 'hello-vno', props: { msg: String, },};
 
-const App = new Vue({
-  template:  /* html */ `
+const App = {
+  template: /* html */ `
   <div id="app">
     <img
       src="https://svgshare.com/i/SNz.svg"
@@ -38,6 +38,10 @@ const App = new Vue({
     />
     <HelloVno msg="you are building: your project with vno" />
   </div>
-`,  name: 'app', components: {HelloVno}});
+`,
+  name: 'app', components: {HelloVno}};
 
-App.$mount("#app");
+const vno184748 = Vue.createApp(App)
+vno184748.component("hello-vno", HelloVno)
+
+vno184748.mount("#app")
