@@ -12,7 +12,9 @@ export type DepsList = DepsListClass;
 export type Queue = QueueClass;
 export type Storage = StorageClass;
 
-declare namespace Fctry {
+// Factory library
+export declare namespace Fctry {
+  // vno.config.json or Factory constructor options
   export interface Config {
     entry: string;
     root: string;
@@ -29,18 +31,13 @@ declare namespace Fctry {
   }
 }
 
-declare namespace Cmpt {
-  export enum Type {
-    Primitive = "PRIMTIVE",
-    Composite = "COMPOSITE",
-  }
-  
+// component library
+export declare namespace Cmpt {
   export type List = Component[];
 
   export interface Container {
     [key: string]: Component;
   }
-
 
   export interface Source {
     descriptor: Descriptor;
@@ -85,7 +82,7 @@ declare namespace Cmpt {
   }
 }
 
-declare namespace Util {
+export declare namespace Util {
   export interface CreateInputs {
     title: string;
     root: string;
@@ -105,7 +102,7 @@ declare namespace Util {
   export type SCF = (content: Cmpt.Descriptor, errors?: string[]) => void;
 }
 
-declare namespace Resolve {
+export declare namespace Resolve {
   export interface Attrs {
     (
       curr: Component,

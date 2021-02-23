@@ -12,7 +12,7 @@ export const showCodeFrame: Util.SCF = function (content, errors) {
   // detect if the error is in the template
   if (templateAnalysis.errors.length) {
     console.log(colors.red(`\nTemplate Error in: ${colors.green(filename)}\n`));
-    templateAnalysis.errors.forEach((error) => {
+    templateAnalysis.errors.forEach((error: Error) => {
       console.log(colors.yellow(`${error.toString()}\n`));
     });
     console.log(

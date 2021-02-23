@@ -1,8 +1,9 @@
-import { Cmpt, DepsList } from "../dts/factory.d.ts";
+import type { Cmpt, DepsList } from "../dts/factory.d.ts";
+import { ComponentType } from "../lib/constants.ts";
 import { utils } from "../utils/vno.utils.ts";
 import { _, sfcCompiler } from "../lib/deps.ts";
 export default abstract class Base {
-  protected __type__: Cmpt.Type;
+  protected __type__: ComponentType;
   protected __raw__: string;
   protected __ast__: Cmpt.Source;
   protected __data__: Cmpt.RawData;
@@ -16,7 +17,7 @@ export default abstract class Base {
     this.label = label;
     this.path = path;
 
-    this.__type__ = Cmpt.Type.Primitive;
+    this.__type__ = ComponentType.Primitive;
     this.__raw__ = Deno.readTextFileSync(path);
     this.__ast__ = sfcCompiler.parse(this.__raw__, {
       filename: `${this.label}.vue`,
@@ -45,16 +46,16 @@ export default abstract class Base {
     return this.__type__;
   }
 
-  set type(input: Cmpt.Type) {
+  set type(input: ComponentType) {
     switch (input) {
-      case Cmpt.Type.Composite:
-        this.__type__ = Cmpt.Type.Composite;
+      case ComponentType.Composite:
+        this.__type__ = ComponentType.Composite;
         break;
-      case Cmpt.Type.Primitive:
-        this.__type__ = Cmpt.Type.Primitive;
+      case ComponentType.Primitive:
+        this.__type__ = ComponentType.Primitive;
         break;
       default:
-        this.__type__ = Cmpt.Type.Primitive;
+        this.__type__ = ComponentType.Primitive;
     }
   }
 

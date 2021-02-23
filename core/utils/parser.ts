@@ -3,7 +3,6 @@ import { VueCDN } from "../lib/constants.ts";
 import { _, colors, scssCompiler, sfcCompiler } from "../lib/deps.ts";
 import { resolver, utils } from "./vno.utils.ts";
 
-
 export const template: Cmpt.Parser = function (curr) {
   let template = curr.temp_data.content;
   template = utils.removeCarriageReturn(template).replace(
@@ -75,19 +74,19 @@ export const toJavaScript: Cmpt.Parser = function (curr, storage) {
       case VueCDN.Vue3:
         if (curr === storage.root) {
           instance = `${curr.middlecode ??
-            ""}\nconst app = Vue.createApp({\n  /* html */\n  template: \`${curr.template}\`, ${curr.script}});\n`;
+            ""}\nconst app = Vue.createApp({/\n  template: /* html * \`${curr.template}\`, ${curr.script}});\n`;
         } else {
           instance = `${curr.middlecode ??
-            ""}\n app.component("${curr.name}", {\n  /* html */\n  template: \`${curr.template}\`,\n ${curr.script});\n)`;
+            ""}\n app.component("${curr.name}", {\n  template: /* html */ \`${curr.template}\`,\n ${curr.script});\n)`;
         }
         break;
       case VueCDN.Vue2:
         if (curr === storage.root) {
           instance = `${curr.middlecode ??
-            ""}\nconst ${curr.label} = new Vue({\n  /* html */\n  template: \`${curr.template}\`, ${curr.script}});\n`;
+            ""}\nconst ${curr.label} = new Vue({\n  template:  /* html */ \`${curr.template}\`, ${curr.script}});\n`;
         } else {
           instance = `${curr.middlecode ??
-            ""}\nconst ${curr.label} = Vue.component("${curr.name}", {\n  /* html */\n  template: \`${curr.template}\`,\n ${curr.script});\n`;
+            ""}\nconst ${curr.label} = Vue.component("${curr.name}", {\n  template:  /* html */ \`${curr.template}\`,\n ${curr.script});\n`;
         }
         break;
       default:

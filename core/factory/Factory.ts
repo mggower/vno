@@ -1,18 +1,19 @@
+import { configReader, writeBundle } from "../utils/vno.utils.ts";
+import { fs, path } from "../lib/deps.ts";
+import { VueCDN } from "../lib/constants.ts";
+import { Fctry } from "../dts/factory.d.ts";
 import Component from "./Component.ts";
 import Storage from "./Storage.ts";
 import Queue from "./Queue.ts";
-import * as gaurd from "../lib/type_gaurds.ts";
-import * as _default from "../lib/defaults.ts";
-import { VueCDN } from "../lib/constants.ts";
-import { Fctry } from "../dts/factory.d.ts";
-import { configReader, writeBundle } from "../utils/vno.utils.ts";
-import { fs, path } from "../lib/deps.ts";
-
+import {
+  isStorageReady,
+  isValidOptions,
+  vueLogger,
+} from "../lib/type_gaurds.ts";
 
 export default class Factory {
   public storage: Storage;
   public queue: Queue;
-
   private _config: Fctry.Config | null;
   private _port: number;
   private _title: string;
@@ -21,10 +22,10 @@ export default class Factory {
 
   constructor(options?: Fctry.Config) {
     if (options) {
-      if (!gaurd.isValidOptions(options)) {
+      if (!isValidOptions(options)) {
         throw new TypeError("received invalid options");
       }
-      options.vue = gaurd.vueLogger(options);
+      options.vue = vueLogger(options);
     }
 
     this.storage = new Storage();
@@ -95,7 +96,7 @@ export default class Factory {
   }
 
   private async parseApplication(): Promise<void> {
-    if (!gaurd.isStorageReady(this.storage)) {
+    if (!isStorageReady(this.storage)) {
       throw new Error("failure to ready build");
     }
 
