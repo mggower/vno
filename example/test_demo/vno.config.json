@@ -1,0 +1,7 @@
+{
+  "root": "App",
+  "entry": "./",
+  "options": {
+    "title": "an example application"
+  }
+}
