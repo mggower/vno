@@ -169,4 +169,12 @@ const vno = new Factory({
 await vno.build();
 ```
 
-`vno.build()` will run a build on the entire application and compile it to a "vno-build" directory into one javascript file and one css file.
+`vno.build()` will run a build on the entire application and compile it to a "vno-build" directory as one javascript file and one css file.
+
+### accessing component object storage
+
+- After running the build, parsed components are accessible inside the storage property on the Factory class.
+```
+vno.storage.get('App');
+```
+the argument accepted by the get method for storage is the component filename
