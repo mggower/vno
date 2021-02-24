@@ -9,21 +9,16 @@ export function javascriptCompile(curr: Component, storage: Storage): string {
   if (curr.parsed_data) {
     switch (storage.vue.state) {
       case 3:
-        if (curr === storage.root) {
-          instance = `${curr.middlecode ??
-            ""}\nconst ${curr.label} = {\n  template: /* html */ \`${curr.template}\`,\n ${curr.script}};\n`;
-        } else {
-          instance = `${curr.middlecode ??
-            ""}\nconst ${curr.label} = {\n  template: /* html */ \`${curr.template}\`,\n ${curr.script};\n`;
-        }
+        instance = `${curr.middlecode ??
+          ""}\nconst ${curr.label} = {\n  template: /* html */ \`${curr.template}\`,\n${curr.script};\n`;
         break;
       case 2:
         if (curr === storage.root) {
           instance = `${curr.middlecode ??
-            ""}\nconst ${curr.label} = new Vue({\n  template:  /* html */ \`${curr.template}\`, ${curr.script}});\n`;
+            ""}\nconst ${curr.label} = new Vue({\n  template:  /* html */ \`${curr.template}\`,\n${curr.script});\n`;
         } else {
           instance = `${curr.middlecode ??
-            ""}\nconst ${curr.label} = Vue.component("${curr.name}", {\n  template:  /* html */ \`${curr.template}\`,\n ${curr.script});\n`;
+            ""}\nconst ${curr.label} = Vue.component("${curr.name}", {\n  template:  /* html */ \`${curr.template}\`,\n${curr.script});\n`;
         }
         break;
       default:
@@ -54,7 +49,7 @@ export function compileForV3(
       registration = `${variable}.component("${curr.name}", ${curr.label})\n`;
     }
   }
-  
+
   if (!registration) {
     throw new Error("compilation failed");
   }

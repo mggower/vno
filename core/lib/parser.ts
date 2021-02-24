@@ -20,9 +20,9 @@ export const script: Cmpt.Parser = async function (curr, storage, queue) {
   const scriptArr: string[] = script
     .split("\n")
     .map((line: string) => {
-      if (!patterns.url.test(line)) {
-        const comment = line.indexOf("//");
-        if (comment > 0) {
+      const comment = line.indexOf("//");
+      if (comment !== -1) {
+        if (!line.match(patterns.url)) {
           return line.slice(0, comment);
         }
       }

@@ -9,11 +9,15 @@ export const _script: Resolve.Source = async function (data, path, tsCheck) {
   if (typeof data === "string") {
     throw new TypeError("invalid arguments");
   }
+
   const start = utils.indexOfRegExp(/^\s*(export)/, data);
   const end = data.lastIndexOf("}");
 
-  const trimmed = utils.sliceAndTrim(data, start + 1, end);
-  let script = tsCheck ? await TsCompile(`({ ${trimmed} })`, path) : trimmed as string;
+  const trimmed = data.slice(start + 1, end).join("\n");
+  
+  let script = tsCheck
+    ? await TsCompile(`({ ${trimmed} })`, path)
+    : trimmed as string;
 
   script = script
     .replace(patterns.multilineComment, "")
