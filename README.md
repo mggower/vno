@@ -59,10 +59,36 @@ deno install --allow-net --unstable https://deno.land/x/vno/install/vno.ts
 - If you decide not to flag permissions at installation, you will be prompted in the terminal after executing a command.
 - **note: If you would like to avoid writing out the permissions altogether, you can also use the `-A` or `--allow-all` tag**
 
+### vno config
+
+- vno.config.json should be in the root of your project
+- following is a description of the object interface:
+
+```
+interface Config {
+    entry: string;
+      //entry is the path to root component's directory : i.e. './client/'
+    root: string;
+      //root is the filename of your root component : i.e. 'App'
+    vue?: 2 | 3;
+      //vue is the number 2 or 3 : 2 = vue v2.6.12 (default); 3 = vue v3.0.5 
+    options?: {
+      port?: number;
+        //preferred port for the dev server : defaults to `3000`
+      title?: string;
+        //title of your project
+      hostname?: string;
+        //preferred host : defaults to `0.0.0.0`
+    };
+  }
+```
+
+## CLI
+
 ### create a new project
 
-- create a directory for your project
-- CD into the aforementioned directory
+- Project name will become the directory that holds your project (you must CD into project directory after running create command). 
+- If project name argument is omitted, then project will be created in current working directory. 
 
 ```
 vno create [project name]
@@ -111,27 +137,36 @@ deno run --allow-read --allow-write --allow-net --unstable https://deno.land/x/v
 
 ![vno run dev](https://i.ibb.co/RckD0Tm/vno-run-dev.gif)
 
-### vno run server
+# vno as an API
 
-- add a server property in your vno.config.json file
+### initializing your application with the api
 
-```
-{
-  "root": "App",
-  "entry": "./path/to/rootcomponent",
-  "options": {
-    "title": "an example application"
-    "port": 4040
-  },
-  "server": "./path/to/server.ts"
-}
-```
-
-- And execute this command in the terminal
-- vno run server creates a subprocess, which will request run permissions
+- You can import vno into your application with the following URL : `https://deno.land/x/vno/dist/mod.ts`
+With a vno.config.json, no argument is needed
+The API will search for the config and apply it to your application
 
 ```
-vno run server
+import { Factory } from 'https://deno.land/x/vno/dist/mod.ts';
+
+const vno = new Factory();
+await vno.build();
 ```
 
-![](https://i.ibb.co/xFZPM1L/vno-run-server.gif)
+without a vno.config.json, you can input the object directly into the Factory instance
+
+```
+import { Factory } from 'https://deno.land/x/vno/dist/mod.ts';
+
+const vno = new Factory({
+  root: "App",
+  entry: "./"
+  vue: 3,
+  options: {
+    port: 3000
+  }
+})
+
+await vno.build();
+```
+
+`vno.build()` will run a build on the entire application and compile it to a "vno-build" directory into one javascript file and one css file.
