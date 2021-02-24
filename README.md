@@ -25,12 +25,12 @@
 
 ## Overview
 
-- Vue is an approachable javascript framework with an exciting ecosystem with remarkable versatility. Deno is a runtime environment intent on improving the shortcomings of node.js. We wanted to be able to leverage the vue framework in a deno runtime environment, but could not find a tool that made this possible. So we decided to make it ourselves.
+- Vue is an approachable javascript framework with an exciting ecosystem with remarkable versatility. Deno is a runtime environment intent on improving the shortcomings of node.js. We wanted to be able to leverage the Vue framework in a Deno runtime environment, and vno makes that possible.
 
 ## How to use vno
 
-- You can use the vno Command Line Interface to quickly create a new vue project in a deno runtime
-- OR you can use the vno build method to compile an existing vue file structure into a deno-legible .js file
+- You can use the vno Command Line Interface to quickly create a new Vue project in a Deno runtime
+- OR you can use the vno build method to compile an existing Vue file structure into a Deno-legible .js file
 
 ### vno installation
 
@@ -41,10 +41,10 @@
 deno install --allow-net --unstable https://deno.land/x/vno/install/vno.ts
 ```
 
-- Deno requires the `--allow-net` permissions to run an installation
+- Deno requires the `--allow-net` permission to run an installation
 - This feature, and many of the others used in vno are still considered "unstable" for Deno. Run the command with `--unstable` to allow these resources to execute.
-- The force flag `-f` is only necessary when you want to overwrite an existing copy of the module
-- name the module in your path with the name flag `-n` or `--name` , we suggest using 'vno'
+- The force flag `-f` can be used if you want to overwrite an existing copy of the module
+- You can name the module in your path with the name flag `-n` or `--name` , 'vno' is the default name.
 - If you have not already added Deno bin into your path, you will need to do so.
 
   - Copy the export path your terminal returns and paste it into your terminal
@@ -57,7 +57,7 @@ deno install --allow-net --unstable https://deno.land/x/vno/install/vno.ts
 - You can avoid responding to the permissions requests by flagging the installation script.
 - Most of our module requires both read and write permissions `--allow-read` & `--allow-write`
 - If you decide not to flag permissions at installation, you will be prompted in the terminal after executing a command.
-- **note: If you would like to avoid writing out the permissions altogether, you can also use the '-A' tag**
+- **note: If you would like to avoid writing out the permissions altogether, you can also use the `-A` or `--allow-all` tag**
 
 ### create a new project
 
