@@ -1,7 +1,7 @@
 import type { Component, Fctry, Storage } from "../dts/factory.d.ts";
 
 export function isValidOptions(obj: unknown): obj is Fctry.Config {
-  return obj !== null &&
+  return obj != null &&
     typeof (obj as Fctry.Config).entry === "string" &&
     typeof (obj as Fctry.Config).root === "string";
 }
@@ -18,6 +18,6 @@ export function isStorageReady(obj: unknown): obj is Storage {
 }
 
 export function hasValidInstance(obj: unknown): obj is Component {
-  return obj !== null &&
+  return obj != null &&
     typeof (obj as Component).parsed_data.instance === "string";
 }

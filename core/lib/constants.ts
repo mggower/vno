@@ -1,7 +1,7 @@
 import { Component } from "../dts/factory.d.ts";
 
 export enum ComponentType {
-  Primitive = "PRIMTIVE",
+  Primitive = "PRIMITIVE",
   Composite = "COMPOSITE",
 }
 

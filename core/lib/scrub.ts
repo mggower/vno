@@ -9,9 +9,9 @@ const memoize = function () {
     }
 
     if (cache[label]) {
-      scrub(label, cache[label]);
+      scrubSearch(label, cache[label]);
     } else {
-      scrub(label, storage.root);
+      scrubSearch(label, storage.root);
     }
 
     cache[label] = current;
@@ -20,16 +20,16 @@ const memoize = function () {
   return memo;
 }
 
-const scrub: Util.MEMO = function (label, component) {
+const scrubSearch: Util.MEMO = function (label, component) {
   if (component.dependants) {
     component.dependants.scrub(label);
 
     if (component.dependants.head) {
-      scrub(label, component.dependants.head);
+      scrubSearch(label, component.dependants.head);
     }
   }
   if (component.sibling) {
-    scrub(label, component.sibling);
+    scrubSearch(label, component.sibling);
   }
 };
 

@@ -1,0 +1,7 @@
+{
+  "root": "App",
+  "entry": "../../example/test_demo/",
+  "options": {
+    "title": "benchmark test project"
+  }
+}
