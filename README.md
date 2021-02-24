@@ -21,7 +21,6 @@
 - Compiler
 - Bundler
 - Adapter
-- Server Side Renderer (coming soon)
 
 ## Overview
 
