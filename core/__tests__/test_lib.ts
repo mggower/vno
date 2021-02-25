@@ -1,10 +1,10 @@
+import type { Component, Fctry } from "../dts/factory.d.ts";
+import { configReader } from "../lib/config_reader.ts";
+import { vueLogger } from "../lib/vue_logger.ts";
 import {
   assertEquals,
   assertNotEquals,
 } from "https://deno.land/std@0.83.0/testing/asserts.ts";
-import { configReader } from "../lib/config_reader.ts";
-import { vueLogger } from "../lib/vue_logger.ts";
-import type { Component, Fctry } from "../dts/factory.d.ts";
 
 // configReader tests:
 Deno.test({
@@ -36,7 +36,7 @@ Deno.test({
       component,
       "label",
     );
-    
+
     assertNotEquals((V2 as Fctry.Vue), undefined);
 
     const dep = "import Vue from ";
@@ -56,12 +56,12 @@ Deno.test({
       component,
       "label",
     );
-    
+
     assertNotEquals((V3 as Fctry.Vue), undefined);
 
     const dep = "import * as Vue from ";
     assertEquals((V3 as Fctry.Vue).dep, dep);
-    
+
     const mount = `\nlabel.mount("#test-root")`;
     assertEquals((V3 as Fctry.Vue).mount, mount);
   },
