@@ -17,7 +17,8 @@ import HelloVno from './components/HelloVno.vue';
 export default {
   name: 'app',
   components: {HelloVno},
-}
+};
+
 </script>
 
 <style>

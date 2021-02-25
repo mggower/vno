@@ -2,10 +2,11 @@ import type { Cmpt, DepsList } from "../dts/factory.d.ts";
 import { ComponentType } from "../lib/constants.ts";
 import * as utils from "../utils/utils.ts";
 import { _, sfcCompiler } from "../lib/deps.ts";
+
 export default abstract class Base {
   protected __type__: ComponentType;
   protected __raw__: string;
-  protected __ast__: Cmpt.Source;
+  protected __source__: Cmpt.Source;
   protected __data__: Cmpt.RawData;
 
   public name: string;
@@ -16,17 +17,16 @@ export default abstract class Base {
   constructor(public label: string, public path: string) {
     this.label = label;
     this.path = path;
-
     this.__type__ = ComponentType.Primitive;
     this.__raw__ = Deno.readTextFileSync(path);
-    this.__ast__ = sfcCompiler.parse(this.__raw__, {
+    this.__source__ = sfcCompiler.parse(this.__raw__, {
       filename: `${this.label}.vue`,
       sourceMap: false,
     });
     this.__data__ = {
-      template: this.__ast__.descriptor.template,
-      script: this.__ast__.descriptor.script,
-      styles: this.__ast__.descriptor.styles,
+      template: this.__source__.descriptor.template,
+      script: this.__source__.descriptor.script,
+      styles: this.__source__.descriptor.styles,
     };
     this.name = this.setComponentName();
     this.parsed_data = {};
@@ -40,6 +40,10 @@ export default abstract class Base {
 
     if (index < 0) return _.kebabCase(this.label);
     return data[index].split(/[`'"]/)[1];
+  }
+
+  get source() {
+    return this.__source__;
   }
 
   get type() {

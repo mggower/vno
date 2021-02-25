@@ -1,6 +1,6 @@
 import * as utils from "../utils/utils.ts";
 import { TsCompile } from "./ts_compile.ts";
-import { _, colors } from "./deps.ts";
+import { _, colors, path as stdPath } from "./deps.ts";
 import { preorderScrub } from "./scrub.ts";
 import { Cmpt, Component, Resolve } from "../dts/factory.d.ts";
 import { patterns } from "./constants.ts";
@@ -14,7 +14,7 @@ export const _script: Resolve.Source = async function (data, path, tsCheck) {
   const end = data.lastIndexOf("}");
 
   const trimmed = data.slice(start + 1, end).join("\n");
-  
+
   let script = tsCheck
     ? await TsCompile(`({ ${trimmed} })`, path)
     : trimmed as string;
@@ -33,11 +33,11 @@ export const _dependants: Resolve.Attrs = function (curr, arr, storage, queue) {
 
   // locate if this component has any children
   const start = utils.indexOfRegExp(/^\s*(components\s*:)/gm, arr);
+  // if the current component has no identified dependants, break from function
   if (start < 0) return;
-
   const children = arr.slice(start);
-
   const end = children.findIndex((el) => el.includes("}")) + 1;
+
   const componentsStr = utils.sliceAndTrim(children, 0, end);
 
   const iter: string[] = _.compact(
@@ -47,7 +47,7 @@ export const _dependants: Resolve.Attrs = function (curr, arr, storage, queue) {
       componentsStr.indexOf("}"),
     ),
   );
-
+  // uses the found reference to retrieve the child component in storage
   const dependants: Cmpt.List = iter.map(
     (child: string) => storage.get(child) as Component,
   );
@@ -56,10 +56,12 @@ export const _dependants: Resolve.Attrs = function (curr, arr, storage, queue) {
 
   while (dependants.length) {
     const component = dependants.pop();
-
     if (component) {
+      // add unparsed components to the queue
       if (!component.is_parsed) queue.enqueue(component);
+      // reposition children higher on dependency graph
       preorderScrub(component.label, curr, storage);
+      // link the child component as a dependant
       curr.dependants?.add(component);
     }
   }
@@ -85,7 +87,7 @@ export const _middlecode: Resolve.Attrs = async function (curr, script) {
     ) {
       if (patterns.import.test(chunk)) {
         imports.push(chunk);
-        // TODO: resolve and inject all imports that not is a component .vue or is a import_map.json call
+        // TODO: resolve and inject all imports not .vue or is a import_map.json call
       } else {
         chunks.push(chunk);
       }

@@ -43,11 +43,18 @@
 </template>
 
 <script>
-import Travel from './components/Travel';
-import Lighthouse from './components/Lighthouse';
-import Deno from './components/Deno';
-import VueJs from './components/VueJs';
-import Home from './components/Home';
+import _ from "https://cdn.skypack.dev/lodash";
+// import Travel from './components/Travel';
+// import Lighthouse from './components/Lighthouse';
+// import Deno from './components/Deno';
+// import VueJs from './components/VueJs';
+// import Home from './components/Home';
+const Home = "Home";
+const Deno = "Deno";
+const Travel = "Travel";
+const VueJs = "VueJs";
+const Lighthouse = "Lighthouse";
+
 
 export default {
   name: 'app',
@@ -71,6 +78,7 @@ export default {
     VueJs,
   },
 };
+
 </script>
 
 <style>

@@ -34,7 +34,7 @@ export const script: Cmpt.Parser = async function (curr, storage, queue) {
     curr.path,
     curr.script_data.lang === "ts",
   );
-
+  
   const middlecode = curr.script_data.attrs?.load
     ? await resolver._middlecode(curr, script)
     : undefined;

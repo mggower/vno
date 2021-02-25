@@ -16,10 +16,6 @@ export default class Component extends Base {
     this.sibling = null;
   }
 
-  get ast() {
-    return this.__ast__;
-  }
-
   public isComposite(): void {
     this.dependants = new DepsList();
     this.type = ComponentType.Composite;
@@ -35,8 +31,8 @@ export default class Component extends Base {
         .green(`[vno: compiling] => ${colors.yellow(this.path)}`),
     );
 
-    if (this.__ast__.errors.length) {
-      showCodeFrame(this.__ast__.descriptor, this.__ast__.errors);
+    if (this.__source__.errors.length) {
+      showCodeFrame(this.__source__.descriptor, this.__source__.errors);
     } else {
       await parse.script(this, storage, queue);
       parse.template(this as Component);
