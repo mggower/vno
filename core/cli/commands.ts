@@ -55,3 +55,4 @@ export const run = async function (args: string[]): Promise<void> {
     }
   }
 };
+

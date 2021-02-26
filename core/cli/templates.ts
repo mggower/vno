@@ -78,7 +78,8 @@ import ${options.components[0]} from './components/${
 export default {
   name: '${_.kebabCase(options.root)}',
   components: {${options.components[0]}},
-}
+};
+
 </script>
 
 <style>

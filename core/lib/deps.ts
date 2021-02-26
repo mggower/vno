@@ -3,11 +3,19 @@ export * as fs from "https://deno.land/std@0.83.0/fs/mod.ts";
 export * as path from "https://deno.land/std@0.83.0/path/mod.ts";
 export * as colors from "https://deno.land/std@0.83.0/fmt/colors.ts";
 export * as http from "https://deno.land/std@0.83.0/http/mod.ts";
-export * as asrt from "https://deno.land/std@0.83.0/testing/asserts.ts";
+export {
+  assertEquals,
+  assertNotEquals,
+} from "https://deno.land/std@0.83.0/testing/asserts.ts";
 
 // oak
-export { Application, send, Context } from "https://deno.land/x/oak@v6.5.0/mod.ts";
-export { superoak } from "https://deno.land/x/superoak@3.0.0/mod.ts";
+export {
+  Application,
+  Context,
+  Router,
+  send,
+} from "https://deno.land/x/oak@v6.5.0/mod.ts";
+export { superoak } from "https://deno.land/x/superoak@4.0.0/mod.ts";
 
 // third-party
 import _ from "https://cdn.skypack.dev/lodash"; // lodash

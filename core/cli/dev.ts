@@ -1,9 +1,9 @@
-import { Application, send, path } from "../lib/deps.ts";
+import { Application, path, Router, send, superoak } from "../lib/deps.ts";
 import * as print from "./stdout.ts";
 
-export const runDevServer = async function (port: number, hostname: string) {
-  const server: Application = new Application();
+export const server: Application = new Application();
 
+export const runDevServer = async function (port: number, hostname: string) {
   server.use(async (ctx, next) => {
     const { pathname } = ctx.request.url;
 
@@ -32,4 +32,6 @@ export const runDevServer = async function (port: number, hostname: string) {
   // listen for active server
   server.addEventListener("listen", () => print.LISTEN(port, hostname));
   await server.listen({ port, hostname });
+
+  return server;
 };
