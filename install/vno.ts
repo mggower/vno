@@ -1,4 +1,10 @@
-import { build, create, run } from "../core/cli/commands.ts";
+import { build, create, flags, run } from "../core/cli/commands.ts";
+import { cmnd } from "../core/cli/constants.ts";
+
+const { args } = Deno;
+const command = args[0];
+
+if (cmnd.help.test(command) || cmnd.info.test(command)) flags(args);
 
 // ensure permissions
 const read = { name: "read" } as const;
@@ -8,16 +14,8 @@ const write = { name: "write" } as const;
 const resRead = await Deno.permissions.request(read);
 const resWrite = await Deno.permissions.request(write);
 
-const { args } = Deno;
-
-const cmnd = {
-  create: /create/i,
-  build: /build/i,
-  run: /run/i,
-};
-
 if (resRead && resWrite) {
-  if (cmnd.create.test(args[0])) await create(args);
-  if (cmnd.build.test(args[0])) await build(args);
-  if (cmnd.run.test(args[0])) await run(args);
+  if (cmnd.create.test(command)) await create(args);
+  if (cmnd.build.test(command)) await build(args);
+  if (cmnd.run.test(command)) await run(args);
 }

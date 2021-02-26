@@ -1,17 +1,18 @@
+import * as parse from "../lib/parser.ts";
 import Component from "../factory/Component.ts";
 import Storage from "../factory/Storage.ts";
 import Queue from "../factory/Queue.ts";
-import * as parse from "../lib/parser.ts";
 import { assertEquals, assertNotEquals } from "../lib/deps.ts";
 import { patterns } from "../lib/constants.ts";
 import { yellow } from "../cli/fns.ts";
 
+const testRoot = new Component("Test", "./test-components/Test.vue");
+const testChild = new Component("TestChild", "./test-components/TestChild.vue");
+
 const storage = new Storage();
 const queue = new Queue();
-
-const testRoot = new Component("Test", "./test-components/Test.vue");
-
 storage.root = testRoot;
+storage.cache(testChild.label, testChild);
 
 Deno.test({
   name: "\n\nparse.template successfully adds a 'template' property\n",
@@ -32,9 +33,6 @@ Deno.test({
     assertEquals(testRoot.template?.indexOf("\r"), -1);
   },
 });
-
-const testChild = new Component("TestChild", "./test-components/TestChild.vue");
-storage.cache(testChild.label, testChild);
 
 Deno.test({
   name: "\n\nparse.script successfully adds a 'script' property\n",
@@ -80,6 +78,12 @@ Deno.test({
     assertEquals(
       testRoot.script?.match("some CSS comments"),
       null,
+    );
+
+    yellow(">> parse.style detects scss from source\n");
+    assertEquals(
+      testRoot.style_data[0].lang,
+      "scss",
     );
   },
 });

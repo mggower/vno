@@ -34,4 +34,6 @@ export const cmnd = {
   dev: /dev/i,
   server: /server/i,
   quiet: /quiet/i,
+  help: /--help/i,
+  info: /--info/i,
 };

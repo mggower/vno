@@ -36,10 +36,13 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss">
 
 html {
   background-color: #203A42;
+  body {
+    color: pink;
+  }
 }
 /* 
   some CSS comments

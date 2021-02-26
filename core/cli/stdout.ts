@@ -1,4 +1,5 @@
 import { colors } from "../lib/deps.ts";
+import * as fn from "./fns.ts";
 
 export const logo = (colors.bold(`
   __   ___ __   ___
@@ -34,39 +35,52 @@ export const LISTEN = function (port: number, hostname?: string) {
 export const WARN = function (msg: string) {
   console.warn(`\n${colors.yellow(msg)}\n`);
 };
+interface DocInfo {
+  version: string | undefined;
+  description: string;
+  docs: string | undefined;
+  module: string | undefined;
+  commands: Commands[];
+  options: Commands[];
+}
+interface Commands {
+  action: string;
+  cmd: string[];
+  about: string;
+}
 
 // prints module specific information
-// export const INFO = function (doc: infoInterface) {
-//   // version
-//   console.log(fn.keyYellow("version", doc.version));
-//   // description
-//   console.log(`\n${colors.green(fn.lineLength(doc.description, 52, 4))}`);
-//   console.log(`\n${fn.keyYellow("docs", doc.docs)}`);
-//   console.log(`${fn.keyYellow("module", doc.module)}`);
-// }
+export const INFO = function (doc: DocInfo) {
+  // version
+  console.log(fn.keyYellow("version", doc.version));
+  // description
+  console.log(`\n${colors.green(fn.lineLength(doc.description, 52, 4))}`);
+  console.log(`\n${fn.keyYellow("docs", doc.docs)}`);
+  console.log(`${fn.keyYellow("module", doc.module)}`);
+};
 
-// export const CMDS = function (doc: any) {
-//   // commands
-//   console.log("\n" + fn.keyYellow("commands"));
-//   doc.commands.forEach((obj: { action: any; cmd: any; about: any; }) => {
-//     const { action, cmd, about } = obj;
-//     console.log("\n" + fn.keyGreen(action));
-//     cmd.forEach((el: string) => {
-//       console.log(`${fn.lineLength(colors.yellow(">>") + "  " + el, 61, 6)}`);
-//     });
-//     console.log(`${fn.lineLength(about, 60, 6)}`);
-//   });
-// }
+export const CMDS = function (doc: DocInfo) {
+  // commands
+  console.log("\n" + fn.keyYellow("commands"));
+  doc.commands.forEach((obj: Commands) => {
+    const { action, cmd, about } = obj;
+    console.log("\n" + fn.keyGreen(action));
+    cmd.forEach((el: string) => {
+      console.log(`${fn.lineLength(colors.yellow(">>") + "  " + el, 61, 6)}`);
+    });
+    console.log(`${fn.lineLength(about, 60, 6)}`);
+  });
+};
 
-// export const OPTIONS = function (doc: any) {
-//   // options flags
-//   console.log("\n" + fn.keyYellow("options"));
-//   doc.options.forEach((obj: { cmd: any; about: any; }) => {
-//     const { cmd, about } = obj;
-//     cmd.forEach((el: string) => {
-//       console.log(`\n${fn.keyGreen(el)}`);
-//     });
-//     console.log(`      ${colors.yellow(">>")}  ${about}`);
-//   });
-//   console.log("\n");
-// }
+export const OPTIONS = function (doc: DocInfo) {
+  // options flags
+  console.log("\n" + fn.keyYellow("options"));
+  doc.options.forEach((obj) => {
+    const { cmd, about } = obj;
+    cmd.forEach((el: string) => {
+      console.log(`\n${fn.keyGreen(el)}`);
+    });
+    console.log(`      ${colors.yellow(">>")}  ${about}`);
+  });
+  console.log("\n");
+};

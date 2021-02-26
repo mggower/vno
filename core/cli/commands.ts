@@ -1,5 +1,6 @@
 import Factory from "../factory/Factory.ts";
 import * as print from "./stdout.ts";
+import info from "./info.ts";
 import { fs, path } from "../lib/deps.ts";
 import { createApplication } from "./create.ts";
 import { runDevServer } from "./dev.ts";
@@ -56,3 +57,17 @@ export const run = async function (args: string[]): Promise<void> {
   }
 };
 
+export const flags = function (args: string[]): void {
+  const helpArg = cmnd.help.test(args[0]);
+  const infoArg = cmnd.info.test(args[0]);
+
+  if (!helpArg && !infoArg) return;
+
+  print.ASCII();
+  print.INFO(info);
+
+  if (helpArg) {
+    print.CMDS(info);
+    print.OPTIONS(info);
+  } else console.log("\n");
+};
