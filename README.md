@@ -156,7 +156,7 @@ without a vno.config.json, you can input the object directly into the Factory in
 ```
 import { Factory } from 'https://deno.land/x/vno/dist/mod.ts';
 
-const vno = new Factory({
+const vno = Factory.create({
   root: "App",
   entry: "./"
   vue: 3,

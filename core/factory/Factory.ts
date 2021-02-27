@@ -2,7 +2,7 @@ import type { Fctry } from "../dts/factory.d.ts";
 import { configReader } from "../lib/config_reader.ts";
 import { vueLogger } from "../lib/vue_logger.ts";
 import { writeBundle } from "../lib/bundle.ts";
-import { fs, path } from "../lib/deps.ts";
+import { fs, path, v4 } from "../lib/deps.ts";
 import Component from "./Component.ts";
 import Storage from "./Storage.ts";
 import Queue from "./Queue.ts";
@@ -22,17 +22,16 @@ export default class Factory {
   private _hostname: string;
   private _server: string | null;
 
-  constructor(options?: Fctry.Config) {
+  private static instance: Factory;
+
+  private constructor(options?: Fctry.Config) {
     if (options) {
       if (!isValidOptions(options)) {
         throw new TypeError("received invalid options");
       }
     }
     // if no options check for vno.config.json
-
-    this.variable = `vno${Math.floor(Math.random() * 1000)}${
-      Math.floor(Math.random() * 1000)
-    }`;
+    this.variable = v4.generate();
     this.storage = new Storage();
     this.queue = new Queue();
     this._config = options ?? null;
@@ -40,6 +39,14 @@ export default class Factory {
     this._hostname = "0.0.0.0";
     this._title = "Your Project";
     this._server = null;
+  }
+
+  public static create(options?: Fctry.Config): Factory {
+    if (!Factory.instance) {
+      Factory.instance = new Factory(options);
+    }
+
+    return Factory.instance;
   }
 
   get config() {
