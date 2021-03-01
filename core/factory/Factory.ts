@@ -1,4 +1,4 @@
-import type { Fctry } from "../dts/factory.d.ts";
+import { Fctry } from "../dts/factory.d.ts";
 import { configReader } from "../lib/config_reader.ts";
 import { vueLogger } from "../lib/vue_logger.ts";
 import { writeBundle } from "../lib/bundle.ts";
