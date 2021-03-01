@@ -24,7 +24,7 @@ export const create = async function (args: string[]): Promise<void> {
 export const build = async function (args: string[]): Promise<void> {
   if (!cmnd.build.test(args[0])) return;
 
-  const vno = Factory().create();
+  const vno = Factory.create();
   await vno.build();
 
   if (quietArg(args[1]) || quietArg(args[2])) print.QUIET();
@@ -34,7 +34,7 @@ export const build = async function (args: string[]): Promise<void> {
 export const run = async function (args: string[]): Promise<void> {
   if (!cmnd.run.test(args[0])) return;
 
-  const vno = Factory().create();
+  const vno = Factory.create();
   await vno.build();
 
   if (quietArg(args[2]) || quietArg(args[3])) print.QUIET();
