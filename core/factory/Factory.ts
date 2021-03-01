@@ -21,9 +21,7 @@ export default class Factory {
   private _title: string;
   private _hostname: string;
   private _server: string | null;
-
   private static instance: Factory;
-
   private constructor(options?: Fctry.Config) {
     if (options) {
       if (!isValidOptions(options)) {
