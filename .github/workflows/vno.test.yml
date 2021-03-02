@@ -27,7 +27,7 @@ jobs:
       run: deno run --reload --unstable --allow-read --allow-write install/vno.ts
     - name: Run Vno Tests
       run: |
-        deno test --allow-read --allow-write --allow-net --unstable test_utils.ts
-        deno test --allow-read --allow-write --allow-net --unstable test_lib.ts
-        deno test --allow-read --allow-write --allow-net --unstable test_parser.ts
-        deno test --allow-read --allow-write --allow-net --unstable test_http.ts
+        deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_utils.ts
+        deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_lib.ts
+        deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_parser.ts
+        deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_http.ts
