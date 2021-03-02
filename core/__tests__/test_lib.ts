@@ -8,6 +8,15 @@ Deno.test({
   name: "configReader returns object with valid props",
 
   async fn(): Promise<void> {
+    await Deno.writeTextFile("./vno.config.json", JSON.stringify({
+      "root": "App",
+      "entry": "../../example/test_demo/",
+      "vue": 3,
+      "options": {
+        "title": "benchmark test project"
+      }
+    }));
+    
     const config: Fctry.Config | unknown = await configReader();
     assertNotEquals((config as Fctry.Config), undefined);
     assertEquals((config as Fctry.Config).vue, 3);
@@ -18,6 +27,8 @@ Deno.test({
       (config as Fctry.Config).options?.title,
       "benchmark test project",
     );
+
+    await Deno.remove("./vno.config.json");
   },
 });
 

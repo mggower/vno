@@ -1,8 +1,0 @@
-{
-  "root": "App",
-  "entry": "../../example/test_demo/",
-  "vue": 3,
-  "options": {
-    "title": "benchmark test project"
-  }
-}
