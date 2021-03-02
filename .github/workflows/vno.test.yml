@@ -31,3 +31,8 @@ jobs:
         deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_lib.ts
         deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_parser.ts
         deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_http.ts
+    - name: Run Vno CLI
+      run: |
+        deno run --allow-read --allow-write --allow-net --unstable install/vno.ts create cli-test
+        no
+        deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_commands.ts
