@@ -69,19 +69,19 @@ Deno.test({
   fn(): void {
     yellow("\n>> vno-build directory exists");
     assertEquals(
-      fs.existsSync("./vno-build"),
+      fs.existsSync("./cli-test/vno-build"),
       true,
     );
 
     yellow("\n>> build.js file compiled");
     assertEquals(
-      fs.existsSync("./vno-build/build.js"),
+      fs.existsSync("./cli-test/vno-build/build.js"),
       true,
     );
 
     yellow("\n>> style.css file compiled");
     assertEquals(
-      fs.existsSync("./vno-build/style.css"),
+      fs.existsSync("./cli-test/vno-build/style.css"),
       true,
     );
   },

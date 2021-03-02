@@ -22,7 +22,7 @@ jobs:
       with:
        deno-version: ${{ matrix.deno-version }}
     - name: Build Vno Mod
-      run: deno run --reload --unstable dist/mod.ts
+      run: deno run --reload --unstable --allow-read --allow-write dist/mod.ts
     - name: Build Vno CLI
       run: deno run --reload --unstable --allow-read --allow-write install/vno.ts
     - name: Run Vno Tests
@@ -31,3 +31,8 @@ jobs:
         deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_lib.ts
         deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_parser.ts
         deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_http.ts
+    - name: Test vno commands
+      run: |
+        deno run --allow-read --allow-write --allow-net --unstable install/vno.ts create cli-test TestApp 8080 TestOne TestTwo TestThree
+        deno run --allow-read --allow-write --allow-net --unstable install/vno.ts build
+        deno test --allow-read --allow-write --allow-net --unstable core/__tests__/test_commands.ts
