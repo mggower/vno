@@ -1,7 +1,7 @@
 import type { Component, Storage } from "../dts/factory.d.ts";
-import { lintignore, VnoPath } from "../lib/constants.ts";
+import { lintignore, VnoPath } from "../utils/constants.ts";
 import { hasValidInstance } from "../utils/type_gaurds.ts";
-import { fs } from "./deps.ts";
+import { fs } from "../utils/deps.ts";
 
 export function writeBundle(storage: Storage): void {
   fs.ensureDirSync(VnoPath.Dir);
@@ -26,9 +26,7 @@ export function writeBundle(storage: Storage): void {
 }
 
 function postorderTraverse(current: Component): void {
-  if (hasValidInstance(current) === false) {
-    throw new TypeError(`${current.label} has no instance prop`);
-  }
+  hasValidInstance(current);
 
   if (current.dependants != null && current.dependants.head) {
     postorderTraverse(current.dependants.head);

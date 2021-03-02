@@ -1,4 +1,4 @@
-import { Router, superoak } from "../lib/deps.ts";
+import { Router, superoak } from "../utils/deps.ts";
 import { server } from "../cli/dev.ts";
 
 const router = new Router();

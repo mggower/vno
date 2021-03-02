@@ -1,21 +1,26 @@
-import { _, colors, fs, ProgressBar } from "../lib/deps.ts";
-import * as utils from "../utils/utils.ts";
+import { _, colors, fs, ProgressBar } from "../utils/deps.ts";
 import * as fn from "./fns.ts";
 import * as out from "./constants.ts";
 import * as template from "./templates.ts";
 
-export const createApplication = async function (repo?: string) {
+interface CreateProjectObj {
+  title?: string;
+  custom?: boolean;
+  root?: string;
+  port?: string;
+  components?: string[];
+}
+
+export const createApplication = async function (obj: CreateProjectObj) {
   let app = out.options;
 
-  // request if a user would like to customize
-  const choice = await utils.prompt(out.custom);
-
   // customize function initializes out/stores answers
-  if (choice.trim()[0].toLowerCase() === "y") app = await customize(repo);
-  else fn.green(out.creating);
+  app = await customize(obj);
+  fn.green(out.creating);
 
   // progress bar
   renderProgress();
+  let complete = false;
 
   // app templates
   const root: string = template.rootComponent(app);
@@ -42,50 +47,81 @@ export const createApplication = async function (repo?: string) {
     if (i === 0) await Deno.writeTextFile(filename, component);
     else await Deno.writeTextFile(filename, generic);
   });
+
+  return;
 };
 
-export const customize = async function (repo?: string) {
+export const customize = async function (obj: CreateProjectObj) {
+  const preset = obj.title && obj.port && obj.root && obj.components;
   let output = out.options;
+
+  // request if a user would like to customize
+  if (!preset) {
+    const choice = await prompt(out.custom, "yes/no") as string;
+    if (choice.trim()[0].toLowerCase() !== "y") return output;
+  }
 
   fn.green(out.init);
   const reqs = out.reqs.slice();
 
   // project title
   let title;
-  if (repo) {
+  if (obj.title) {
     reqs.pop();
-    title = repo;
+    title = obj.title;
   } else {
-    title = await utils.prompt(reqs.pop() as string);
+    title = await prompt(reqs.pop() as string, "Your Project") as string;
   }
 
   // label root component file
-  const root: string = await utils.prompt(reqs.pop() as string);
-
-  // additional components
-  const componentRes: string = await utils.prompt(reqs.pop() as string);
-  const components: string[] = componentRes != null &&
-      componentRes.toLowerCase().trim() != "none" &&
-      componentRes.trim() != "0"
-    ? componentRes.split(/\ +/)
-    : out.options.components;
+  let root;
+  if (obj.root) {
+    reqs.pop();
+    root = obj.root;
+  } else {
+    root = await prompt(reqs.pop() as string, "App") as string;
+  }
 
   // preferred port
-  const portRes: string = await utils.prompt(reqs.pop() as string);
-  const port: number = portRes != null
-    ? parseInt(portRes.trim(), 10)
-    : out.options.port;
+  let port;
+  if (obj.port) {
+    reqs.pop();
+    port = obj.port;
+  } else {
+    port = await prompt(reqs.pop() as string, "3000") as string;
+  }
+  port = parseInt(port, 10);
+
+  // additional components
+  let components;
+  if (obj.components) {
+    reqs.pop();
+    components = obj.components;
+  } else {
+    const response = await prompt(reqs.pop() as string);
+    components = response != null &&
+        response.toLowerCase().trim() != "none" &&
+        response.trim() != "0"
+      ? response.split(/\ +/)
+      : out.options.components;
+  }
 
   // request to confirm input
-  fn.green(fn.confirmation(title, root, componentRes, portRes));
-  const confirm: string = await utils.prompt(reqs.pop() as string);
+  fn.green(
+    fn.confirmation(title, root, components.join(" + "), port.toString()),
+  );
 
-  if (confirm.trim()[0].toLowerCase() === "y") {
+  let confirm;
+  if (!preset) {
+    confirm = await prompt(reqs.pop() as string, "yes/no") as string;
+  }
+
+  if (preset || confirm?.trim()[0].toLowerCase() === "y") {
     output = { title, root, components, port };
     fn.green(out.creating);
   } else { // reset on rejection
     fn.yellow(out.reset);
-    await customize(repo);
+    await customize(obj);
   }
 
   return output;

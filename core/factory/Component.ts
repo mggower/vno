@@ -1,8 +1,8 @@
 import type { Queue, Storage } from "../dts/factory.d.ts";
 import { compileForV3, javascriptCompile } from "../lib/js_compile.ts";
-import { ComponentType } from "../lib/constants.ts";
+import { ComponentType } from "../utils/constants.ts";
 import { showCodeFrame } from "../lib/code_frame.ts";
-import { colors } from "../lib/deps.ts";
+import { colors } from "../utils/deps.ts";
 import * as parse from "../lib/parser.ts";
 import DepsList from "./DepsList.ts";
 import Base from "./Base.ts";

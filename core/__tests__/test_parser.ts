@@ -2,8 +2,8 @@ import * as parse from "../lib/parser.ts";
 import Component from "../factory/Component.ts";
 import Storage from "../factory/Storage.ts";
 import Queue from "../factory/Queue.ts";
-import { assertEquals, assertNotEquals, path } from "../lib/deps.ts";
-import { patterns } from "../lib/constants.ts";
+import { assertEquals, assertNotEquals, path } from "../utils/deps.ts";
+import { patterns } from "../utils/constants.ts";
 import { yellow } from "../cli/fns.ts";
 
 const testRoot = new Component("Test", path.join(Deno.cwd(), "./core/__tests__/test-components/Test.vue"));

@@ -1,5 +1,5 @@
 import { Util } from "../dts/factory.d.ts";
-import { _ } from "../lib/deps.ts";
+import { _ } from "../utils/deps.ts";
 
 // template literal strings for HTML/Components/Server/Deps
 export const childComponent = (componentsName: string) => {

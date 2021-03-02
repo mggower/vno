@@ -1,7 +1,7 @@
-import type { Cmpt, DepsList } from "../dts/factory.d.ts";
-import { ComponentType } from "../lib/constants.ts";
+import { Cmpt, DepsList } from "../dts/factory.d.ts";
+import { ComponentType } from "../utils/constants.ts";
 import * as utils from "../utils/utils.ts";
-import { _, sfcCompiler } from "../lib/deps.ts";
+import { _, sfcCompiler } from "../utils/deps.ts";
 
 export default abstract class Base {
   protected __type__: ComponentType;

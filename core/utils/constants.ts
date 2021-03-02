@@ -15,15 +15,15 @@ export const Vue = {
     dep: "import * asVue from ",
     cdn: "https://cdn.jsdelivr.net/npm/vue@3.0.5/dist/vue.esm-browser.js",
     mount: (root: Component) => `app.mount("${root.name}")`,
-  }
-}
+  },
+};
 
 // relative paths for vno-build/ bundle
-export enum VnoPath {
-  Dir = "vno-build",
-  Build = "vno-build/build.js",
-  Style = "vno-build/style.css",
-}
+export const VnoPath: Record<string, string> = {
+  Dir: "vno-build",
+  Build: "vno-build/build.js",
+  Style: "vno-build/style.css",
+};
 
 // ignore linting in build
 export const lintignore = `/* eslint-disable */
@@ -41,4 +41,3 @@ export const patterns: Record<string, RegExp> = {
     /(ftp|http|https|file):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gm,
   whitespace: /(\s{2,})/g,
 };
-

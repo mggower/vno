@@ -1,9 +1,9 @@
 import * as utils from "../utils/utils.ts";
 import { TsCompile } from "./ts_compile.ts";
-import { _, colors, path as stdPath } from "./deps.ts";
+import { _, colors, path as stdPath } from "../utils/deps.ts";
 import { preorderScrub } from "./scrub.ts";
 import { Cmpt, Component, Resolve } from "../dts/factory.d.ts";
-import { patterns } from "./constants.ts";
+import { patterns } from "../utils/constants.ts";
 
 export const _script: Resolve.Source = async function (data, path, tsCheck) {
   if (typeof data === "string") {

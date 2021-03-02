@@ -1,4 +1,4 @@
-import { colors } from "../lib/deps.ts";
+import { colors } from "../utils/deps.ts";
 import { cmnd, options } from "./constants.ts";
 
 export const green = function (str: string) {
@@ -13,8 +13,8 @@ export const confirmation = function <S>(a: S, b: S, c: S, d: S): string {
   return `\nYour Project:\n\n` +
     `    Title: ${a || options.title}\n` +
     `    Root: ${b || options.root}\n` +
-    `    Additional Component(s): ${c}\n` +
-    `    Port: ${d || options.port}\n`;
+    `    Port: ${d || options.port}\n` +
+    `    Additional Component(s): ${c}\n`;
 };
 
 // prints key/values to terminal in yellow with 2-space indent

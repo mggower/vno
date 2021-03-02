@@ -1,7 +1,5 @@
 import Factory from "../../core/factory/Factory.ts";
 
-const vno = new Factory();
+const vno = Factory.create();
 await vno.build();
-const App = vno.storage.get("App");
-
-console.log(App);
+// console.log(vno.storage.get("App"))

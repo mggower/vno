@@ -2,41 +2,31 @@ import { Fctry } from "../dts/factory.d.ts";
 import { configReader } from "../lib/config_reader.ts";
 import { vueLogger } from "../lib/vue_logger.ts";
 import { writeBundle } from "../lib/bundle.ts";
-import { fs, path, v4 } from "../lib/deps.ts";
+import { fs, path, v4 } from "../utils/deps.ts";
 import Component from "./Component.ts";
 import Storage from "./Storage.ts";
 import Queue from "./Queue.ts";
 import {
+  checkOptions,
   checkVueVersion,
   isStorageReady,
-  isValidOptions,
 } from "../utils/type_gaurds.ts";
 
 export default class Factory {
   public storage: Storage;
   public queue: Queue;
   public variable: string;
-  private _config: Fctry.Config | null;
-  private _port: number;
-  private _title: string;
-  private _hostname: string;
-  private _server: string | null;
+  private _config: Fctry.Config;
+  private _port!: number;
+  private _title!: string;
+  private _hostname!: string;
+  private _server!: string;
   private static instance: Factory;
   private constructor(options?: Fctry.Config) {
-    if (options) {
-      if (!isValidOptions(options)) {
-        throw new TypeError("received invalid options");
-      }
-    }
-    // if no options check for vno.config.json
-    this.variable = v4.generate();
     this.storage = new Storage();
     this.queue = new Queue();
-    this._config = options ?? null;
-    this._port = 3000;
-    this._hostname = "0.0.0.0";
-    this._title = "Your Project";
-    this._server = null;
+    this.variable = v4.generate();
+    this._config = options ?? <Fctry.Config> {};
   }
 
   public static create(options?: Fctry.Config): Factory {
@@ -45,6 +35,64 @@ export default class Factory {
     }
 
     return Factory.instance;
+  }
+
+  public async assignConfig(): Promise<void> {
+    if (!checkOptions(this.config)) {
+      this._config = await configReader() as Fctry.Config;
+    }
+    if (this.config.options?.port) {
+      this._port = this.config.options.port;
+    }
+    if (this.config.options?.hostname) {
+      this._hostname = this.config.options.hostname;
+    }
+    if (this.config.server) {
+      this._server = this.config.server;
+    }
+  }
+
+  private async createStorage(): Promise<void> {
+    await this.assignConfig();
+
+    for await (
+      const file of fs.walk(`${this.config?.entry}`, { exts: ["vue"] })
+    ) {
+      const label = path.parse(file.path).name;
+      const component = new Component(label, file.path);
+
+      this.storage.cache(label, component);
+
+      if (label === this.config?.root) {
+        this.storage.root = component;
+      }
+    }
+  }
+
+  private async parseApplication(): Promise<void> {
+    isStorageReady(this.storage);
+
+    this.storage.vue = vueLogger(
+      this._config.vue as Fctry.Version,
+      this.storage.root,
+      this.variable,
+    );
+
+    this.queue.enqueue(this.storage.root);
+
+    while (!this.queue.isEmpty()) {
+      const current = this.queue.dequeue() as Component;
+      await current.parseComponent(this.storage, this.queue, this.variable);
+    }
+  }
+
+  public async build(): Promise<Storage> {
+    await this.createStorage();
+    await this.parseApplication();
+
+    writeBundle(this.storage);
+
+    return this.storage as Storage;
   }
 
   get config() {
@@ -69,66 +117,5 @@ export default class Factory {
   get server() {
     if (this._server) return this._server;
     return null;
-  }
-
-  public async init(): Promise<void> {
-    const config = await configReader();
-    if (config) {
-      this._config = config;
-      if (config?.options?.port) {
-        this._port = config.options.port;
-      }
-      if (config?.options?.hostname) {
-        this._hostname = config.options.hostname;
-      }
-      if (config?.server) {
-        this._server = config.server;
-      }
-    }
-  }
-
-  private async createStorage(): Promise<void> {
-    if (this.config == null) await this.init();
-
-    for await (
-      const file of fs.walk(`${this.config?.entry}`, { exts: ["vue"] })
-    ) {
-      const label = path.parse(file.path).name;
-      const component = new Component(label, file.path);
-
-      this.storage.cache(label, component);
-
-      if (label === this.config?.root) {
-        this.storage.root = component;
-      }
-    }
-  }
-
-  private async parseApplication(): Promise<void> {
-    if (!isStorageReady(this.storage)) {
-      throw new Error("failure to ready build");
-    }
-
-    const version = checkVueVersion(this._config)
-      ? this._config?.vue as Fctry.Version
-      : 2;
-
-    this.storage.vue = vueLogger(version, this.storage.root, this.variable);
-
-    this.queue.enqueue(this.storage.root);
-
-    while (!this.queue.isEmpty()) {
-      const current = this.queue.dequeue() as Component;
-      await current.parseComponent(this.storage, this.queue, this.variable);
-    }
-  }
-
-  public async build(): Promise<Storage> {
-    await this.createStorage();
-    await this.parseApplication();
-
-    writeBundle(this.storage);
-
-    return this.storage as Storage;
   }
 }

@@ -1,4 +1,4 @@
-import { Application, path, Router, send, superoak } from "../lib/deps.ts";
+import { Application, path, send } from "../utils/deps.ts";
 import * as print from "./stdout.ts";
 
 export const server: Application = new Application();

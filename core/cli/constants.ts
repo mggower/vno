@@ -1,6 +1,6 @@
 import { Util } from "../dts/factory.d.ts";
 
-export const custom = "\nWould you like to customize your vno project? (y/n)";
+export const custom = "\nWould you like to customize your vno project?";
 export const init = "\n\ninitializing you vno project...\n";
 export const creating = "\ncreating your vno project...\n";
 export const reset = "\nresetting user options\n";
@@ -19,11 +19,11 @@ export const options: Util.CreateInputs = {
 };
 
 export const reqs: string[] = [
-  "\nConfirm these results and create your project? (y/n)",
-  "\nPort number for server",
-  "\nName of additional components? (enter 'none' for default)",
-  "\nWhat would you like to name your root Vue component? (recommend: App)",
-  "\nPlease enter a project title",
+  "\nConfirm these results and create your project:",
+  "\nName any additional components:",
+  "\nPort number for server:",
+  "\nLabel your root component:",
+  "\nPlease enter a title:",
 ];
 
 // command tests

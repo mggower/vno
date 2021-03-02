@@ -1,4 +1,4 @@
-import { colors } from "../lib/deps.ts";
+import { colors } from "../utils/deps.ts";
 import * as fn from "./fns.ts";
 
 export const logo = (colors.bold(`

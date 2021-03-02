@@ -1,5 +1,5 @@
 import { Util } from "../dts/factory.d.ts";
-import { colors } from "./deps.ts";
+import { colors } from "../utils/deps.ts";
 
 // compile typescript code to string javascrit code
 export const TsCompile: Util.TSC = async function (source, path, cut = true) {

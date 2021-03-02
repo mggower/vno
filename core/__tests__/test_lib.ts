@@ -1,7 +1,7 @@
 import type { Component, Fctry } from "../dts/factory.d.ts";
 import { configReader } from "../lib/config_reader.ts";
 import { vueLogger } from "../lib/vue_logger.ts";
-import { assertEquals, assertNotEquals } from "../lib/deps.ts";
+import { assertEquals, assertNotEquals } from "../utils/deps.ts";
 
 // configReader tests:
 Deno.test({

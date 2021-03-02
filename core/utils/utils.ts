@@ -1,5 +1,5 @@
 import type { Util } from "../dts/factory.d.ts";
-import { patterns } from "../lib/constants.ts";
+import { patterns } from "./constants.ts";
 
 // returns index of pattern match
 export const indexOfRegExp: Util.IOF = function (rx, arr) {

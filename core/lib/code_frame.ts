@@ -1,6 +1,6 @@
 import * as utils from "../utils/utils.ts";
 import type { Util } from "../dts/factory.d.ts";
-import { colors, sfcCompiler } from "./deps.ts";
+import { colors, sfcCompiler } from "../utils/deps.ts";
 
 export const showCodeFrame: Util.SCF = function (content, errors) {
   const { filename, source, template } = content;

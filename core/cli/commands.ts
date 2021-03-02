@@ -1,7 +1,7 @@
 import Factory from "../factory/Factory.ts";
 import * as print from "./stdout.ts";
 import info from "./info.ts";
-import { fs, path } from "../lib/deps.ts";
+import { fs, path } from "../utils/deps.ts";
 import { createApplication } from "./create.ts";
 import { runDevServer } from "./dev.ts";
 import { quietArg } from "./fns.ts";
@@ -10,14 +10,19 @@ import { cmnd } from "./constants.ts";
 export const create = async function (args: string[]): Promise<void> {
   if (!cmnd.create.test(args[0])) return;
 
-  const repo = args[1];
-  if (repo) {
-    const dir = `${Deno.cwd()}/${repo}`;
+  const mutable = args.slice(1);
+  const title = mutable.shift();
+  const root = mutable.shift();
+  const port = mutable.shift();
+  const components = mutable.length > 0 ? mutable : undefined;
+  
+  if (title) {
+    const dir = `${Deno.cwd()}/${title}`;
     await fs.ensureDir(dir);
     Deno.chdir(dir);
   }
 
-  await createApplication(repo);
+  await createApplication({ title, root, port, components });
   return;
 };
 

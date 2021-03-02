@@ -1,20 +1,21 @@
 import { Fctry } from "../dts/factory.d.ts";
-import { fs, path } from "./deps.ts";
+import { fs, path } from "../utils/deps.ts";
+import { checkVueVersion } from "../utils/type_gaurds.ts";
 
-export async function configReader(): Promise<void | Fctry.Config> {
-  let configFile;
-  for await (const file of fs.walk(Deno.cwd())) {
-    const currFile = path.parse(file.path);
-    if (currFile.name === "vno.config") {
-      configFile = currFile;
-    }
-  }
+const configPath = path.join(Deno.cwd(), "./vno.config.json");
 
-  if (configFile) {
-    const configPath = `${Deno.cwd()}/${configFile.base}`;
-    const json = await Deno.readTextFile(configPath);
-    const res = JSON.parse(json);
-    res.vue = res.vue ?? 2;
-    return res as Fctry.Config;
-  }
+function configExists() {
+  if (fs.existsSync(configPath)) return true;
+  throw new Error(
+    "vno requires a config file or options argument for Factory class",
+  );
+}
+
+export async function configReader(): Promise<Fctry.Config> {
+  configExists();
+
+  const json = await Deno.readTextFile(configPath);
+  const res = JSON.parse(json);
+  const config = checkVueVersion(res) ? res : { ...res, vue: 2 };
+  return config as Fctry.Config;
 }
