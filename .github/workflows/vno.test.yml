@@ -1,0 +1,33 @@
+name: Test Vno
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+       deno-version: ["v1.7.5", "v1.7.x"]
+
+    steps:
+    - name: Git Checkout Deno Mod
+      uses: actions/checkout@v2
+    - name: Use Deno Version ${{ matrix.deno-version }}
+      uses: denolib/setup-deno@v2.3.0
+      with:
+       deno-version: ${{ matrix.deno-version }}
+    - name: Build Vno Mod
+      run: deno run --reload --unstable dist/mod.ts
+    - name: Build Vno CLI
+      run: deno run --reload --unstable --allow-read --allow-write install/vno.ts
+    - name: Run Vno Tests
+      run: |
+        deno test --allow-read --allow-write --allow-net --unstable test_utils.ts
+        deno test --allow-read --allow-write --allow-net --unstable test_lib.ts
+        deno test --allow-read --allow-write --allow-net --unstable test_parser.ts
+        deno test --allow-read --allow-write --allow-net --unstable test_http.ts
