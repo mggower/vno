@@ -1,10 +1,10 @@
-import type { Cmpt } from "../dts/factory.d.ts";
+import { Parser } from "../dts/factory.d.ts";
 import * as utils from "../utils/utils.ts";
 import * as resolver from "./resolver.ts";
 import { patterns } from "../utils/constants.ts";
 import { _, colors, scssCompiler, sfcCompiler } from "../utils/deps.ts";
 
-export const template: Cmpt.Parser = function (curr) {
+export const template: Parser = function template(curr) {
   let template = curr.temp_data.content;
   template = utils.removeCarriageReturn(template).replace(
     patterns.htmlComment,
@@ -13,9 +13,8 @@ export const template: Cmpt.Parser = function (curr) {
   curr.template = template;
 };
 
-export const script: Cmpt.Parser = async function (curr, storage, queue) {
+export const script: Parser = async function (curr, storage, queue) {
   let script = curr.script_data.content;
-
   // prevent to cut urls like http://, https://, ftp:// or file://
   const scriptArr: string[] = script
     .split("\n")
@@ -34,7 +33,7 @@ export const script: Cmpt.Parser = async function (curr, storage, queue) {
     curr.path,
     curr.script_data.lang === "ts",
   );
-  
+
   const middlecode = curr.script_data.attrs?.load
     ? await resolver._middlecode(curr, script)
     : undefined;
@@ -45,7 +44,7 @@ export const script: Cmpt.Parser = async function (curr, storage, queue) {
   curr.script = script;
 };
 
-export const style: Cmpt.Parser = function (curr) {
+export const style: Parser = function (curr) {
   if (!curr.style_data.length) return;
   let styles = curr.style_data[0].content;
 

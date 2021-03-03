@@ -1,4 +1,4 @@
-import type { Component, Fctry } from "../dts/factory.d.ts";
+import type { Component, Config, Vue } from "../dts/factory.d.ts";
 import { configReader } from "../lib/config_reader.ts";
 import { vueLogger } from "../lib/vue_logger.ts";
 import { assertEquals, assertNotEquals } from "../utils/deps.ts";
@@ -8,23 +8,26 @@ Deno.test({
   name: "configReader returns object with valid props",
 
   async fn(): Promise<void> {
-    await Deno.writeTextFile("./vno.config.json", JSON.stringify({
-      "root": "App",
-      "entry": "../../example/test_demo/",
-      "vue": 3,
-      "options": {
-        "title": "benchmark test project"
-      }
-    }));
-    
-    const config: Fctry.Config | unknown = await configReader();
-    assertNotEquals((config as Fctry.Config), undefined);
-    assertEquals((config as Fctry.Config).vue, 3);
-    assertEquals((config as Fctry.Config).entry, "../../example/test_demo/");
-    assertEquals((config as Fctry.Config).root, "App");
-    assertNotEquals((config as Fctry.Config).options, undefined);
+    await Deno.writeTextFile(
+      "./vno.config.json",
+      JSON.stringify({
+        "root": "App",
+        "entry": "../../example/test_demo/",
+        "vue": 3,
+        "options": {
+          "title": "benchmark test project",
+        },
+      }),
+    );
+
+    const config: Config | unknown = await configReader();
+    assertNotEquals((config as Config), undefined);
+    assertEquals((config as Config).vue, 3);
+    assertEquals((config as Config).entry, "../../example/test_demo/");
+    assertEquals((config as Config).root, "App");
+    assertNotEquals((config as Config).options, undefined);
     assertEquals(
-      (config as Fctry.Config).options?.title,
+      (config as Config).options?.title,
       "benchmark test project",
     );
 
@@ -39,19 +42,19 @@ Deno.test({
   name: "vueLogger returns object with valid props for Vue2",
 
   fn(): void {
-    const V2: Fctry.Vue = vueLogger(
-      2 as Fctry.Version,
+    const V2: Vue.State = vueLogger(
+      2 as Vue.Version,
       component,
       "label",
     );
 
-    assertNotEquals((V2 as Fctry.Vue), undefined);
+    assertNotEquals((V2 as Vue.State), undefined);
 
     const dep = "import Vue from ";
-    assertEquals((V2 as Fctry.Vue).dep, dep);
+    assertEquals((V2 as Vue.State).dep, dep);
 
     const mount = `\nTestRoot.$mount("#test-root")`;
-    assertEquals((V2 as Fctry.Vue).mount, mount);
+    assertEquals((V2 as Vue.State).mount, mount);
   },
 });
 
@@ -59,18 +62,18 @@ Deno.test({
   name: "vueLogger returns object with valid props for Vue3",
 
   fn(): void {
-    const V3: Fctry.Vue = vueLogger(
-      3 as Fctry.Version,
+    const V3: Vue.State = vueLogger(
+      3 as Vue.Version,
       component,
       "label",
     );
 
-    assertNotEquals((V3 as Fctry.Vue), undefined);
+    assertNotEquals((V3 as Vue.State), undefined);
 
     const dep = "import * as Vue from ";
-    assertEquals((V3 as Fctry.Vue).dep, dep);
+    assertEquals((V3 as Vue.State).dep, dep);
 
     const mount = `\nlabel.mount("#test-root")`;
-    assertEquals((V3 as Fctry.Vue).mount, mount);
+    assertEquals((V3 as Vue.State).mount, mount);
   },
 });

@@ -1,10 +1,10 @@
-import { Component, Fctry } from "../dts/factory.d.ts";
+import { Component, Vue } from "../dts/factory.d.ts";
 
 export function vueLogger(
-  vue: Fctry.Version,
+  vue: Vue.Version,
   root: Component,
   variable: string,
-): Fctry.Vue {
+): Vue.State {
   switch (vue) {
     case 3:
       return {

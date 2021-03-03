@@ -1,4 +1,4 @@
-import { Component } from '../dts/factory.d.ts';
+import { Component } from "../dts/factory.d.ts";
 export default class DepsList {
   head: Component | null;
   tail: Component | null;
@@ -61,7 +61,7 @@ export default class DepsList {
 
       this.tail = prev;
       this.tail.sibling = null;
-      
+
       removed.sibling = null;
       return true;
     }

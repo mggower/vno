@@ -1,8 +1,11 @@
 import * as utils from "../utils/utils.ts";
-import type { Util } from "../dts/factory.d.ts";
+import { Raw } from "../dts/factory.d.ts";
 import { colors, sfcCompiler } from "../utils/deps.ts";
 
-export const showCodeFrame: Util.SCF = function (content, errors) {
+export function showCodeFrame(
+  content: Raw.Descriptor,
+  errors?: string[],
+): void {
   const { filename, source, template } = content;
 
   const templateAnalysis = sfcCompiler.compileTemplate(
@@ -41,4 +44,4 @@ export const showCodeFrame: Util.SCF = function (content, errors) {
       ),
     );
   }
-};
+}

@@ -2,7 +2,7 @@ import * as utils from "../utils/utils.ts";
 import { TsCompile } from "./ts_compile.ts";
 import { _, colors, path as stdPath } from "../utils/deps.ts";
 import { preorderScrub } from "./scrub.ts";
-import { Cmpt, Component, Resolve } from "../dts/factory.d.ts";
+import { ComponentList, Component, Resolve } from "../dts/factory.d.ts";
 import { patterns } from "../utils/constants.ts";
 
 export const _script: Resolve.Source = async function (data, path, tsCheck) {
@@ -48,7 +48,7 @@ export const _dependants: Resolve.Attrs = function (curr, arr, storage, queue) {
     ),
   );
   // uses the found reference to retrieve the child component in storage
-  const dependants: Cmpt.List = iter.map(
+  const dependants: ComponentList = iter.map(
     (child: string) => storage.get(child) as Component,
   );
 

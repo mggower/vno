@@ -1,9 +1,13 @@
-import { Cmpt, Util } from "../dts/factory.d.ts";
+import {
+  Component,
+  ComponentContainer,
+  Storage,
+} from "../dts/factory.d.ts";
 
-const memoize = function () {
-  const cache = {} as Cmpt.Container;
+function memoize() {
+  const cache = {} as ComponentContainer;
 
-  const memo: Util.MEMO = (label, current, storage) => {
+  return function (label: string, current: Component, storage: Storage): void {
     if (!storage) {
       throw new Error("storage input is required");
     }
@@ -16,11 +20,9 @@ const memoize = function () {
 
     cache[label] = current;
   };
-
-  return memo;
 }
 
-const scrubSearch: Util.MEMO = function (label, component) {
+function scrubSearch(label: string, component: Component): void {
   if (component.dependants) {
     component.dependants.scrub(label);
 
@@ -31,6 +33,6 @@ const scrubSearch: Util.MEMO = function (label, component) {
   if (component.sibling) {
     scrubSearch(label, component.sibling);
   }
-};
+}
 
 export const preorderScrub = memoize();

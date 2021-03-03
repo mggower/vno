@@ -1,17 +1,17 @@
-import type { Component, Fctry, Storage } from "../dts/factory.d.ts";
+import { Component, Storage, Config, Vue } from "../dts/factory.d.ts";
 
-export function checkOptions(obj: unknown): obj is Fctry.Config {
+export function checkOptions(obj: unknown): obj is Config {
   return obj != null &&
-    typeof (obj as Fctry.Config).entry === "string" &&
-    typeof (obj as Fctry.Config).root === "string";
+    typeof (obj as Config).entry === "string" &&
+    typeof (obj as Config).root === "string";
 }
 
 export function checkVueVersion(
   obj: unknown,
-): obj is Fctry.Config & { vue: Fctry.Version } {
-  return (obj as Fctry.Config).vue != null &&
-      (obj as Fctry.Config).vue === 2 ||
-    (obj as Fctry.Config).vue === 3;
+): obj is Config & { vue: Vue.Version } {
+  return (obj as Config).vue != null &&
+      (obj as Config).vue === 2 ||
+    (obj as Config).vue === 3;
 }
 
 export function isStorageReady(obj: unknown): obj is Storage {

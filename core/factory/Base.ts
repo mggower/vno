@@ -1,4 +1,4 @@
-import { Cmpt, DepsList } from "../dts/factory.d.ts";
+import { DepsList, Raw } from "../dts/factory.d.ts";
 import { ComponentType } from "../utils/constants.ts";
 import * as utils from "../utils/utils.ts";
 import { _, sfcCompiler } from "../utils/deps.ts";
@@ -6,8 +6,8 @@ import { _, sfcCompiler } from "../utils/deps.ts";
 export default abstract class Base {
   protected __type__: ComponentType;
   protected __raw__: string;
-  protected __source__: Cmpt.Source;
-  protected __data__: Cmpt.RawData;
+  protected __source__: Raw.Source;
+  protected __data__: Raw.Data;
 
   public name: string;
   public parsed_data: Record<string, unknown>;

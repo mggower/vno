@@ -1,4 +1,4 @@
-import { Util } from "../dts/factory.d.ts";
+import { CreateInputs } from "../dts/factory.d.ts";
 import { _ } from "../utils/deps.ts";
 
 // template literal strings for HTML/Components/Server/Deps
@@ -53,7 +53,7 @@ li {
   );
 };
 
-export const rootComponent = (options: Util.CreateInputs) => {
+export const rootComponent = (options: CreateInputs) => {
   return (
     `<template>
   <div id="${options.root.toLowerCase()}">
@@ -115,7 +115,7 @@ export const genericComponent = () => {
 </style>`;
 };
 
-export const htmlTemplate = (options: Util.CreateInputs) => {
+export const htmlTemplate = (options: CreateInputs) => {
   return (
     `<!DOCTYPE html>
 <html lang="en">
@@ -137,7 +137,7 @@ export const htmlTemplate = (options: Util.CreateInputs) => {
   );
 };
 
-export const vnoConfig = (options: Util.CreateInputs) => {
+export const vnoConfig = (options: CreateInputs) => {
   const { root, port, title } = options;
   return JSON.stringify(
     { root, entry: "./", options: { port, title } },

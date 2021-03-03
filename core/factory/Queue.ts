@@ -1,9 +1,9 @@
-import { Component, Cmpt } from "../dts/factory.d.ts";
+import { ComponentList, Component } from "../dts/factory.d.ts";
 export default class Queue {
-  public components: Cmpt.List;
+  public components: ComponentList;
 
   constructor() {
-    this.components = <Cmpt.List> [];
+    this.components = <ComponentList> [];
   }
 
   get length() {

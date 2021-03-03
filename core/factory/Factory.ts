@@ -1,4 +1,4 @@
-import { Fctry } from "../dts/factory.d.ts";
+import { Config, Vue } from "../dts/factory.d.ts";
 import { configReader } from "../lib/config_reader.ts";
 import { vueLogger } from "../lib/vue_logger.ts";
 import { writeBundle } from "../lib/bundle.ts";
@@ -16,20 +16,20 @@ export default class Factory {
   public storage: Storage;
   public queue: Queue;
   public variable: string;
-  private _config: Fctry.Config;
+  private _config: Config;
   private _port!: number;
   private _title!: string;
   private _hostname!: string;
   private _server!: string;
   private static instance: Factory;
-  private constructor(options?: Fctry.Config) {
+  private constructor(options?: Config) {
     this.storage = new Storage();
     this.queue = new Queue();
     this.variable = v4.generate();
-    this._config = options ?? <Fctry.Config> {};
+    this._config = options ?? <Config> {};
   }
 
-  public static create(options?: Fctry.Config): Factory {
+  public static create(options?: Config): Factory {
     if (!Factory.instance) {
       Factory.instance = new Factory(options);
     }
@@ -39,7 +39,7 @@ export default class Factory {
 
   public async assignConfig(): Promise<void> {
     if (!checkOptions(this.config)) {
-      this._config = await configReader() as Fctry.Config;
+      this._config = await configReader() as Config;
     }
     if (this.config.options?.port) {
       this._port = this.config.options.port;
@@ -73,7 +73,7 @@ export default class Factory {
     isStorageReady(this.storage);
 
     this.storage.vue = vueLogger(
-      this._config.vue as Fctry.Version,
+      this._config.vue as Vue.Version,
       this.storage.root,
       this.variable,
     );

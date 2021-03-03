@@ -1,50 +1,132 @@
-import FactoryClass from "../factory/Factory.ts";
-import ComponentClass from "../factory/Component.ts";
-import DepsListClass from "../factory/DepsList.ts";
-import QueueClass from "../factory/Queue.ts";
-import StorageClass from "../factory/Storage.ts";
+import Factory from "../factory/Factory.ts";
+import Component from "../factory/Component.ts";
+import DepsList from "../factory/DepsList.ts";
+import Queue from "../factory/Queue.ts";
+import Storage from "../factory/Storage.ts";
 
-export type Factory = FactoryClass;
-export type Component = ComponentClass;
-export type DepsList = DepsListClass;
-export type Queue = QueueClass;
-export type Storage = StorageClass;
+export { Component, DepsList, Factory, Queue, Storage };
+export interface CreateInputs {
+  /**
+   * requested inputs for `vno create` command
+   * options to further customize vno
+   */
+  title: string;
+  /**
+   * project title
+   */
+  root: string;
+  /**
+   * label of root component
+   */
+  components: string[];
+  /**
+   * child components to generate
+   */
+  port: number;
+  /**
+   * preferred port for dev server
+   * default: 3000
+   */
+}
 
 // Factory library
-export declare namespace Fctry {
-  // vno.config.json or Factory constructor options
-  export interface Config {
-    entry: string;
-    root: string;
-    vue?: Version;
-    terminal?: boolean;
-    server?: string;
-    options?: {
-      port?: number;
-      title?: string;
-      hostname?: string;
-    };
-  }
+export interface Config {
+  /**
+   * Config interface defines the properties for vno.config.json 
+   * or the options argument provided to Factory.create()
+   */
+  entry: string;
+  /**
+   * entry defines the path from vno.config.json 
+   * to the application's Root component
+   * (i.e. "./client")
+   */
+  root: string;
+  /**
+   * root defines the name of the application's root component file
+   * (i.e.'App' for App.vue)
+   */
+  vue?: Vue.Version;
+  /**
+   * The number provided for the preferred version of Vue
+   */
+  server?: string;
+  /**
+   * path to application server to for running vno run server
+   */
+  options?: {
+    /**
+     * options to further customize vno
+     */
+    port?: number;
+    /**
+     * preferred port for dev server
+     * default: 3000
+     */
+    title?: string;
+    /**
+     * title of your project
+     */
+    hostname?: string;
+    /**
+     * preferred host
+     * default: "0.0.0.0"
+     */
+  };
+}
+export declare namespace Vue {
   export type Version = 2 | 3;
-  export interface Vue {
+  /**
+   * number 2 represents Vue version "2.6.12"
+   * number 3 represents Vue version "3.0.5"
+   */
+  export interface State {
     state: Version;
+    /**
+     * state property defines the Vue version
+     */
     dep: string;
+    /**
+     * syntax for import from CDN
+     */
     cdn: string;
+    /**
+     * provided CDN for vue dependency
+     */
     mount: string;
+    /**
+     * syntax for mounting App
+     */
   }
 }
 
 // component library
-export declare namespace Cmpt {
-  export type List = Component[];
-
-  export interface Container {
-    [key: string]: Component;
-  }
-
+export type ComponentList = Component[];
+/**
+ * an ordered list of Component's
+ */
+export interface ComponentContainer {
+  /**
+   * an unordered container for Component's
+   */
+  [key: string]: Component;
+}
+export declare namespace Raw {
+  /**
+   * Raw data saved onto the Component Class
+   */
   export interface Source {
+    /**
+     * provided on Component.__source__ protected instance prop
+     */
     descriptor: Descriptor;
-    errors: [];
+    /**
+     * compiled data is saved on descriptor prop
+     */
+    errors: unknown[];
+    /**
+     * in the event of errors, they are stored here
+     */
   }
 
   export interface Descriptor {
@@ -52,6 +134,9 @@ export declare namespace Cmpt {
     source: string;
     template: Tag;
     script: Tag;
+    /**
+     * below props are not used
+     */
     scriptSetup: unknown;
     styles: Tag[];
     customBlocks: [];
@@ -59,53 +144,48 @@ export declare namespace Cmpt {
   }
 
   export interface Tag {
+    /**
+     * compiled data for Template, Script, Style
+     */
     type: string;
     content: string;
+    /**
+     * file content saved as string
+     */
     loc: {
       source: string;
       start: Record<string, unknown>;
       end: Record<string, unknown>;
     };
     lang?: string;
+    /**
+     * allows us to identify characteristics i.e. SCSS or TypeScript
+     */
     ast?: Record<string, unknown>;
     attrs?: {
       load: unknown;
     };
     scoped?: boolean;
+    /**
+     * refers to styling
+     */
   }
 
-  export interface RawData {
+  export interface Data {
     template: Tag;
     styles: Tag[];
     script: Tag;
   }
-
-  export interface Parser {
-    (src: Component, storage?: Storage, queue?: Queue): void;
-  }
 }
 
-export declare namespace Util {
-  export interface CreateInputs {
-    title: string;
-    root: string;
-    components: string[];
-    port: number;
-  }
-
-  export type TRIM = (
-    input: string | string[],
-    indexStart: number,
-    indexEnd: number,
-  ) => string[] | string;
-  export type TXT = (text: string) => string;
-  export type IOF = (exp: RegExp, arr: string[]) => number;
-  export type MEMO = (id: string, ref: Component, box?: Storage) => void;
-  export type TSC = (s: string, p: string, cut?: boolean) => Promise<string>;
-  export type SCF = (content: Cmpt.Descriptor, errors?: string[]) => void;
+export interface Parser {
+  (src: Component, storage?: Storage, queue?: Queue): void;
 }
 
 export declare namespace Resolve {
+  /**
+   * lib resolver functions, allow to properly parse content
+   */
   export interface Attrs {
     (
       curr: Component,

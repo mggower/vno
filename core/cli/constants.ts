@@ -1,4 +1,4 @@
-import { Util } from "../dts/factory.d.ts";
+import { CreateInputs } from "../dts/factory.d.ts";
 
 export const custom = "\nWould you like to customize your vno project?";
 export const init = "\n\ninitializing you vno project...\n";
@@ -11,7 +11,7 @@ export const components = "components";
 export const indexhtml = `${pub}/index.html`;
 export const vnoconfig = "vno.config.json";
 
-export const options: Util.CreateInputs = {
+export const options: CreateInputs = {
   title: "your project",
   root: "App",
   components: ["HelloVno"],

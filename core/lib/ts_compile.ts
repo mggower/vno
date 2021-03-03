@@ -1,8 +1,11 @@
-import { Util } from "../dts/factory.d.ts";
 import { colors } from "../utils/deps.ts";
 
 // compile typescript code to string javascrit code
-export const TsCompile: Util.TSC = async function (source, path, cut = true) {
+export async function TsCompile(
+  source: string,
+  path: string,
+  cut = true,
+): Promise<string> {
   const temp = `./${Math.random().toString().replace(".", "")}.ts`;
   try {
     const file = await Deno.create(temp);
@@ -35,4 +38,4 @@ export const TsCompile: Util.TSC = async function (source, path, cut = true) {
       ),
     );
   }
-};
+}
