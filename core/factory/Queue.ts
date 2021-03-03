@@ -1,8 +1,9 @@
-import { ComponentList, Component } from "../dts/factory.d.ts";
+import { Component, ComponentList } from "../dts/factory.d.ts";
+
 export default class Queue {
   public components: ComponentList;
 
-  constructor() {
+  public constructor() {
     this.components = <ComponentList> [];
   }
 

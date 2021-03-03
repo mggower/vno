@@ -1,4 +1,4 @@
-import { Component, Storage, Config, Vue } from "../dts/factory.d.ts";
+import { Component, Config, Storage, Vue } from "../dts/factory.d.ts";
 
 export function checkOptions(obj: unknown): obj is Config {
   return obj != null &&

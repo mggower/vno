@@ -17,7 +17,7 @@ export function writeBundle(storage: Storage): void {
 
   postorderTraverse(storage.root);
   if (storage.vue.state === 3) {
-    inorderTraverse(storage.root);
+    preorderTraverse(storage.root);
   }
 
   Deno.writeTextFileSync(VnoPath.Build, storage.vue.mount, {
@@ -49,7 +49,7 @@ function postorderTraverse(current: Component): void {
   }
 }
 
-function inorderTraverse(current: Component): void {
+function preorderTraverse(current: Component): void {
   if (current.registration) {
     Deno.writeTextFileSync(VnoPath.Build, current.registration, {
       append: true,
@@ -57,10 +57,10 @@ function inorderTraverse(current: Component): void {
   }
 
   if (current.dependants != null && current.dependants.head) {
-    inorderTraverse(current.dependants.head);
+    preorderTraverse(current.dependants.head);
   }
 
   if (current.sibling) {
-    inorderTraverse(current.sibling);
+    preorderTraverse(current.sibling);
   }
 }

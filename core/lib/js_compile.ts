@@ -1,6 +1,10 @@
 import { Component, Storage } from "../dts/factory.d.ts";
 
-export function javascriptCompile(curr: Component, storage: Storage): string {
+export function javascriptCompile(
+  curr: Component,
+  storage: Storage,
+  variable: string,
+): string {
   if (!storage) {
     throw new TypeError("invalid arguments");
   }
@@ -11,6 +15,8 @@ export function javascriptCompile(curr: Component, storage: Storage): string {
       case 3:
         instance = `${curr.middlecode ??
           ""}\nconst ${curr.label} = {\n  template: /* html */ \`${curr.template}\`,\n${curr.script};\n`;
+
+        compileForV3(curr, storage, variable);
         break;
       case 2:
         if (curr === storage.root) {
@@ -26,9 +32,8 @@ export function javascriptCompile(curr: Component, storage: Storage): string {
     }
   }
 
-  if (!instance) {
-    throw new Error("compilation failed");
-  }
+  if (!instance) throw new Error("compilation failed");
+
   curr.instance = instance;
   return instance;
 }

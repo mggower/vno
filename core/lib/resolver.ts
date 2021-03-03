@@ -1,9 +1,9 @@
-import * as utils from "../utils/utils.ts";
-import { TsCompile } from "./ts_compile.ts";
-import { _, colors, path as stdPath } from "../utils/deps.ts";
+import { Component, ComponentList, Resolve } from "../dts/factory.d.ts";
+import { typescriptCompile } from "./ts_compile.ts";
 import { preorderScrub } from "./scrub.ts";
-import { ComponentList, Component, Resolve } from "../dts/factory.d.ts";
 import { patterns } from "../utils/constants.ts";
+import * as utils from "../utils/utils.ts";
+import { _, colors } from "../utils/deps.ts";
 
 export const _script: Resolve.Source = async function (data, path, tsCheck) {
   if (typeof data === "string") {
@@ -16,7 +16,7 @@ export const _script: Resolve.Source = async function (data, path, tsCheck) {
   const trimmed = data.slice(start + 1, end).join("\n");
 
   let script = tsCheck
-    ? await TsCompile(`({ ${trimmed} })`, path)
+    ? await typescriptCompile(`({ ${trimmed} })`, path)
     : trimmed as string;
 
   script = script
@@ -94,7 +94,11 @@ export const _middlecode: Resolve.Attrs = async function (curr, script) {
     }
   }
 
-  const compilerOutPut = await TsCompile(chunks.join("\n"), curr.path, false);
+  const compilerOutPut = await typescriptCompile(
+    chunks.join("\n"),
+    curr.path,
+    false,
+  );
 
   const output = await _imports(
     `${imports.join("\n")}\n${compilerOutPut}`,

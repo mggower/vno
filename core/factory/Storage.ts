@@ -1,15 +1,33 @@
 import { Component, ComponentContainer, Vue } from "../dts/factory.d.ts";
+
+/**
+ * Storage class follows the Singelton design pattern
+ * only one can be made for an application
+ */
 export default class Storage {
   private _root: Component;
   private _vue: Vue.State;
   public size: number;
   public app: ComponentContainer;
-
-  constructor() {
+  private static instance: Storage;
+  private constructor() {
     this.app = <ComponentContainer> {};
     this._root = <Component> {};
     this._vue = <Vue.State> {};
     this.size = 0;
+  }
+
+  /**
+   * an instance is made through the `create` method 
+   * if an instance has already been made, it returns 
+   * the original instance
+   */
+  public static create() {
+    if (!Storage.instance) {
+      Storage.instance = new Storage();
+    }
+
+    return Storage.instance;
   }
 
   public cache(label: string, component: Component): Component {

@@ -1,4 +1,9 @@
 import { Component } from "../dts/factory.d.ts";
+
+/**
+ * DepsList is modeled after a singly LinkedList
+ * its purpose is to cache child components on Composites
+ */
 export default class DepsList {
   head: Component | null;
   tail: Component | null;
@@ -6,7 +11,11 @@ export default class DepsList {
     this.head = null;
     this.tail = null;
   }
-
+  /**
+   * add method will add a Component to
+   * the tail of a Component's deps list
+   * @param component 
+   */
   public add(component: Component): void {
     if (!this.head) {
       this.head = component;
@@ -17,8 +26,13 @@ export default class DepsList {
       this.tail.sibling = null;
     }
   }
-
-  public scrub(label: string): boolean {
+  /**
+   * remove uses a label as a reference to take a component
+   * out of a DepsList, this is used to reposition references
+   * as we resolve the dependency graph
+   * @param label 
+   */
+  public remove(label: string): boolean {
     if (!this.head) return false;
 
     let removed, current, prev;

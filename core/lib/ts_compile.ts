@@ -1,7 +1,7 @@
 import { colors } from "../utils/deps.ts";
 
 // compile typescript code to string javascrit code
-export async function TsCompile(
+export async function typescriptCompile(
   source: string,
   path: string,
   cut = true,

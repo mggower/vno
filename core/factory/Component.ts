@@ -1,24 +1,60 @@
-import type { Queue, Storage } from "../dts/factory.d.ts";
-import { compileForV3, javascriptCompile } from "../lib/js_compile.ts";
-import { ComponentType } from "../utils/constants.ts";
-import { showCodeFrame } from "../lib/code_frame.ts";
-import { colors } from "../utils/deps.ts";
-import * as parse from "../lib/parser.ts";
 import DepsList from "./DepsList.ts";
+import Storage from "./Storage.ts";
+import Queue from "./Queue.ts";
 import Base from "./Base.ts";
 
+import * as utils from "../utils/utils.ts";
+import * as parse from "../lib/parser.ts";
+
+import { javascriptCompile } from "../lib/js_compile.ts";
+import { ComponentType } from "../utils/constants.ts";
+import { showCodeFrame } from "../lib/code_frame.ts";
+import { _, colors } from "../utils/deps.ts";
+
 export default class Component extends Base {
+  private _type: ComponentType;
   public sibling: Component | null;
-  constructor(label: string, path: string) {
+  public name: string;
+  public dependants: DepsList | null;
+  public is_parsed: boolean;
+
+  constructor(public label: string, public path: string) {
     super(label, path);
-    this.label = label;
-    this.path = path;
+    this._type = ComponentType.Primitive;
+    this.name = this.setComponentName();
+    this.dependants = null;
     this.sibling = null;
+    this.is_parsed = false;
+  }
+
+  get type() {
+    return this._type;
+  }
+
+  set type(input: ComponentType) {
+    switch (input) {
+      case ComponentType.Composite:
+        this._type = ComponentType.Composite;
+        break;
+      case ComponentType.Primitive:
+        this._type = ComponentType.Primitive;
+        break;
+      default:
+        this._type = ComponentType.Primitive;
+    }
   }
 
   public isComposite(): void {
     this.dependants = new DepsList();
     this.type = ComponentType.Composite;
+  }
+
+  private setComponentName() {
+    const data = this.script_data.content.split("\n");
+    const index = utils.indexOfRegExp(/^\s*(name\s*:)/, data);
+
+    if (index < 0) return _.kebabCase(this.label);
+    return data[index].split(/[`'"]/)[1];
   }
 
   public async parseComponent(
@@ -31,14 +67,13 @@ export default class Component extends Base {
         .green(`[vno: compiling] => ${colors.yellow(this.path)}`),
     );
 
-    if (this.__source__.errors.length) {
-      showCodeFrame(this.__source__.descriptor, this.__source__.errors);
+    if (this._source.errors.length) {
+      showCodeFrame(this._source.descriptor, this._source.errors);
     } else {
       await parse.script(this, storage, queue);
       parse.template(this as Component);
       parse.style(this);
-      javascriptCompile(this, storage);
-      if (storage.vue.state === 3) compileForV3(this, storage, variable);
+      javascriptCompile(this, storage, variable);
       this.is_parsed = true;
     }
   }

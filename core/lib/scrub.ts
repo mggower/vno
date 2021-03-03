@@ -1,8 +1,4 @@
-import {
-  Component,
-  ComponentContainer,
-  Storage,
-} from "../dts/factory.d.ts";
+import { Component, ComponentContainer, Storage } from "../dts/factory.d.ts";
 
 function memoize() {
   const cache = {} as ComponentContainer;
@@ -13,25 +9,25 @@ function memoize() {
     }
 
     if (cache[label]) {
-      scrubSearch(label, cache[label]);
+      scrub(label, cache[label]);
     } else {
-      scrubSearch(label, storage.root);
+      scrub(label, storage.root);
     }
 
     cache[label] = current;
   };
 }
 
-function scrubSearch(label: string, component: Component): void {
+function scrub(label: string, component: Component): void {
   if (component.dependants) {
-    component.dependants.scrub(label);
+    component.dependants.remove(label);
 
     if (component.dependants.head) {
-      scrubSearch(label, component.dependants.head);
+      scrub(label, component.dependants.head);
     }
   }
   if (component.sibling) {
-    scrubSearch(label, component.sibling);
+    scrub(label, component.sibling);
   }
 }
 

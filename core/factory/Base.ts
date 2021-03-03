@@ -1,79 +1,46 @@
-import { DepsList, Raw } from "../dts/factory.d.ts";
-import { ComponentType } from "../utils/constants.ts";
-import * as utils from "../utils/utils.ts";
-import { _, sfcCompiler } from "../utils/deps.ts";
+import { Raw } from "../dts/factory.d.ts";
+import { sfcCompiler } from "../utils/deps.ts";
 
+/**
+ * abstract Base Class defines the properties, methods, and getters/setters 
+ * for values relevant to the construction of a Component class
+ * 
+ */
 export default abstract class Base {
-  protected __type__: ComponentType;
-  protected __raw__: string;
-  protected __source__: Raw.Source;
-  protected __data__: Raw.Data;
-
-  public name: string;
+  protected _raw: string;
+  protected _source: Raw.Source;
+  protected _data: Raw.Data;
   public parsed_data: Record<string, unknown>;
-  public dependants: DepsList | null;
-  public is_parsed: boolean;
 
   constructor(public label: string, public path: string) {
-    this.label = label;
-    this.path = path;
-    this.__type__ = ComponentType.Primitive;
-    this.__raw__ = Deno.readTextFileSync(path);
-    this.__source__ = sfcCompiler.parse(this.__raw__, {
+    this._raw = Deno.readTextFileSync(path);
+    this._source = sfcCompiler.parse(this._raw, {
       filename: `${this.label}.vue`,
       sourceMap: false,
     });
-    this.__data__ = {
-      template: this.__source__.descriptor.template,
-      script: this.__source__.descriptor.script,
-      styles: this.__source__.descriptor.styles,
+    this._data = {
+      template: this._source.descriptor.template,
+      script: this._source.descriptor.script,
+      styles: this._source.descriptor.styles,
     };
-    this.name = this.setComponentName();
     this.parsed_data = {};
-    this.dependants = null;
-    this.is_parsed = false;
-  }
-
-  private setComponentName() {
-    const data = this.script_data.content.split("\n");
-    const index = utils.indexOfRegExp(/^\s*(name\s*:)/, data);
-
-    if (index < 0) return _.kebabCase(this.label);
-    return data[index].split(/[`'"]/)[1];
   }
 
   get source() {
-    return this.__source__;
-  }
-
-  get type() {
-    return this.__type__;
-  }
-
-  set type(input: ComponentType) {
-    switch (input) {
-      case ComponentType.Composite:
-        this.__type__ = ComponentType.Composite;
-        break;
-      case ComponentType.Primitive:
-        this.__type__ = ComponentType.Primitive;
-        break;
-      default:
-        this.__type__ = ComponentType.Primitive;
-    }
+    return this._source;
   }
 
   // raw data
   get temp_data() {
-    return this.__data__.template;
+    return this._data.template;
   }
 
   get script_data() {
-    return this.__data__.script;
+    return this._data.script;
   }
 
   get style_data() {
-    return this.__data__.styles;
+    return this._data.styles;
   }
 
   // resolved data
@@ -155,7 +122,9 @@ export default abstract class Base {
     }
     return undefined;
   }
-
+  /**
+   * relevant for Vue3 Only
+   */
   set registration(registration: string | undefined) {
     if (registration != null) {
       this.parsed_data = {
