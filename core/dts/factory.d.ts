@@ -123,7 +123,7 @@ export declare namespace Raw {
     /**
      * compiled data is saved on descriptor prop
      */
-    errors: unknown[];
+    errors: [];
     /**
      * in the event of errors, they are stored here
      */
