@@ -15,7 +15,7 @@ const testChild = new Component(
   path.join(Deno.cwd(), "./core/__tests__/test-components/TestChild.vue"),
 );
 
-const storage = new Storage();
+const storage = Storage.create();
 const queue = new Queue();
 storage.root = testRoot;
 storage.cache(testChild.label, testChild);

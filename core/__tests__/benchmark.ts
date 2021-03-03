@@ -10,7 +10,7 @@ bench({
   runs: 1,
   func(x: { start: () => void; stop: () => void }): void {
     x.start();
-    const vnoTest = new Factory();
+    const vnoTest = Factory.create();
     vnoTest.build();
     x.stop();
   },
