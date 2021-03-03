@@ -15,7 +15,7 @@ export const create = async function (args: string[]): Promise<void> {
   const root = mutable.shift();
   const port = mutable.shift();
   const components = mutable.length > 0 ? mutable : undefined;
-  
+
   if (title) {
     const dir = `${Deno.cwd()}/${title}`;
     await fs.ensureDir(dir);
@@ -28,6 +28,12 @@ export const create = async function (args: string[]): Promise<void> {
 
 export const build = async function (args: string[]): Promise<void> {
   if (!cmnd.build.test(args[0])) return;
+
+  const path = args[1];
+  if (path) {
+    const dir = `${Deno.cwd()}/${path}`;
+    if (await fs.exists(dir)) Deno.chdir(dir);
+  }
 
   const vno = Factory.create();
   await vno.build();
